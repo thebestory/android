@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">TheBestory</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_send_story">Send story</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="title_stories">All Stories</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Here you can write you funny story!</string>
+    <string name="hint_send_story">Вводить историю здесь...</string>
+    <string name="intro_send_story">Здесь вы можете написать свою невероятную историю! Пишите интересно и с юмором!</string>
+    <string name="title_send_story">Отправить свою историю</string>
+</resources>
