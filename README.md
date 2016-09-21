@@ -1,10 +1,7 @@
 # TheBestory
 
 ### 21.09.2016
-Исправлены ошибки в "Navigation Drawer" и добавлены Tabs на "All Stories". Изменен EditText в "Send your story"
-
-<img src="https://pp.vk.me/c630820/v630820656/2f01d/eThKlXdX3rg.jpg" width=360px/>
-<img src="https://pp.vk.me/c630820/v630820656/2f025/sCfJZxNtnS0.jpg" width=360px/>
+Исправлены ошибки в "Navigation Drawer" и добавлены Tabs на "All Stories". Изменен EditText в "Send your story".
 
 ### 20.09.2016
 Проект создан! Добавлено "Navigation Drawer", "Send your story" и создана Activity для "All stories". Подобран ориентировочный стиль для приложения. 
