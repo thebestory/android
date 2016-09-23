@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:id="@+id/navdrawer_group_primary">
+        <item
+            android:id="@+id/navdrawer_stories"
+            android:icon="@drawable/ic_navdrawer_stories"
+            android:title="@string/navdrawer_stories" />
+        <item
+            android:id="@+id/navdrawer_topics"
+            android:icon="@drawable/ic_navdrawer_topics"
+            android:title="@string/navdrawer_topics" />
+    </group>
+
+    <group
+        android:id="@+id/navdrawer_group_secondary">
+        <item
+            android:id="@+id/navdrawer_settings"
+            android:icon="@drawable/ic_navdrawer_settings"
+            android:title="@string/navdrawer_settings" />
+        <item
+            android:id="@+id/navdrawer_about"
+            android:icon="@drawable/ic_navdrawer_about"
+            android:title="@string/navdrawer_about" />
+        <item
+            android:id="@+id/navdrawer_send_feedback"
+            android:icon="@drawable/ic_navdrawer_send_feedback"
+            android:title="@string/navdrawer_send_feedback" />
+    </group>
+
+    <group
+        android:id="@+id/navdrawer_group_developer"
+        android:visible="false">
+        <item
+            android:id="@+id/navdrawer_debug"
+            android:icon="@drawable/ic_navdrawer_debug"
+            android:title="@string/navdrawer_debug" />
+    </group>
+
+</menu>
