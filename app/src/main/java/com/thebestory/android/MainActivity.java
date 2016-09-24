@@ -1,12 +1,20 @@
 package com.thebestory.android;
 
+import android.content.Context;
+import android.os.PersistableBundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.AttributeSet;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.thebestory.android.fragment.main.*;
 
@@ -45,22 +53,36 @@ public class MainActivity extends AppCompatActivity
     private AboutFragment aboutFragment;
     private DebugFragment debugFragment;
 
+    private Button auth;
+    private ImageView avatar;
+    private TextView username;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        storiesFragment = new StoriesFragment();
-        topicsFragment = new TopicsFragment();
-        settingsFragment = new SettingsFragment();
-        aboutFragment = new AboutFragment();
-        debugFragment = new DebugFragment();
+        storiesFragment = StoriesFragment.newInstance();
+        topicsFragment = TopicsFragment.newInstance();
+        settingsFragment = SettingsFragment.newInstance();
+        aboutFragment = AboutFragment.newInstance();
+        debugFragment = DebugFragment.newInstance();
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.main_frame_container, storiesFragment).commit();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.navdrawer);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    public void myClick(View view) {
+        auth = (Button) findViewById(R.id.navdrawer_action_auth);
+        avatar = (ImageView) findViewById(R.id.navdrawer_account_avatar);
+        username = (TextView) findViewById(R.id.navdrawer_account_username);
+
+        auth.setVisibility(View.GONE);
+        avatar.setVisibility(View.VISIBLE);
+        username.setVisibility(View.VISIBLE);
     }
 
     @Override

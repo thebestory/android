@@ -1,22 +1,28 @@
 package com.thebestory.android.fragment.main;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v7.widget.Toolbar;
 
 import com.thebestory.android.R;
 import com.thebestory.android.adapter.main.StoriesFragmentPagerAdapter;
+import com.thebestory.android.fragment.main.stories.NewStoryFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,6 +34,8 @@ import com.thebestory.android.adapter.main.StoriesFragmentPagerAdapter;
  */
 public class StoriesFragment extends Fragment {
     private View view;
+
+    private Fragment newStoryFragment;
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
@@ -51,6 +59,9 @@ public class StoriesFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+
+        newStoryFragment = NewStoryFragment.newInstance();
     }
 
     @Override
@@ -81,6 +92,26 @@ public class StoriesFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+
+        switch (item.getItemId()) {
+            case R.id.main_stories_toolbar_action_new:
+                transaction.replace(R.id.main_frame_container, newStoryFragment);
+                break;
+            case R.id.main_stories_toolbar_action_search:
+                break;
+            default:
+                break;
+        }
+
+        transaction.addToBackStack(null);
+        transaction.commit();
+
+        return super.onOptionsItemSelected(item);
+    }
+
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -103,6 +134,11 @@ public class StoriesFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.main_stories, menu);
     }
 
     /**

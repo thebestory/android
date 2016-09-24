@@ -32,7 +32,7 @@ public class AboutFragment extends Fragment {
      *
      * @return A new instance of fragment AboutFragment.
      */
-    public static AboutFragment newInstance(String param1, String param2) {
+    public static AboutFragment newInstance() {
         return new AboutFragment();
     }
 

@@ -1,4 +1,4 @@
-package com.thebestory.android.fragment.main;
+package com.thebestory.android.fragment.main.stories;
 
 import android.content.Context;
 import android.net.Uri;
@@ -13,27 +13,27 @@ import com.thebestory.android.R;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link SettingsFragment.OnFragmentInteractionListener} interface
+ * {@link RecentTabFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link SettingsFragment#newInstance} factory method to
+ * Use the {@link RecentTabFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SettingsFragment extends Fragment {
+public class RecentTabFragment extends Fragment {
     private View view;
 
     private OnFragmentInteractionListener mListener;
 
-    public SettingsFragment() {
+    public RecentTabFragment() {
     }
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @return A new instance of fragment SettingsFragment.
+     * @return A new instance of fragment RecentTabFragment.
      */
-    public static SettingsFragment newInstance() {
-        return new SettingsFragment();
+    public static RecentTabFragment newInstance() {
+        return new RecentTabFragment();
     }
 
     @Override
@@ -45,7 +45,7 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view =  inflater.inflate(R.layout.fragment_main_settings, container, false);
+        view = inflater.inflate(R.layout.fragment_main_stories_recent_tab, container, false);
         return view;
     }
 

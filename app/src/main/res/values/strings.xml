@@ -22,4 +22,10 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="main_stories_toolbar_action_new">New story</string>
+    <string name="main_stories_toolbar_action_search">Search stories</string>
+    <string name="navdrawer_action_auth">Authorization</string>
+    <string name="thebestory">TheBestory</string>
+    <string name="main_stories_new_toolbar_send">Send story</string>
+    <string name="main_stories_new_toolbar_title">New story</string>
 </resources>

@@ -2,11 +2,19 @@
 
 Этот changelog является заметками, написанными в течение разработки.
 
+### 24.09.2016
+* @Oktai15 + @woofilee: Возвращена страница написания истории.
+* @Oktai15 + @woofilee: Доработан дизайн шапки Navigation Drawer
+* @Oktai15 + @woofilee: Теперь у нас есть значок приложения :tada:
+* @Oktai15 + @woofilee: Добавлена бага с незакрывающейся клавиатурой при закрытии станицы написания новой истории. Исправить.
+
+    <img alt="New story" src="https://pp.vk.me/c626126/v626126257/29076/6xuG5NZ_2_s.jpg" height="144px">
+
 ### 23.09.2016
 * @woofilee: Добавлены вкладки для страницы историй. Реализован адаптер для него.
 
-    <img alt="Navigation Drawer" src="https://pp.vk.me/c626221/v626221257/2cd45/C_NaJFffeTo.jpg" height="144px"/>
-    <img alt="Stories page view" src="https://pp.vk.me/c626221/v626221257/2cd4f/2zZe2Xehf08.jpg" height="144px"/>
+    <img alt="Navigation Drawer" src="https://pp.vk.me/c626221/v626221257/2cd45/C_NaJFffeTo.jpg" height="144px">
+    <img alt="Stories page view" src="https://pp.vk.me/c626221/v626221257/2cd4f/2zZe2Xehf08.jpg" height="144px">
 
 ### 22.09.2016
 * @woofilee: Удалена страница создания истории, т.к. она более не является Activity классом. Вместо него будет реализован Fragment.
@@ -26,5 +34,5 @@
 * @Oktai15: Добавлено "Navigation Drawer", "Send your story" и создана Activity для "All stories". 
 * @Oktai15: Подобран ориентировочный стиль для приложения. 
 
-    <img src="https://pp.vk.me/c626521/v626521113/275be/k3-3EvZOit8.jpg" height="144px"/>
-    <img src="https://pp.vk.me/c626521/v626521096/313d5/ouTHqoDlOZ8.jpg" height="144px"/>
+    <img src="https://pp.vk.me/c626521/v626521113/275be/k3-3EvZOit8.jpg" height="144px">
+    <img src="https://pp.vk.me/c626521/v626521096/313d5/ouTHqoDlOZ8.jpg" height="144px">

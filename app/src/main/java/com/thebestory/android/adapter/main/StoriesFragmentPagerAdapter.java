@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.thebestory.android.R;
-import com.thebestory.android.fragment.main.stories.RecentFragment;
+import com.thebestory.android.fragment.main.stories.RecentTabFragment;
 
 public class StoriesFragmentPagerAdapter extends FragmentPagerAdapter {
 
@@ -34,13 +34,13 @@ public class StoriesFragmentPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return RecentFragment.newInstance();
+                return RecentTabFragment.newInstance();
             case 1:
-                return RecentFragment.newInstance();
+                return RecentTabFragment.newInstance();
             case 2:
-                return RecentFragment.newInstance();
+                return RecentTabFragment.newInstance();
             case 3:
-                return RecentFragment.newInstance();
+                return RecentTabFragment.newInstance();
         }
 
         return null;

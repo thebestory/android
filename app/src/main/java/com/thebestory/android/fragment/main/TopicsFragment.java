@@ -33,7 +33,7 @@ public class TopicsFragment extends Fragment {
      *
      * @return A new instance of fragment TopicsFragment.
      */
-    public static TopicsFragment newInstance(String param1, String param2) {
+    public static TopicsFragment newInstance() {
         return new TopicsFragment();
     }
 
