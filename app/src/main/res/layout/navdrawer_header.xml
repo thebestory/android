@@ -10,7 +10,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+    android:theme="@style/AppTheme">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -23,12 +23,15 @@
             android:src="@mipmap/ic_launcher"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="275dp"
             android:layout_height="wrap_content"
             android:text="@string/thebestory"
-            android:textSize="30sp"
+            android:textSize="45sp"
+            android:textColor="#202020"
             android:textStyle="normal|bold"
-            android:paddingLeft="16dp"/>
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            />
 
     </LinearLayout>
 
@@ -43,7 +46,7 @@
     <TextView
         android:id="@+id/navdrawer_account_username"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:text="Anonymous"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
@@ -56,11 +59,5 @@
         android:text="@string/navdrawer_action_auth"
         android:onClick="myClick"
         android:visibility="gone"/>
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="\@anonymous" />
 
 </LinearLayout>
