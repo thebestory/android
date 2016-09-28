@@ -1,27 +1,31 @@
-package com.thebestory.android;
+package com.thebestory.android.activity;
 
 import android.content.Context;
-import android.os.PersistableBundle;
-import android.support.annotation.Nullable;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.AttributeSet;
 import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 
+import com.thebestory.android.R;
 import com.thebestory.android.fragment.main.*;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+
+    private StoriesFragment storiesFragment;
+    private TopicsFragment topicsFragment;
+    private SettingsFragment settingsFragment;
+    private AboutFragment aboutFragment;
+    private DebugFragment debugFragment;
+
     private static final int[] NAVDRAWER_MENU_RES_ID = new int[]{
             R.id.navdrawer_stories,
             R.id.navdrawer_topics,
@@ -49,21 +53,16 @@ public class MainActivity extends AppCompatActivity
             R.drawable.ic_navdrawer_debug
     };
 
-    private StoriesFragment storiesFragment;
-    private TopicsFragment topicsFragment;
-    private SettingsFragment settingsFragment;
-    private AboutFragment aboutFragment;
-    private DebugFragment debugFragment;
-
-    private Button auth;
-    private ImageView avatar;
-    private TextView username;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        drawerLayout = (DrawerLayout) findViewById(R.id.main_drawer_layout);
+        navigationView = (NavigationView) findViewById(R.id.main_navdrawer);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        // TODO: упростить как-то это
         storiesFragment = StoriesFragment.newInstance();
         topicsFragment = TopicsFragment.newInstance();
         settingsFragment = SettingsFragment.newInstance();
@@ -71,91 +70,54 @@ public class MainActivity extends AppCompatActivity
         debugFragment = DebugFragment.newInstance();
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.main_frame_container, storiesFragment).commit();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navdrawer);
-        navigationView.setNavigationItemSelectedListener(this);
-    }
-
-    public void myClick(View view) {
-        auth = (Button) findViewById(R.id.navdrawer_action_auth);
-        avatar = (ImageView) findViewById(R.id.navdrawer_account_avatar);
-        username = (TextView) findViewById(R.id.navdrawer_account_username);
-
-        auth.setVisibility(View.GONE);
-        avatar.setVisibility(View.VISIBLE);
-        username.setVisibility(View.VISIBLE);
+                .replace(R.id.main_frame_layout, storiesFragment).commit();
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.main, menu);
-//        return true;
-//    }
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
         switch (item.getItemId()) {
             case R.id.navdrawer_stories:
-                transaction.replace(R.id.main_frame_container, storiesFragment);
+                transaction.replace(R.id.main_frame_layout, storiesFragment);
                 break;
             case R.id.navdrawer_topics:
-                transaction.replace(R.id.main_frame_container, topicsFragment);
+                transaction.replace(R.id.main_frame_layout, topicsFragment);
                 break;
             case R.id.navdrawer_settings:
-                transaction.replace(R.id.main_frame_container, settingsFragment);
+                transaction.replace(R.id.main_frame_layout, settingsFragment);
                 break;
             case R.id.navdrawer_about:
-                transaction.replace(R.id.main_frame_container, aboutFragment);
+                transaction.replace(R.id.main_frame_layout, aboutFragment);
                 break;
             case R.id.navdrawer_send_feedback:
-                // TODO: Send feedback (Switch to Play Market)
+                // TODO: Send feedback (switch to Play Market)
                 break;
             case R.id.navdrawer_debug:
-                transaction.replace(R.id.main_frame_container, debugFragment);
+                transaction.replace(R.id.main_frame_layout, debugFragment);
                 break;
             default:
                 break;
         }
 
-        transaction.addToBackStack(null);
-        transaction.commit();
+        transaction.addToBackStack(null).commit();
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.main_drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    //Next methods close keyboard from NewStoryFragment
+    // TODO: next methods close keyboard from NewStoryFragment, kostyl, we need to change it
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) hideKeyboard();

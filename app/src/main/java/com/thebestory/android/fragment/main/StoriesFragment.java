@@ -1,12 +1,10 @@
 package com.thebestory.android.fragment.main;
 
-import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -79,7 +77,7 @@ public class StoriesFragment extends Fragment {
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) getActivity().findViewById(R.id.main_drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 getActivity(), drawer, toolbar, R.string.navdrawer_open, R.string.navdrawer_close);
         drawer.addDrawerListener(toggle);
@@ -98,7 +96,7 @@ public class StoriesFragment extends Fragment {
 
         switch (item.getItemId()) {
             case R.id.main_stories_toolbar_action_new:
-                transaction.replace(R.id.main_frame_container, newStoryFragment);
+                transaction.replace(R.id.main_frame_layout, newStoryFragment);
                 break;
             case R.id.main_stories_toolbar_action_search:
                 break;

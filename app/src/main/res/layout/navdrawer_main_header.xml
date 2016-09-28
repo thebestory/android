@@ -12,36 +12,18 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:theme="@style/AppTheme">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:src="@mipmap/ic_launcher"/>
-
-        <TextView
-            android:layout_width="275dp"
-            android:layout_height="wrap_content"
-            android:text="@string/thebestory"
-            android:textSize="45sp"
-            android:textColor="#202020"
-            android:textStyle="normal|bold"
-            android:paddingLeft="20dp"
-            android:paddingTop="10dp"
-            />
-
-    </LinearLayout>
+    <ImageView
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:src="@mipmap/ic_launcher" />
 
     <ImageView
         android:id="@+id/navdrawer_account_avatar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        app:srcCompat="@android:drawable/sym_def_app_icon"
-        android:visibility="visible" />
+        android:visibility="visible"
+        app:srcCompat="@android:drawable/sym_def_app_icon" />
 
     <TextView
         android:id="@+id/navdrawer_account_username"
@@ -56,8 +38,14 @@
         android:id="@+id/navdrawer_action_auth"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/navdrawer_action_auth"
         android:onClick="myClick"
-        android:visibility="gone"/>
+        android:text="@string/navdrawer_action_auth"
+        android:visibility="gone" />
+
+    <!--<TextView-->
+        <!--android:id="@+id/textView"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="\@anonymous" />-->
 
 </LinearLayout>
