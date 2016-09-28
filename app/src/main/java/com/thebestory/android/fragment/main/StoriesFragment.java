@@ -9,7 +9,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,6 +18,7 @@ import android.view.ViewGroup;
 import android.support.v7.widget.Toolbar;
 
 import com.thebestory.android.R;
+import com.thebestory.android.activity.MainActivity;
 import com.thebestory.android.adapter.main.StoriesFragmentPagerAdapter;
 import com.thebestory.android.fragment.main.stories.NewStoryFragment;
 
@@ -32,16 +32,18 @@ import com.thebestory.android.fragment.main.stories.NewStoryFragment;
  */
 public class StoriesFragment extends Fragment {
     private View view;
-
-    private Fragment newStoryFragment;
+    private MainActivity activity;
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
 
+    private Fragment newStoryFragment;
+
     private OnFragmentInteractionListener mListener;
 
     public StoriesFragment() {
+        // Required empty public constructor
     }
 
     /**
@@ -65,25 +67,23 @@ public class StoriesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_main_stories, container, false);
-
+        activity = (MainActivity) getActivity();
         toolbar = (Toolbar) view.findViewById(R.id.main_stories_toolbar);
         tabLayout = (TabLayout) view.findViewById(R.id.main_stories_tab_layout);
         viewPager = (ViewPager) view.findViewById(R.id.main_stories_viewpager);
 
-        toolbar.setTitle(R.string.navdrawer_stories);
-
-        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        toolbar.setTitle(R.string.navdrawer_main_stories);
         activity.setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) getActivity().findViewById(R.id.main_drawer_layout);
+        DrawerLayout drawerLayout = activity.getDrawerLayout();
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                getActivity(), drawer, toolbar, R.string.navdrawer_open, R.string.navdrawer_close);
-        drawer.addDrawerListener(toggle);
+                activity, drawerLayout, toolbar, R.string.navdrawer_open, R.string.navdrawer_close);
+        drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        StoriesFragmentPagerAdapter adapter = new StoriesFragmentPagerAdapter(getChildFragmentManager(), getContext());
+        StoriesFragmentPagerAdapter adapter = new StoriesFragmentPagerAdapter(
+                getChildFragmentManager(), getContext());
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
 
@@ -91,22 +91,24 @@ public class StoriesFragment extends Fragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.main_stories, menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
 
         switch (item.getItemId()) {
             case R.id.main_stories_toolbar_action_new:
                 transaction.replace(R.id.main_frame_layout, newStoryFragment);
                 break;
             case R.id.main_stories_toolbar_action_search:
-                break;
-            default:
+                // TODO: Stories search
                 break;
         }
 
-        transaction.addToBackStack(null);
-        transaction.commit();
-
+        transaction.addToBackStack(null).commit();
         return super.onOptionsItemSelected(item);
     }
 
@@ -132,11 +134,6 @@ public class StoriesFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.main_stories, menu);
     }
 
     /**

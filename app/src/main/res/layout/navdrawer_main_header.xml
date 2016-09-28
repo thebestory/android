@@ -39,7 +39,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="myClick"
-        android:text="@string/navdrawer_action_auth"
+        android:text="@string/navdrawer_main_action_auth"
         android:visibility="gone" />
 
     <!--<TextView-->

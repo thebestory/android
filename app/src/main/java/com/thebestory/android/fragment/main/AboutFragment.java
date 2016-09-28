@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.thebestory.android.R;
+import com.thebestory.android.activity.MainActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,6 +21,7 @@ import com.thebestory.android.R;
  */
 public class AboutFragment extends Fragment {
     private View view;
+    private MainActivity activity;
 
     private OnFragmentInteractionListener mListener;
 
@@ -44,8 +46,9 @@ public class AboutFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_main_about, container, false);
+        activity = (MainActivity) getActivity();
+
         return view;
     }
 

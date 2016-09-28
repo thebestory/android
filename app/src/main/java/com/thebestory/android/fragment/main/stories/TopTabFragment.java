@@ -1,4 +1,4 @@
-package com.thebestory.android.fragment.main;
+package com.thebestory.android.fragment.main.stories;
 
 import android.content.Context;
 import android.net.Uri;
@@ -7,25 +7,24 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.thebestory.android.R;
-import com.thebestory.android.activity.MainActivity;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link TopicsFragment.OnFragmentInteractionListener} interface
+ * {@link TopTabFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link TopicsFragment#newInstance} factory method to
+ * Use the {@link TopTabFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TopicsFragment extends Fragment {
+public class TopTabFragment extends Fragment {
     private View view;
-    private MainActivity activity;
 
     private OnFragmentInteractionListener mListener;
 
-    public TopicsFragment() {
+    public TopTabFragment() {
         // Required empty public constructor
     }
 
@@ -33,10 +32,10 @@ public class TopicsFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @return A new instance of fragment TopicsFragment.
+     * @return A new instance of fragment TopTabFragment.
      */
-    public static TopicsFragment newInstance() {
-        return new TopicsFragment();
+    public static TopTabFragment newInstance() {
+        return new TopTabFragment();
     }
 
     @Override
@@ -47,9 +46,7 @@ public class TopicsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_main_topics, container, false);
-        activity = (MainActivity) getActivity();
-
+        view = inflater.inflate(R.layout.fragment_main_stories_top_tab, container, false);
         return view;
     }
 

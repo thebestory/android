@@ -6,11 +6,11 @@
         <item
             android:id="@+id/navdrawer_stories"
             android:icon="@drawable/ic_navdrawer_stories"
-            android:title="@string/navdrawer_stories" />
+            android:title="@string/navdrawer_main_stories" />
         <item
             android:id="@+id/navdrawer_topics"
             android:icon="@drawable/ic_navdrawer_topics"
-            android:title="@string/navdrawer_topics" />
+            android:title="@string/navdrawer_main_topics" />
     </group>
 
     <group
@@ -18,15 +18,15 @@
         <item
             android:id="@+id/navdrawer_settings"
             android:icon="@drawable/ic_navdrawer_settings"
-            android:title="@string/navdrawer_settings" />
+            android:title="@string/navdrawer_main_settings" />
         <item
             android:id="@+id/navdrawer_about"
             android:icon="@drawable/ic_navdrawer_about"
-            android:title="@string/navdrawer_about" />
+            android:title="@string/navdrawer_main_about" />
         <item
             android:id="@+id/navdrawer_send_feedback"
             android:icon="@drawable/ic_navdrawer_send_feedback"
-            android:title="@string/navdrawer_send_feedback" />
+            android:title="@string/navdrawer_main_send_feedback" />
     </group>
 
     <group
@@ -35,7 +35,7 @@
         <item
             android:id="@+id/navdrawer_debug"
             android:icon="@drawable/ic_navdrawer_debug"
-            android:title="@string/navdrawer_debug" />
+            android:title="@string/navdrawer_main_debug" />
     </group>
 
 </menu>

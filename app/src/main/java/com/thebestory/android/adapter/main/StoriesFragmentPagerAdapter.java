@@ -6,9 +6,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.thebestory.android.R;
+import com.thebestory.android.fragment.main.stories.HotTabFragment;
+import com.thebestory.android.fragment.main.stories.RandomTabFragment;
 import com.thebestory.android.fragment.main.stories.RecentTabFragment;
+import com.thebestory.android.fragment.main.stories.TopTabFragment;
 
 public class StoriesFragmentPagerAdapter extends FragmentPagerAdapter {
+
+    private Context mContext;
 
     private static final int[] TAB_TITLE_RES_ID = new int[]{
             R.string.main_stories_tab_recent,
@@ -17,12 +22,9 @@ public class StoriesFragmentPagerAdapter extends FragmentPagerAdapter {
             R.string.main_stories_tab_random
     };
 
-    Context mContext;
-
     public StoriesFragmentPagerAdapter(FragmentManager fm, Context context) {
         super(fm);
         mContext = context;
-
     }
 
     @Override
@@ -36,11 +38,11 @@ public class StoriesFragmentPagerAdapter extends FragmentPagerAdapter {
             case 0:
                 return RecentTabFragment.newInstance();
             case 1:
-                return RecentTabFragment.newInstance();
+                return HotTabFragment.newInstance();
             case 2:
-                return RecentTabFragment.newInstance();
+                return TopTabFragment.newInstance();
             case 3:
-                return RecentTabFragment.newInstance();
+                return RandomTabFragment.newInstance();
         }
 
         return null;

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.thebestory.android.R;
+import com.thebestory.android.activity.MainActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,6 +21,7 @@ import com.thebestory.android.R;
  */
 public class DebugFragment extends Fragment {
     private View view;
+    private MainActivity activity;
 
     private OnFragmentInteractionListener mListener;
 
@@ -33,7 +35,6 @@ public class DebugFragment extends Fragment {
      *
      * @return A new instance of fragment DebugFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static DebugFragment newInstance() {
         return new DebugFragment();
     }
@@ -46,8 +47,9 @@ public class DebugFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_main_debug, container, false);
+        activity = (MainActivity) getActivity();
+
         return view;
     }
 

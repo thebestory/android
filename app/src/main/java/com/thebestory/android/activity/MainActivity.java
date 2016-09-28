@@ -36,12 +36,12 @@ public class MainActivity extends AppCompatActivity
     };
 
     private static final int[] NAVDRAWER_TITLE_RES_ID = new int[]{
-            R.string.navdrawer_stories,
-            R.string.navdrawer_topics,
-            R.string.navdrawer_settings,
-            R.string.navdrawer_about,
-            R.string.navdrawer_send_feedback,
-            R.string.navdrawer_debug
+            R.string.navdrawer_main_stories,
+            R.string.navdrawer_main_topics,
+            R.string.navdrawer_main_settings,
+            R.string.navdrawer_main_about,
+            R.string.navdrawer_main_send_feedback,
+            R.string.navdrawer_main_debug
     };
 
     private static final int[] NAVDRAWER_ICON_RES_ID = new int[]{
@@ -106,8 +106,6 @@ public class MainActivity extends AppCompatActivity
             case R.id.navdrawer_debug:
                 transaction.replace(R.id.main_frame_layout, debugFragment);
                 break;
-            default:
-                break;
         }
 
         transaction.addToBackStack(null).commit();
@@ -129,4 +127,11 @@ public class MainActivity extends AppCompatActivity
         imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
     }
 
+    public DrawerLayout getDrawerLayout() {
+        return drawerLayout;
+    }
+
+    public NavigationView getNavigationView() {
+        return navigationView;
+    }
 }
