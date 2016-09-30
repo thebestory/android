@@ -2,12 +2,11 @@ package com.thebestory.android.activity;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentTransaction;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.inputmethod.InputMethodManager;
@@ -15,7 +14,7 @@ import android.view.inputmethod.InputMethodManager;
 import com.thebestory.android.R;
 import com.thebestory.android.fragment.main.*;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -69,7 +68,7 @@ public class MainActivity extends AppCompatActivity
         aboutFragment = AboutFragment.newInstance();
         debugFragment = DebugFragment.newInstance();
 
-        getSupportFragmentManager().beginTransaction()
+        getFragmentManager().beginTransaction()
                 .replace(R.id.main_frame_layout, storiesFragment).commit();
     }
 
@@ -85,7 +84,7 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
         switch (item.getItemId()) {
             case R.id.navdrawer_stories:

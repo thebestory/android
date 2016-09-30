@@ -3,9 +3,9 @@ package com.thebestory.android.fragment.main;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentTransaction;
+import android.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -83,7 +83,7 @@ public class StoriesFragment extends Fragment {
         toggle.syncState();
 
         StoriesFragmentPagerAdapter adapter = new StoriesFragmentPagerAdapter(
-                getChildFragmentManager(), getContext());
+                getChildFragmentManager(), activity);
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
 
@@ -97,7 +97,7 @@ public class StoriesFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
+        FragmentTransaction transaction = activity.getFragmentManager().beginTransaction();
 
         switch (item.getItemId()) {
             case R.id.main_stories_toolbar_action_new:

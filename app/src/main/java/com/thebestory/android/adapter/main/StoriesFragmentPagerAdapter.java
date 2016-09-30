@@ -1,9 +1,9 @@
 package com.thebestory.android.adapter.main;
 
 import android.content.Context;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.support.v13.app.FragmentPagerAdapter;
 
 import com.thebestory.android.R;
 import com.thebestory.android.fragment.main.stories.HotTabFragment;
@@ -13,7 +13,7 @@ import com.thebestory.android.fragment.main.stories.TopTabFragment;
 
 public class StoriesFragmentPagerAdapter extends FragmentPagerAdapter {
 
-    private Context mContext;
+    private Context context;
 
     private static final int[] TAB_TITLE_RES_ID = new int[]{
             R.string.main_stories_tab_recent,
@@ -24,12 +24,12 @@ public class StoriesFragmentPagerAdapter extends FragmentPagerAdapter {
 
     public StoriesFragmentPagerAdapter(FragmentManager fm, Context context) {
         super(fm);
-        mContext = context;
+        this.context = context;
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return mContext.getString(TAB_TITLE_RES_ID[position]);
+        return context.getString(TAB_TITLE_RES_ID[position]);
     }
 
     @Override
