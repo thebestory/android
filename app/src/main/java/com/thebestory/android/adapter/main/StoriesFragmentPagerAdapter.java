@@ -16,10 +16,10 @@ public class StoriesFragmentPagerAdapter extends FragmentPagerAdapter {
     private Context context;
 
     private static final int[] TAB_TITLE_RES_ID = new int[]{
-            R.string.main_stories_tab_recent,
-            R.string.main_stories_tab_hot,
-            R.string.main_stories_tab_top,
-            R.string.main_stories_tab_random
+            R.string.main_stories_recent_tab,
+            R.string.main_stories_hot_tab,
+            R.string.main_stories_top_tab,
+            R.string.main_stories_random_tab
     };
 
     public StoriesFragmentPagerAdapter(FragmentManager fm, Context context) {

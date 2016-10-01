@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.thebestory.android.fragment.main.StoriesFragment"
-    android:background="?attr/colorBackground">
+    tools:context="com.thebestory.android.fragment.main.StoriesFragment">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -22,8 +21,8 @@
             android:id="@+id/main_stories_tab_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabMode="scrollable"
-            app:tabContentStart="72dp" />
+            app:tabContentStart="72dp"
+            app:tabMode="scrollable" />
 
     </android.support.design.widget.AppBarLayout>
 
@@ -31,6 +30,6 @@
         android:id="@+id/main_stories_viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"  />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </android.support.design.widget.CoordinatorLayout>
