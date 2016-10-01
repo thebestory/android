@@ -1,9 +1,25 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#BCAAA4</color>
-    <color name="colorPrimaryDark">#A1887F</color>
-    <color name="colorAccent">#A1887F</color>
 
-    <color name="colorPageBackground">#EFEFEF</color>
-    <color name="colorContentBackground">#FFFFFF</color>
+    <!--             -->
+    <!-- LIGHT THEME -->
+    <!--             -->
+
+    <color name="light_colorPrimary">#BCAAA4</color>
+    <color name="light_colorPrimaryDark">#A1887F</color>
+    <color name="light_colorAccent">#A1887F</color>
+
+    <color name="light_colorBackground">#EFEFEF</color>
+    <color name="light_colorContentBackground">#FFFFFF</color>
+
+    <!--            -->
+    <!-- DARK THEME -->
+    <!--            -->
+
+    <color name="dark_colorPrimary">#BCAAA4</color>
+    <color name="dark_colorPrimaryDark">#A1887F</color>
+    <color name="dark_colorAccent">#A1887F</color>
+
+    <color name="dark_colorBackground">#EFEFEF</color>
+    <color name="dark_colorContentBackground">#FFFFFF</color>
+
 </resources>
