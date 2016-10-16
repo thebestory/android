@@ -7,15 +7,23 @@ import java.util.ArrayList;
 /**
  * Created by Alex on 16.10.2016.
  */
+public class ApiMethods {
+    private static ApiMethods ourInstance = new ApiMethods();
 
-public final class ApiMethods {
-    private ApiMethods() {
-        throw new AssertionError();
+    public static ApiMethods getInstance() {
+        return ourInstance;
     }
 
-    public static void getStoryes (int topicId, int startStoryId, int count, CallBack<ArrayList<Story>> func) {
+    private ApiMethods() {
+    }
+
+    public void getStoryes (int topicId, int startStoryId, int count, CallBack<ArrayList<Story>> func) {
         ArrayList<Story> response = new ArrayList<>();
         response.add(new Story(startStoryId, topicId, 0, "Hello world!"));
         func.callBack(response);
+    }
+
+    public void getTopics() {
+
     }
 }
