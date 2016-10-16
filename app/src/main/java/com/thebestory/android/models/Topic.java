@@ -10,13 +10,13 @@ public final class Topic {
     public final String title;
     public final String description;
     public final String icon;
-    public final int stories_count;
+    public final int storiesCount;
 
-    public Topic(int id, String title, String description, String icon, int stories_count) {
+    public Topic(int id, String title, String description, String icon, int storiesCount) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.icon = icon;
-        this.stories_count = stories_count;
+        this.storiesCount = storiesCount;
     }
 }
