@@ -6,5 +6,5 @@ package com.thebestory.android.api;
 
 public interface CallBack<T> {
 
-    public void callBack(T obj) ;
+    void callBack(T obj) ;
 }

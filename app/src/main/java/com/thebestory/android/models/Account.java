@@ -1,5 +1,9 @@
 package com.thebestory.android.models;
 
+import android.util.JsonReader;
+
+import java.io.IOException;
+
 /**
  * Created by Alex on 16.10.2016.
  */
@@ -17,5 +21,41 @@ public final class Account {
         this.username = username;
         this.storiesCount = storiesCount;
         this.likesCount = likesCount;
+    }
+
+    public static Account parseAccount (JsonReader jr) throws IOException {
+        int id = 0;
+        String email = null;
+        String username = null;
+        int storiesCount = 0;
+        int likesCount = 0;
+
+        jr.beginObject();
+        while (jr.hasNext()) {
+            switch (jr.nextName()) {
+                case "id" :
+                    id = jr.nextInt();
+                    break;
+                case "email" :
+                    email = jr.nextString();
+                    break;
+                case "username" :
+                    username = jr.nextString();
+                    break;
+                case "storiesCount" :
+                    storiesCount = jr.nextInt();
+                    break;
+                case "likesCount" :
+                    likesCount = jr.nextInt();
+                    break;
+
+                default:
+                    jr.skipValue();
+                    break;
+            }
+        }
+        jr.endObject();
+
+        return new Account(id, email, username, storiesCount, likesCount);
     }
 }
