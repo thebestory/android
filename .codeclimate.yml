@@ -1,0 +1,21 @@
+engines:
+
+  checkstyle:
+    enabled: true
+    channel: "beta"
+
+  pmd:
+    enabled: true
+    channel: "beta"
+
+  markdownlint:
+    enabled: true
+
+  fixme:
+    enabled: true
+
+ratings:
+  paths:
+    - "**.java"
+
+exclude_paths: []
