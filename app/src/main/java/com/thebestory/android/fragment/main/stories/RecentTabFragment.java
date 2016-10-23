@@ -4,11 +4,18 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.thebestory.android.R;
+import com.thebestory.android.Story;
+import com.thebestory.android.adapter.main.StoriesFragmentForStoryAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,6 +27,8 @@ import com.thebestory.android.R;
  */
 public class RecentTabFragment extends Fragment {
     private View view;
+    private List<Story> stories;
+    private RecyclerView rv;
 
     private OnFragmentInteractionListener mListener;
 
@@ -46,6 +55,20 @@ public class RecentTabFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_main_stories_recent_tab, container, false);
+
+        rv = (RecyclerView) view.findViewById(R.id.rv);
+
+        //rv.setHasFixedSize(true); if rv don't change
+
+        LinearLayoutManager llm = new LinearLayoutManager(getActivity().getApplicationContext());
+        rv.setLayoutManager(llm);
+
+        StoriesFragmentForStoryAdapter adapter = new StoriesFragmentForStoryAdapter(stories);
+        rv.setAdapter(adapter);
+
+        initializeData();
+        initializeAdapter();
+
         return view;
     }
 
@@ -86,5 +109,22 @@ public class RecentTabFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+
+    private void initializeData() {
+        stories = new ArrayList<>();
+        stories.add(new Story("Funny", 56,
+                "Самое классное для меня в путешествиях - это снять квартиру вне туристического центра, обедать не в дорогих ресторанах, а в маленьких закусочных, которые держат какие-нибудь милые пенсионеры, гулять не по центральным улицам, а по неизведанным дворам, где кипит настоящая местная жизнь.\n" +
+                        "Памятники и музеи - это прекрасно, но так жаль, что многие туристы и не догадываются, сколько еще интересного скрывают чужие города.", 120, "4 hours ago"));
+        stories.add(new Story("Funny", 56,
+                "Самое классное для меня в путешествиях - это снять квартиру вне туристического центра, обедать не в дорогих ресторанах, а в маленьких закусочных, которые держат какие-нибудь милые пенсионеры, гулять не по центральным улицам, а по неизведанным дворам, где кипит настоящая местная жизнь.\n" +
+                        "Памятники и музеи - это прекрасно, но так жаль, что многие туристы и не догадываются, сколько еще интересного скрывают чужие города.", 120, "4 hours ago"));
+
+    }
+
+    private void initializeAdapter(){
+        StoriesFragmentForStoryAdapter adapter = new StoriesFragmentForStoryAdapter(stories);
+        rv.setAdapter(adapter);
     }
 }

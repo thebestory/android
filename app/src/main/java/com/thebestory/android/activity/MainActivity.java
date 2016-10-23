@@ -61,7 +61,8 @@ public class MainActivity extends BaseActivity
         navigationView = (NavigationView) findViewById(R.id.main_navdrawer);
         navigationView.setNavigationItemSelectedListener(this);
 
-        // TODO: упростить как-то это
+        // TODO: we have to edit this
+        // Update: Why? It's okay
         storiesFragment = StoriesFragment.newInstance();
         topicsFragment = TopicsFragment.newInstance();
         settingsFragment = SettingsFragment.newInstance();
@@ -72,6 +73,7 @@ public class MainActivity extends BaseActivity
                 .replace(R.id.main_frame_layout, storiesFragment).commit();
     }
 
+    //For button "Back"
     @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -81,6 +83,7 @@ public class MainActivity extends BaseActivity
         }
     }
 
+    // Processing click on item NavigationMenu
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -114,7 +117,8 @@ public class MainActivity extends BaseActivity
         return true;
     }
 
-    // TODO: next methods close keyboard from NewStoryFragment, kostyl, we need to change it
+    // TODO: next two methods close keyboard from NewStoryFragment
+    // Update: It's a crutch, we need to change it
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) hideKeyboard();
