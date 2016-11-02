@@ -11,7 +11,7 @@ import com.thebestory.android.api.parseUrlRequest.ParseUrl;
  * Created by Alex on 16.10.2016.
  */
 
-class ApiAsyncTask<T> extends AsyncTaskLoader<T> {
+class ApiAsyncTask<T> extends AsyncTaskLoader<LoaderResult<T>> {
 
     private final ParseUrl parseUrlRequest;
     private final ParseResponse<T> parseResponse;
@@ -29,13 +29,13 @@ class ApiAsyncTask<T> extends AsyncTaskLoader<T> {
     }
 
     @Override
-    public T loadInBackground() {
+    public  LoaderResult<T> loadInBackground() {
         String urlRequest = parseUrlRequest.parse(args);
 
         String jsonResponse = null; //TODO: request to urlRequest
 
         T response = parseResponse.parse(jsonResponse);
-        return response;
+        return new LoaderResult(LoaderStatus.ERROR, response);
     }
 
 }

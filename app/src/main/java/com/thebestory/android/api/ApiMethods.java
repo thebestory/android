@@ -27,7 +27,7 @@ public class ApiMethods {
     private ApiMethods() {
     }
 
-    public AsyncTaskLoader<ArrayList<Story>> getStoryesTask (Context context, int topicId, int startStoryId, int count) {
+    public ApiAsyncTask<ArrayList<Story>> getStoryesTask (Context context, int topicId, int startStoryId, int count) {
         Bundle requestBundle = new Bundle();
         requestBundle.putInt("topicId", topicId);
         requestBundle.putInt("startStoryId", startStoryId);
@@ -38,7 +38,7 @@ public class ApiMethods {
         return task;
     }
 
-    public AsyncTaskLoader<ArrayList<Topic>>  getTopicsTask (Context context) {
+    public ApiAsyncTask<ArrayList<Topic>>  getTopicsTask (Context context) {
         ApiAsyncTask task = new ApiAsyncTask(context, new GetTopicsUrl(), new ParseTopicsArray(), null);
         return task;
     }
