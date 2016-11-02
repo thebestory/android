@@ -4,8 +4,8 @@ import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.os.Bundle;
 
-import com.thebestory.android.api.parseResponse.parseResponse;
-import com.thebestory.android.api.parseUrlRequest.parseUrl;
+import com.thebestory.android.api.parseResponse.ParseResponse;
+import com.thebestory.android.api.parseUrlRequest.ParseUrl;
 
 /**
  * Created by Alex on 16.10.2016.
@@ -13,18 +13,18 @@ import com.thebestory.android.api.parseUrlRequest.parseUrl;
 
 class ApiAsyncTask<T> extends AsyncTaskLoader<T> {
 
-    private final parseUrl parseUrlRequest;
-    private final parseResponse<T> parseT;
+    private final ParseUrl parseUrlRequest;
+    private final ParseResponse<T> parseResponse;
     private Bundle args;
 
-    public ApiAsyncTask(Context context, parseUrl parseUrlRequest, parseResponse<T> parseT) {
-        this(context, parseUrlRequest, parseT, null);
+    public ApiAsyncTask(Context context, ParseUrl parseUrlRequest, ParseResponse<T> parseResponse) {
+        this(context, parseUrlRequest, parseResponse, null);
     }
 
-    public ApiAsyncTask(Context context, parseUrl parseUrlRequest, parseResponse<T> parseT, Bundle args) {
+    public ApiAsyncTask(Context context, ParseUrl parseUrlRequest, ParseResponse<T> parseResponse, Bundle args) {
         super(context);
         this.parseUrlRequest = parseUrlRequest;
-        this.parseT = parseT;
+        this.parseResponse = parseResponse;
         this.args = args;
     }
 
@@ -34,13 +34,8 @@ class ApiAsyncTask<T> extends AsyncTaskLoader<T> {
 
         String jsonResponse = null; //TODO: request to urlRequest
 
-        T response = parseT.parse(jsonResponse);
+        T response = parseResponse.parse(jsonResponse);
         return response;
     }
-
-    public void setBundle (Bundle args) {
-        this.args = args;
-    }
-
 
 }

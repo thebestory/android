@@ -1,9 +1,14 @@
 package com.thebestory.android.api;
 
 import android.app.LoaderManager;
+import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.thebestory.android.api.parseResponse.ParseStoriesArray;
+import com.thebestory.android.api.parseResponse.ParseTopicsArray;
+import com.thebestory.android.api.urlCollection.GetStoryUrl;
+import com.thebestory.android.api.urlCollection.GetTopicsUrl;
 import com.thebestory.android.models.Story;
 import com.thebestory.android.models.Topic;
 
@@ -22,23 +27,19 @@ public class ApiMethods {
     private ApiMethods() {
     }
 
-    public void getStoryes (int topicId, int startStoryId, int count, CallBack<ArrayList<Story>> func, LoaderManager loaderManager, Context context) {
-        ArrayList<Story> response = new ArrayList<>();
-        response.add(new Story(startStoryId, topicId, 0, "Hello world!"));
-        func.callBack(response);
-
+    public AsyncTaskLoader<ArrayList<Story>> getStoryesTask (Context context, int topicId, int startStoryId, int count) {
         Bundle requestBundle = new Bundle();
         requestBundle.putInt("topicId", topicId);
         requestBundle.putInt("startStoryId", startStoryId);
         requestBundle.putInt("count", count);
 
-        //ApiLoadeCallbad<ArrayList<Story>> loadedListener = new ApiLoadeCallbad<>(context, UrlGetStory, GetStoryResponse, func);
-        //loaderManager.restartLoader(loadersId.GET_STORYES_ID, requestBundle, loadedListeber);
+        ApiAsyncTask task = new ApiAsyncTask(context, new GetStoryUrl(), new ParseStoriesArray(), requestBundle);
+
+        return task;
     }
 
-    public void getTopics(CallBack<ArrayList<Topic>> func) {
-        ArrayList<Topic> response = new ArrayList<>();
-        response.add(new Topic(0, "hello", "world", "no icon", 1 ));
-        func.callBack(response);
+    public AsyncTaskLoader<ArrayList<Topic>>  getTopicsTask (Context context) {
+        ApiAsyncTask task = new ApiAsyncTask(context, new GetTopicsUrl(), new ParseTopicsArray(), null);
+        return task;
     }
 }

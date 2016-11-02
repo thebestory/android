@@ -20,12 +20,14 @@ public final class Story {
     //public final int comment_count;
 
     public final String story;
+    public final String topicTitle;
 
-    public Story(int id, int topicId, int likesCount, String story) {
+    public Story(int id, int topicId, int likesCount, String topicTitle, String story) {
         this.id = id;
         this.topicId = topicId;
         this.likesCount = likesCount;
         this.story = story;
+        this.topicTitle = topicTitle;
     }
 
     public static Story parseStory(JsonReader jr) throws IOException {
@@ -33,20 +35,24 @@ public final class Story {
         int topicId = 0;
         int likesCount = 0;
         String story = null;
+        String topicTitle = null;
         jr.beginObject();
             while (jr.hasNext()) {
                 switch (jr.nextName()) {
                     case "id" :
                         id = jr.nextInt();
                         break;
-                    case "topicId" :
+                    case "topic_id" :
                         topicId = jr.nextInt();
                         break;
-                    case "likesCount" :
+                    case "likes_count" :
                         likesCount = jr.nextInt();
                         break;
                     case "story" :
                         story = jr.nextString();
+                        break;
+                    case "topic_title":
+                        topicTitle = jr.nextString();
                         break;
                     default:
                         jr.skipValue();
@@ -54,6 +60,6 @@ public final class Story {
                 }
             }
         jr.endObject();
-        return new Story(id, topicId, likesCount, story);
+        return new Story(id, topicId, likesCount, topicTitle, story);
     }
 }

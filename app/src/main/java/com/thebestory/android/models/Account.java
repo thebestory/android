@@ -42,10 +42,10 @@ public final class Account {
                 case "username" :
                     username = jr.nextString();
                     break;
-                case "storiesCount" :
+                case "stories_count" :
                     storiesCount = jr.nextInt();
                     break;
-                case "likesCount" :
+                case "likes_count" :
                     likesCount = jr.nextInt();
                     break;
 

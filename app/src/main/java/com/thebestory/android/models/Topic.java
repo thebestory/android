@@ -46,7 +46,7 @@ public final class Topic {
                 case "icon" :
                     icon = jr.nextString();
                     break;
-                case "storiesCount" :
+                case "stories_count" :
                     storiesCount = jr.nextInt();
                     break;
 
