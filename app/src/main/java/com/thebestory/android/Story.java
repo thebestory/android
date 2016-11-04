@@ -7,6 +7,8 @@ import java.util.List;
  * Created by Октай on 18.10.2016.
  */
 
+@Deprecated
+
 public class Story {
 
     private String imageTopic;// TODO: 20.10.2016

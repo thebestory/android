@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.thebestory.android.Story;
 
 import com.thebestory.android.R;
+import com.thebestory.android.models.Story;
 
 import java.util.List;
 
@@ -60,11 +60,11 @@ public class StoriesFragmentForStoryAdapter extends RecyclerView.Adapter<Stories
 
     @Override
     public void onBindViewHolder(StoryViewHolder storyViewHolder, int i) {
-        storyViewHolder.nameTopic.setText(stories.get(i).getNameTopic());
-        storyViewHolder.numberStory.setText(Integer.toString(stories.get(i).getNumberStory()));
-        storyViewHolder.textStory.setText(stories.get(i).getTextStory());
-        storyViewHolder.timeTopic.setText(stories.get(i).getTimeTopic());
-        storyViewHolder.numbersLike.setText(Integer.toString(stories.get(i).getNumbersLikes()));
+        storyViewHolder.nameTopic.setText(Integer.toString(stories.get(i).topicId));
+        storyViewHolder.numberStory.setText(Integer.toString(stories.get(i).id));
+        storyViewHolder.textStory.setText(stories.get(i).story);
+        storyViewHolder.timeTopic.setText(/*stories.get(i).*/"1000500");
+        storyViewHolder.numbersLike.setText(Integer.toString(stories.get(i).likesCount));
         //storyViewHolder.imageTopic.setImageResource(stories.get(i).getImageTopic);
     }
 

@@ -11,8 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.thebestory.android.R;
-import com.thebestory.android.Story;
 import com.thebestory.android.adapter.main.StoriesFragmentForStoryAdapter;
+import com.thebestory.android.models.Story;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +66,8 @@ public class RecentTabFragment extends Fragment {
         StoriesFragmentForStoryAdapter adapter = new StoriesFragmentForStoryAdapter(stories);
         rv.setAdapter(adapter);
 
-        initializeData();
+
+        debugInitializeData();
         initializeAdapter();
 
         return view;
@@ -112,15 +113,15 @@ public class RecentTabFragment extends Fragment {
     }
 
 
-    private void initializeData() {
+    private void debugInitializeData() {
         stories = new ArrayList<>();
-        stories.add(new Story("Funny", 56,
+        stories.add(new Story(1, 56, 5,
+                "Самое классное для меня в путешествиях - это снять квартиру вне туристического центра, обедать не в дорогих ресторанах, а в маленьких закусочных, которые держат какие-нибудь милые пенсионеры, гулять не по центральным улицам, а по неизведанным дворам, где кипит настоящая местная жизнь.\n" +
+                        "Памятники и музеи - это прекрасно, но так жаль, что многие туристы и не догадываются, сколько еще интересного скрывают чужие города."));
+        /*stories.add(new Story("Funny", 56,
                 "Самое классное для меня в путешествиях - это снять квартиру вне туристического центра, обедать не в дорогих ресторанах, а в маленьких закусочных, которые держат какие-нибудь милые пенсионеры, гулять не по центральным улицам, а по неизведанным дворам, где кипит настоящая местная жизнь.\n" +
                         "Памятники и музеи - это прекрасно, но так жаль, что многие туристы и не догадываются, сколько еще интересного скрывают чужие города.", 120, "4 hours ago"));
-        stories.add(new Story("Funny", 56,
-                "Самое классное для меня в путешествиях - это снять квартиру вне туристического центра, обедать не в дорогих ресторанах, а в маленьких закусочных, которые держат какие-нибудь милые пенсионеры, гулять не по центральным улицам, а по неизведанным дворам, где кипит настоящая местная жизнь.\n" +
-                        "Памятники и музеи - это прекрасно, но так жаль, что многие туристы и не догадываются, сколько еще интересного скрывают чужие города.", 120, "4 hours ago"));
-
+*/
     }
 
     private void initializeAdapter(){
