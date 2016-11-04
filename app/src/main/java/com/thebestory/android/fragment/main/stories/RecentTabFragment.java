@@ -56,16 +56,12 @@ public class RecentTabFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_main_stories_recent_tab, container, false);
 
-        rv = (RecyclerView) view.findViewById(R.id.rv);
+        rv = (RecyclerView) view.findViewById(R.id.rv_stories_recent_tab);
 
         //rv.setHasFixedSize(true); if rv don't change
 
         LinearLayoutManager llm = new LinearLayoutManager(getActivity().getApplicationContext());
         rv.setLayoutManager(llm);
-
-        StoriesFragmentForStoryAdapter adapter = new StoriesFragmentForStoryAdapter(stories);
-        rv.setAdapter(adapter);
-
 
         debugInitializeData();
         initializeAdapter();

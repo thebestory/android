@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/card_topic"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <ImageView
+                android:id="@+id/icon_topic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginEnd="16dp"
+                android:scaleType="fitStart"
+                android:src="@drawable/ic_smile_black" />
+
+
+            <TextView
+                android:id="@+id/text_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/icon_topic"
+                android:text="Funny"
+                android:textColor="@color/cardview_dark_background"
+                android:textSize="30sp" />
+
+
+            <TextView
+                android:id="@+id/text_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/text_title"
+                android:layout_toRightOf="@+id/icon_topic"
+                android:text="Very impressive stories that happened in interesting moments in life." />
+
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/text_stories_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/text_title"
+            android:layout_alignBottom="@+id/text_title"
+            android:text="28 stories"
+            android:layout_marginStart="315dp"
+            android:gravity=""
+            android:layout_alignParentTop="true" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginTop="4dp"
+            android:background="#d1d0d0" />
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>
