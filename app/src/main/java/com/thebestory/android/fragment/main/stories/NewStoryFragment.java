@@ -30,7 +30,7 @@ public class NewStoryFragment extends Fragment {
 
     private Toolbar toolbar;
 
-    public NewStoryFragment() {
+    public NewStoryFragment() { //TODO: When we come up how to post request -> Do it!
         // Required empty public constructor
     }
 

@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="8dp"
-    app:cardCornerRadius="5dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -63,7 +62,7 @@
                     android:layout_marginEnd="5dp"
                     android:layout_marginStart="5dp"
                     android:alpha="0.8"
-                    android:text=""
+                    android:text="Saw a girl in a bus yesterday with a SAT tests book, came closer to pay and found out that behind the book she had a phone with a gay-porn video going on."
                     android:textColor="@color/black_colorText"
                     android:textSize="15sp" />
 

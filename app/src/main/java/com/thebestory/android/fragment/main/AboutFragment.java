@@ -19,7 +19,7 @@ import com.thebestory.android.activity.MainActivity;
  * Use the {@link AboutFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AboutFragment extends Fragment {
+public class AboutFragment extends Fragment { //TODO: We should ask Alexandr Afonin for helps this
     private View view;
     private MainActivity activity;
 

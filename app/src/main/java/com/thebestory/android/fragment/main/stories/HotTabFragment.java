@@ -19,7 +19,7 @@ import com.thebestory.android.R;
  * Use the {@link HotTabFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HotTabFragment extends Fragment {
+public class HotTabFragment extends Fragment { //TODO: When we create RecentTabFragment -> Do it!
     private View view;
 
     private OnFragmentInteractionListener mListener;

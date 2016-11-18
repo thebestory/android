@@ -34,7 +34,7 @@ import java.util.List;
  * Use the {@link TopicsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TopicsFragment extends Fragment {
+public class TopicsFragment extends Fragment { //TODO: When we create RecentTabFragment -> Do it!
     private View view;
     private MainActivity activity;
 
@@ -158,6 +158,8 @@ public class TopicsFragment extends Fragment {
     private void debugInitializeData() {
         topics = new ArrayList<>();
         topics.add(new Topic(1, "Funny", "Very impressive stories that happened in good moments life", ".png", 5));
+        topics.add(new Topic(2, "Sad", "Very impressive stories that happened in bad moments life", ".png", 6));
+        topics.add(new Topic(2, "Sad", "Very impressive stories that happened in bad moments life", ".png", 6));
         topics.add(new Topic(2, "Sad", "Very impressive stories that happened in bad moments life", ".png", 6));
     }
 

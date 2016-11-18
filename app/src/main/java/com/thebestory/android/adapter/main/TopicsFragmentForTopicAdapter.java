@@ -29,7 +29,7 @@ public class TopicsFragmentForTopicAdapter extends RecyclerView.Adapter<TopicsFr
         TextView storiesCount;
         //ImageView imageTopic;
 
-        TopicViewHolder(View itemView) {
+        TopicViewHolder(View itemView) { //TODO: When Alex changes API = Change this methods
             super(itemView);
             cv = (CardView) itemView.findViewById(R.id.card_topic);
             title = (TextView) itemView.findViewById(R.id.text_title);
@@ -58,7 +58,7 @@ public class TopicsFragmentForTopicAdapter extends RecyclerView.Adapter<TopicsFr
     }
 
     @Override
-    public void onBindViewHolder(TopicViewHolder storyViewHolder, int i) {
+    public void onBindViewHolder(TopicViewHolder storyViewHolder, int i) { //TODO: When Alex changes API = Change this methods
         storyViewHolder.title.setText(topics.get(i).title);
         storyViewHolder.description.setText(topics.get(i).description);
         storyViewHolder.storiesCount.setText(Integer.toString(topics.get(i).storiesCount));

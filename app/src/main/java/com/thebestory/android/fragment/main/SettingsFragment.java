@@ -26,7 +26,7 @@ import com.thebestory.android.activity.MainActivity;
  * Use the {@link SettingsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SettingsFragment extends Fragment {
+public class SettingsFragment extends Fragment { //TODO: We should discuss about this topic and Nariman can make it
     private View view;
     private MainActivity activity;
 

@@ -19,7 +19,7 @@ import com.thebestory.android.R;
  * Use the {@link RandomTabFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RandomTabFragment extends Fragment {
+public class RandomTabFragment extends Fragment { //TODO: When we create RecentTabFragment -> Do it!
     private View view;
 
     private OnFragmentInteractionListener mListener;
