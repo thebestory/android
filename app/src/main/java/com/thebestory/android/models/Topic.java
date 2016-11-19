@@ -15,20 +15,22 @@ public final class Topic {
     public final String description;
     public final String icon;
     public final int storiesCount;
+    public final String slug;
 
-    public Topic(int id, String title, String description, String icon, int storiesCount) {
+    public Topic(int id, String title, String description, String slug, String icon, int storiesCount) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.icon = icon;
         this.storiesCount = storiesCount;
+        this.slug = slug;
     }
 
     public static Topic parseTopic (JsonReader jr) throws IOException {
         int id = 0;
         String title = null;
         String description = null;
-        String icon = null;
+        String icon = null, slug = null;
         int storiesCount = 0;
 
         jr.beginObject();
@@ -46,10 +48,12 @@ public final class Topic {
                 case "icon" :
                     icon = jr.nextString();
                     break;
-                case "storiesCount" :
+                case "stories_count" :
                     storiesCount = jr.nextInt();
                     break;
-
+                case "slug" :
+                    slug = jr.nextString();
+                    break;
                 default:
                     jr.skipValue();
                     break;
@@ -57,6 +61,6 @@ public final class Topic {
         }
         jr.endObject();
 
-        return new Topic(id, title, description, icon, storiesCount);
+        return new Topic(id, title, description, slug, icon, storiesCount);
     }
 }

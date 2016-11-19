@@ -3,44 +3,46 @@ package com.thebestory.android.api;
 import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.JsonReader;
 
-import com.thebestory.android.api.parseResponse.parseResponse;
-import com.thebestory.android.api.parseUrlRequest.parseUrl;
+import com.thebestory.android.api.parseResponse.ParseResponse;
+import com.thebestory.android.api.parseUrlRequest.ParseUrl;
+
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 
 /**
  * Created by Alex on 16.10.2016.
  */
 
-class ApiAsyncTask<T> extends AsyncTaskLoader<T> {
+class ApiAsyncTask<T> extends AsyncTaskLoader<LoaderResult<T>> {
 
-    private final parseUrl parseUrlRequest;
-    private final parseResponse<T> parseT;
+    private final ParseUrl parseUrlRequest;
+    private final ParseResponse<T> parseResponse;
     private Bundle args;
 
-    public ApiAsyncTask(Context context, parseUrl parseUrlRequest, parseResponse<T> parseT) {
-        this(context, parseUrlRequest, parseT, null);
+    public ApiAsyncTask(Context context, ParseUrl parseUrlRequest, ParseResponse<T> parseResponse) {
+        this(context, parseUrlRequest, parseResponse, null);
     }
 
-    public ApiAsyncTask(Context context, parseUrl parseUrlRequest, parseResponse<T> parseT, Bundle args) {
+    public ApiAsyncTask(Context context, ParseUrl parseUrlRequest, ParseResponse<T> parseResponse, Bundle args) {
         super(context);
         this.parseUrlRequest = parseUrlRequest;
-        this.parseT = parseT;
+        this.parseResponse = parseResponse;
         this.args = args;
     }
 
     @Override
-    public T loadInBackground() {
-        String urlRequest = parseUrlRequest.parse(args);
+    public  LoaderResult<T> loadInBackground() {
+        try {
+            HttpURLConnection urlConnection = parseUrlRequest.parse(args);
+            JsonReader jr  = new JsonReader(new InputStreamReader(urlConnection.getInputStream(), "utf-8"));
+            T response = parseResponse.parse(jr);
+            return new LoaderResult(LoaderStatus.OK, response);
+        } catch (Exception error) {
 
-        String jsonResponse = null; //TODO: request to urlRequest
-
-        T response = parseT.parse(jsonResponse);
-        return response;
+        }
+        return new LoaderResult(LoaderStatus.ERROR, null);
     }
-
-    public void setBundle (Bundle args) {
-        this.args = args;
-    }
-
 
 }

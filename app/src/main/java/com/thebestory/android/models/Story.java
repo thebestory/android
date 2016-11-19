@@ -9,51 +9,63 @@ import java.io.IOException;
  */
 
 public final class Story {
-    public final int id;
-    public final int topicId;
-    //TODO: Use the time class
-    //public final int timestamp;
+    public final String id;
 
     public final int likesCount;
 
-    //TODO: If comments supported
-    //public final int comment_count;
+    public final int commentsCount;
 
-    public final String story;
+    public final String content;
 
-    public Story(int id, int topicId, int likesCount, String story) {
+    public final String submitDate;
+    public final String publishDate;
+
+    public final Topic topic;
+
+    public Story(String id, int likesCount, int commentsCount, String content, String submitDate, String publishDate, Topic topic) {
         this.id = id;
-        this.topicId = topicId;
         this.likesCount = likesCount;
-        this.story = story;
+        this.content = content;
+        this.submitDate = submitDate;
+        this.publishDate = publishDate;
+        this.topic = topic;
+        this.commentsCount = commentsCount;
     }
 
     public static Story parseStory(JsonReader jr) throws IOException {
-        int id = 0;
-        int topicId = 0;
-        int likesCount = 0;
-        String story = null;
+        String id = null;
+        int commentsCount = 0, likesCount = 0;
+        String content = null, publishDate = null, submitDate = null;
+        Topic topic = null;
         jr.beginObject();
-            while (jr.hasNext()) {
-                switch (jr.nextName()) {
-                    case "id" :
-                        id = jr.nextInt();
-                        break;
-                    case "topicId" :
-                        topicId = jr.nextInt();
-                        break;
-                    case "likesCount" :
-                        likesCount = jr.nextInt();
-                        break;
-                    case "story" :
-                        story = jr.nextString();
-                        break;
-                    default:
-                        jr.skipValue();
-                        break;
-                }
+        while (jr.hasNext()) {
+            switch (jr.nextName()) {
+                case "id":
+                    id = jr.nextString();
+                    break;
+                case "likes_count":
+                    likesCount = jr.nextInt();
+                    break;
+                case "content":
+                    content = jr.nextString();
+                    break;
+                case "comments_count":
+                    commentsCount = jr.nextInt();
+                    break;
+                case "submitted_date":
+                    submitDate = jr.nextString();
+                    break;
+                case "published_date":
+                    publishDate = jr.nextString();
+                    break;
+                case "topic":
+                    topic = Topic.parseTopic(jr);
+                default:
+                    jr.skipValue();
+                    break;
             }
+        }
         jr.endObject();
-        return new Story(id, topicId, likesCount, story);
+        return new Story(id, likesCount, commentsCount, content, submitDate, publishDate, topic);
     }
 }

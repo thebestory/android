@@ -1,9 +1,23 @@
 package com.thebestory.android.api;
 
-import android.app.LoaderManager;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.thebestory.android.api.parseResponse.ParseStoriesArray;
+import com.thebestory.android.api.parseResponse.ParseStory;
+import com.thebestory.android.api.parseResponse.ParseTopic;
+import com.thebestory.android.api.parseResponse.ParseTopicsArray;
+import com.thebestory.android.api.parseUrlRequest.ParseUrl;
+import com.thebestory.android.api.urlCollection.Stories.GetDetailsStory;
+import com.thebestory.android.api.urlCollection.Stories.GetHotStories;
+import com.thebestory.android.api.urlCollection.Stories.GetLatestStories;
+import com.thebestory.android.api.urlCollection.Stories.GetRandomStories;
+import com.thebestory.android.api.urlCollection.Stories.GetTopStories;
+import com.thebestory.android.api.urlCollection.Stories.SubmitStory;
+import com.thebestory.android.api.urlCollection.Topics.GetDetailsTopic;
+import com.thebestory.android.api.urlCollection.Topics.GetTopicStories;
+import com.thebestory.android.api.urlCollection.Topics.GetTopicsList;
+import com.thebestory.android.api.urlCollection.TypeOfCollection;
 import com.thebestory.android.models.Story;
 import com.thebestory.android.models.Topic;
 
@@ -20,25 +34,82 @@ public class ApiMethods {
     }
 
     private ApiMethods() {
+        throw new AssertionError();
     }
 
-    public void getStoryes (int topicId, int startStoryId, int count, CallBack<ArrayList<Story>> func, LoaderManager loaderManager, Context context) {
-        ArrayList<Story> response = new ArrayList<>();
-        response.add(new Story(startStoryId, topicId, 0, "Hello world!"));
-        func.callBack(response);
+    private void addTypeOfCollection(Bundle requestBundle, TypeOfCollection typeOf, String id) {
+        switch (typeOf) {
+            case AROUND:
+                requestBundle.putString("around", id);
+                break;
+            case BEFORE:
+                requestBundle.putString("before", id);
+                break;
+            case AFTER:
+                requestBundle.putString("after", id);
+                break;
+            default:
+                break;
+        }
+    }
 
+    public ApiAsyncTask<Story> getDetailsStory(Context context, String id) {
+        Bundle requestBundle = new Bundle();
+        requestBundle.putString("id", id);
+        ApiAsyncTask task = new ApiAsyncTask(context, new GetDetailsStory(), new ParseStory(), requestBundle);
+        return task;
+    }
+
+    private ApiAsyncTask<ArrayList<Story>> getTeamplateStories (Context context, TypeOfCollection typeOf, String id,  int limit, ParseUrl parserUrl) {
+        Bundle requestBundle = new Bundle();
+        addTypeOfCollection(requestBundle, typeOf, id);
+        requestBundle.putInt("limit", limit);
+        ApiAsyncTask task = new ApiAsyncTask(context, parserUrl, new ParseStoriesArray(), requestBundle);
+        return task;
+    }
+
+    public ApiAsyncTask<ArrayList<Story>> getLatestStories (Context context, TypeOfCollection typeOf, String id, int limit) {
+        return getTeamplateStories(context, typeOf, id, limit, new GetLatestStories());
+    }
+
+    public ApiAsyncTask<ArrayList<Story>> getHotStories (Context context, TypeOfCollection typeOf, String id, int limit) {
+        return getTeamplateStories(context, typeOf, id, limit, new GetHotStories());
+    }
+
+    public ApiAsyncTask<ArrayList<Story>> getRandomStories (Context context, TypeOfCollection typeOf, String id, int limit) {
+        return getTeamplateStories(context, typeOf, id, limit, new GetRandomStories());
+    }
+
+    public ApiAsyncTask<ArrayList<Story>> getTopStories (Context context, TypeOfCollection typeOf, String id, int limit) {
+        return getTeamplateStories(context, typeOf, id, limit, new GetTopStories());
+    }
+
+    public ApiAsyncTask<Boolean> SubmitStory(Context context, String story) {
+        Bundle requestBundle = new Bundle();
+        requestBundle.putString("story", story);
+        ApiAsyncTask task = new ApiAsyncTask(context, new SubmitStory(), null, requestBundle);
+        return task;
+    }
+
+    public ApiAsyncTask<Topic> getDetailsTopic(Context context, int id) {
+        Bundle requestBundle = new Bundle();
+        requestBundle.putInt("id", id);
+        ApiAsyncTask task = new ApiAsyncTask(context, new GetDetailsTopic(), new ParseTopic(), requestBundle);
+        return task;
+    }
+
+    public ApiAsyncTask<ArrayList<Topic>> getTopicsList(Context context) {
+        ApiAsyncTask task = new ApiAsyncTask(context, new GetTopicsList(), new ParseTopicsArray(), null);
+        return task;
+    }
+
+    public ApiAsyncTask<ArrayList<Story>> getTopicStories(Context context, int topicId, TypeOfCollection typeOf, String timeStamp, int limit) {
         Bundle requestBundle = new Bundle();
         requestBundle.putInt("topicId", topicId);
-        requestBundle.putInt("startStoryId", startStoryId);
-        requestBundle.putInt("count", count);
+        addTypeOfCollection(requestBundle, typeOf, timeStamp);
 
-        //ApiLoadeCallbad<ArrayList<Story>> loadedListener = new ApiLoadeCallbad<>(context, UrlGetStory, GetStoryResponse, func);
-        //loaderManager.restartLoader(loadersId.GET_STORYES_ID, requestBundle, loadedListeber);
+        ApiAsyncTask task = new ApiAsyncTask(context, new GetTopicStories(), new ParseStoriesArray(), requestBundle);
+        return task;
     }
 
-    public void getTopics(CallBack<ArrayList<Topic>> func) {
-        ArrayList<Topic> response = new ArrayList<>();
-        response.add(new Topic(0, "hello", "world", "no icon", 1 ));
-        func.callBack(response);
-    }
 }
