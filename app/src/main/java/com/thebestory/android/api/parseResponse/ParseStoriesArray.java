@@ -1,6 +1,7 @@
 package com.thebestory.android.api.parseResponse;
 
 import android.util.JsonReader;
+import android.util.Log;
 
 import com.thebestory.android.models.Story;
 import com.thebestory.android.models.Topic;
@@ -20,12 +21,13 @@ public class ParseStoriesArray implements ParseResponse<ArrayList<Story>> {
         //while (!jr.nextName().equals("stories")) {
         //    jr.skipValue();
         //}
+        Log.e("WRONG","Start");
         response.beginArray();
-        while (response.hasNext())
-        {
+        while (response.hasNext()) {
             stories.add(Story.parseStory(response));
         }
         response.endArray();
+        Log.e("WRONG","End");
         return stories;
     }
 }

@@ -90,7 +90,7 @@ public class TopicsFragment extends Fragment { //TODO: When we create RecentTabF
         LinearLayoutManager llm = new LinearLayoutManager(getActivity().getApplicationContext());
         rv.setLayoutManager(llm);
 
-        debugInitializeData();
+        //debugInitializeData();
         initializeAdapter();
 
         return view;
@@ -155,13 +155,13 @@ public class TopicsFragment extends Fragment { //TODO: When we create RecentTabF
         void onFragmentInteraction(Uri uri);
     }
 
-    private void debugInitializeData() {
+    /*private void debugInitializeData() {
         topics = new ArrayList<>();
         topics.add(new Topic(1, "Funny", "Very impressive stories that happened in good moments life", ".png", 5));
         topics.add(new Topic(2, "Sad", "Very impressive stories that happened in bad moments life", ".png", 6));
         topics.add(new Topic(2, "Sad", "Very impressive stories that happened in bad moments life", ".png", 6));
         topics.add(new Topic(2, "Sad", "Very impressive stories that happened in bad moments life", ".png", 6));
-    }
+    }*/
 
     private void initializeAdapter() {
         TopicsFragmentForTopicAdapter adapter = new TopicsFragmentForTopicAdapter(topics);

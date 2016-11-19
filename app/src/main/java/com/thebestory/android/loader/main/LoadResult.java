@@ -7,6 +7,12 @@ import android.support.annotation.Nullable;
  * Created by Октай on 16.11.2016.
  */
 
+
+/*
+@deprecated class was written Oktai
+*/
+
+@Deprecated
 public class LoadResult<T> {
 
     /**

@@ -10,6 +10,7 @@ import android.app.Fragment;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +19,15 @@ import android.widget.TextView;
 
 import com.thebestory.android.R;
 import com.thebestory.android.adapter.main.StoriesFragmentForStoryAdapter;
-import com.thebestory.android.loader.main.LoadResult;
-import com.thebestory.android.loader.main.ResultType;
+import com.thebestory.android.api.ApiMethods;
+import com.thebestory.android.api.LoaderResult;
+import com.thebestory.android.api.LoaderStatus;
+import com.thebestory.android.api.urlCollection.TypeOfCollection;
 import com.thebestory.android.loader.main.StoriesData;
-import com.thebestory.android.loader.main.StoriesLoader;
 import com.thebestory.android.models.Story;
 
-import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,7 +37,7 @@ import java.util.List;
  * Use the {@link RecentTabFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RecentTabFragment extends Fragment implements LoaderManager.LoaderCallbacks<LoadResult<List<Story>>> {
+public class RecentTabFragment extends Fragment implements LoaderManager.LoaderCallbacks<LoaderResult<List<Story>>> {
 
     private View view;
     final RecentTabFragment thisFragment = this;
@@ -106,6 +108,7 @@ public class RecentTabFragment extends Fragment implements LoaderManager.LoaderC
         } else {
             currentIdStories = 0;
             flagForLoader = true;
+            //Log.e("onCreateView: ", "i am here");
             getLoaderManager().initLoader(currentIdStories, null, this);
         }
 
@@ -166,37 +169,19 @@ public class RecentTabFragment extends Fragment implements LoaderManager.LoaderC
         void onFragmentInteraction(Uri uri);
     }
 
-
-    private void debugInitializeData() {
-        stories = new ArrayList<>();
-        stories.add(new Story(1, 56, 5,
-                "Самое классное для меня в путешествиях - это снять квартиру вне туристического центра, обедать не в дорогих ресторанах, а в маленьких закусочных, которые держат какие-нибудь милые пенсионеры, гулять не по центральным улицам, а по неизведанным дворам, где кипит настоящая местная жизнь.\n" +
-                        "Памятники и музеи - это прекрасно, но так жаль, что многие туристы и не догадываются, сколько еще интересного скрывают чужие города."));
-        stories.add(new Story(1, 56, 5,
-                "Самое классное для меня в путешествиях - это снять квартиру вне туристического центра, обедать не в дорогих ресторанах, а в маленьких закусочных, которые держат какие-нибудь милые пенсионеры, гулять не по центральным улицам, а по неизведанным дворам, где кипит настоящая местная жизнь.\n" +
-                        "Памятники и музеи - это прекрасно, но так жаль, что многие туристы и не догадываются, сколько еще интересного скрывают чужие города."));
-        stories.add(new Story(1, 56, 5,
-                "Самое классное для меня в путешествиях - это снять квартиру вне туристического центра, обедать не в дорогих ресторанах, а в маленьких закусочных, которые держат какие-нибудь милые пенсионеры, гулять не по центральным улицам, а по неизведанным дворам, где кипит настоящая местная жизнь.\n" +
-                        "Памятники и музеи - это прекрасно, но так жаль, что многие туристы и не догадываются, сколько еще интересного скрывают чужие города."));
-        stories.add(new Story(1, 56, 5,
-                "Самое классное для меня в путешествиях - это снять квартиру вне туристического центра, обедать не в дорогих ресторанах, а в маленьких закусочных, которые держат какие-нибудь милые пенсионеры, гулять не по центральным улицам, а по неизведанным дворам, где кипит настоящая местная жизнь.\n" +
-                        "Памятники и музеи - это прекрасно, но так жаль, что многие туристы и не догадываются, сколько еще интересного скрывают чужие города."));
-        /*stories.add(new Story("Funny", 56,
-                "Самое классное для меня в путешествиях - это снять квартиру вне туристического центра, обедать не в дорогих ресторанах, а в маленьких закусочных, которые держат какие-нибудь милые пенсионеры, гулять не по центральным улицам, а по неизведанным дворам, где кипит настоящая местная жизнь.\n" +
-                        "Памятники и музеи - это прекрасно, но так жаль, что многие туристы и не догадываются, сколько еще интересного скрывают чужие города.", 120, "4 hours ago"));
-*/
-    }
-
-
     @Override
-    public Loader<LoadResult<List<Story>>> onCreateLoader(int id, Bundle args) {
-        return new StoriesLoader(getActivity(), this.currentIdStories);
+    public Loader<LoaderResult<List<Story>>> onCreateLoader(int id, Bundle args) {
+        //return new StoriesLoader(getActivity(), this.currentIdStories);
+        Log.e("onCreateView: ", "i am here");
+        Loader<LoaderResult<List<Story>>> temp = ApiMethods.getInstance().getLatestStories(getActivity(), TypeOfCollection.NONE, null, 5);
+        temp.forceLoad();
+        return temp;
     }
 
     @Override
-    public void onLoadFinished(Loader<LoadResult<List<Story>>> loader, LoadResult<List<Story>> result) {
+    public void onLoadFinished(Loader<LoaderResult<List<Story>>> loader, LoaderResult<List<Story>> result) {
         flagForLoader = false;
-        if (result.resultType == ResultType.OK) {
+        if (result.status == LoaderStatus.OK) {
             if (result.data != null && !result.data.isEmpty()) {
                 displayNonEmptyData(result.data);
                 storiesData.getCurrentStories().addAll(result.data);
@@ -204,12 +189,12 @@ public class RecentTabFragment extends Fragment implements LoaderManager.LoaderC
                 displayEmptyData();
             }
         } else {
-            displayError(result.resultType);
+            displayError(result.status);
         }
     }
 
     @Override
-    public void onLoaderReset(Loader<LoadResult<List<Story>>> loader) {
+    public void onLoaderReset(Loader<LoaderResult<List<Story>>> loader) {
         displayEmptyData();
     }
 
@@ -230,12 +215,12 @@ public class RecentTabFragment extends Fragment implements LoaderManager.LoaderC
         rv.setVisibility(View.VISIBLE);
     }
 
-    private void displayError(ResultType resultType) {
+    private void displayError(LoaderStatus resultType) {
         progressView.setVisibility(View.GONE);
         rv.setVisibility(View.GONE);
         errorTextView.setVisibility(View.VISIBLE);
         final int messageResId;
-        if (resultType == ResultType.NO_INTERNET) {
+        if (resultType == LoaderStatus.ERROR) { //TODO: Add in LoaderStatus NO_INTERNET
             messageResId = R.string.no_internet;
         } else {
             messageResId = R.string.error;

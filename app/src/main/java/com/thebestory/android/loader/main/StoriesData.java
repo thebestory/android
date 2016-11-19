@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * Created by Октай on 16.11.2016.
  */
 
-public class StoriesData extends Fragment {
+public class StoriesData extends Fragment { //TODO: create interface StoriesData and make four class for everyone Fragment
 
     public static final String TAG = StoriesData.class.getCanonicalName();
     private ArrayList<Story> currentStories = new ArrayList<>();

@@ -52,10 +52,10 @@ public class StoriesFragmentForStoryAdapter extends RecyclerView.Adapter<Stories
     @Override
     public void onBindViewHolder(StoryViewHolder storyViewHolder, int position) { //TODO: When Alex changes API = Change this methods
         final Story currentStory = stories.get(position);
-        storyViewHolder.nameTopic.setText(Integer.toString(currentStory.topicId));
-        storyViewHolder.numberStory.setText(Integer.toString(currentStory.id));
-        storyViewHolder.textStory.setText(currentStory.story);
-        storyViewHolder.timeTopic.setText(/*stories.get(i).*/"1000500");
+        storyViewHolder.nameTopic.setText(currentStory.topic.title);
+        storyViewHolder.numberStory.setText(currentStory.id);
+        storyViewHolder.textStory.setText(currentStory.content);
+        storyViewHolder.timeTopic.setText(currentStory.publishDate);
         storyViewHolder.numbersLike.setText(Integer.toString(currentStory.likesCount));
         //storyViewHolder.imageTopic.setImageResource(currentStory.getImageTopic);
     }

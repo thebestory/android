@@ -9,5 +9,5 @@ import java.io.IOException;
  */
 
 public interface ParseResponse<T> {
-    T parse (JsonReader response) throws IOException;
+    T parse(JsonReader response) throws IOException;
 }

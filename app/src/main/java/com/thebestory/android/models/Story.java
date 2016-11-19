@@ -1,6 +1,7 @@
 package com.thebestory.android.models;
 
 import android.util.JsonReader;
+import android.util.Log;
 
 import java.io.IOException;
 
@@ -42,24 +43,32 @@ public final class Story {
             switch (jr.nextName()) {
                 case "id":
                     id = jr.nextString();
+                    Log.e("WRONG", id);
                     break;
                 case "likes_count":
                     likesCount = jr.nextInt();
+                    Log.e("WRONG", String.valueOf(likesCount));
                     break;
                 case "content":
                     content = jr.nextString();
+                    Log.e("WRONG", content);//wrong
                     break;
                 case "comments_count":
                     commentsCount = jr.nextInt();
+                    Log.e("WRONG", String.valueOf(commentsCount));
                     break;
                 case "submitted_date":
                     submitDate = jr.nextString();
+                    Log.e("WRONG", submitDate);
                     break;
                 case "published_date":
                     publishDate = jr.nextString();
+                    Log.e("WRONG", publishDate);
                     break;
                 case "topic":
                     topic = Topic.parseTopic(jr);
+                    Log.e("WRONG", String.valueOf(topic.id));
+                    break; //WOW
                 default:
                     jr.skipValue();
                     break;

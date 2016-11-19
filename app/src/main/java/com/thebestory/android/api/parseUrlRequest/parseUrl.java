@@ -11,5 +11,5 @@ import java.net.MalformedURLException;
  */
 
 public interface ParseUrl {
-    HttpURLConnection parse (Bundle args) throws IOException;
+    HttpURLConnection parse(Bundle args) throws IOException;
 }

@@ -7,6 +7,11 @@ package com.thebestory.android.loader.main;
 /**
  * Три возможных результат процесса загрузки данных.
  */
+/*
+@deprecated class was written Oktai
+*/
+
+@Deprecated
 public enum ResultType {
 
     /**

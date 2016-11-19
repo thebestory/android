@@ -17,9 +17,12 @@ import java.util.List;
 /**
  * Created by Октай on 16.11.2016.
  */
+/*
+@deprecated class was written Oktai
+*/
 
+@Deprecated
 public class StoriesLoader extends AsyncTaskLoader<LoadResult<List<Story>>> {
-
     public final String TAG = "Stories";
 
     private LoadResult<List<Story>> result;
@@ -54,7 +57,7 @@ public class StoriesLoader extends AsyncTaskLoader<LoadResult<List<Story>>> {
         InputStream in = null;
 
         try {
-            connection = /**NAME_CLASS**/.getRecentStoriesRequest(currentIdStories); //ToDo: Alex create/change API and create this method
+            //connection = /**NAME_CLASS**/.//getRecentStoriesRequest(currentIdStories); //ToDo: Alex create/change API and create this method
             Log.d(TAG, "Performing request: " + connection.getURL());
 
             stethoManager.preConnect(connection, null);
@@ -66,7 +69,7 @@ public class StoriesLoader extends AsyncTaskLoader<LoadResult<List<Story>>> {
                 in = connection.getInputStream();
                 in = stethoManager.interpretResponseStream(in);
 
-                data = Story.parseStory(in); //ToDo: Alex change parseStory(in) in class Story
+                //data = Story.parseStory(in); //ToDo: Alex change parseStory(in) in class Story
 
                 resultType = ResultType.OK;
 

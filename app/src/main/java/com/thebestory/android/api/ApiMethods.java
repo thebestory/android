@@ -21,7 +21,7 @@ import com.thebestory.android.api.urlCollection.TypeOfCollection;
 import com.thebestory.android.models.Story;
 import com.thebestory.android.models.Topic;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Alex on 16.10.2016.
@@ -33,9 +33,7 @@ public class ApiMethods {
         return ourInstance;
     }
 
-    private ApiMethods() {
-        throw new AssertionError();
-    }
+    private ApiMethods() {}
 
     private void addTypeOfCollection(Bundle requestBundle, TypeOfCollection typeOf, String id) {
         switch (typeOf) {
@@ -60,7 +58,7 @@ public class ApiMethods {
         return task;
     }
 
-    private ApiAsyncTask<ArrayList<Story>> getTeamplateStories (Context context, TypeOfCollection typeOf, String id,  int limit, ParseUrl parserUrl) {
+    private ApiAsyncTask<List<Story>> getTeamplateStories(Context context, TypeOfCollection typeOf, String id, int limit, ParseUrl parserUrl) {
         Bundle requestBundle = new Bundle();
         addTypeOfCollection(requestBundle, typeOf, id);
         requestBundle.putInt("limit", limit);
@@ -68,19 +66,19 @@ public class ApiMethods {
         return task;
     }
 
-    public ApiAsyncTask<ArrayList<Story>> getLatestStories (Context context, TypeOfCollection typeOf, String id, int limit) {
+    public ApiAsyncTask<List<Story>> getLatestStories(Context context, TypeOfCollection typeOf, String id, int limit) {
         return getTeamplateStories(context, typeOf, id, limit, new GetLatestStories());
     }
 
-    public ApiAsyncTask<ArrayList<Story>> getHotStories (Context context, TypeOfCollection typeOf, String id, int limit) {
+    public ApiAsyncTask<List<Story>> getHotStories(Context context, TypeOfCollection typeOf, String id, int limit) {
         return getTeamplateStories(context, typeOf, id, limit, new GetHotStories());
     }
 
-    public ApiAsyncTask<ArrayList<Story>> getRandomStories (Context context, TypeOfCollection typeOf, String id, int limit) {
+    public ApiAsyncTask<List<Story>> getRandomStories(Context context, TypeOfCollection typeOf, String id, int limit) {
         return getTeamplateStories(context, typeOf, id, limit, new GetRandomStories());
     }
 
-    public ApiAsyncTask<ArrayList<Story>> getTopStories (Context context, TypeOfCollection typeOf, String id, int limit) {
+    public ApiAsyncTask<List<Story>> getTopStories(Context context, TypeOfCollection typeOf, String id, int limit) {
         return getTeamplateStories(context, typeOf, id, limit, new GetTopStories());
     }
 
@@ -98,12 +96,12 @@ public class ApiMethods {
         return task;
     }
 
-    public ApiAsyncTask<ArrayList<Topic>> getTopicsList(Context context) {
+    public ApiAsyncTask<List<Topic>> getTopicsList(Context context) {
         ApiAsyncTask task = new ApiAsyncTask(context, new GetTopicsList(), new ParseTopicsArray(), null);
         return task;
     }
 
-    public ApiAsyncTask<ArrayList<Story>> getTopicStories(Context context, int topicId, TypeOfCollection typeOf, String timeStamp, int limit) {
+    public ApiAsyncTask<List<Story>> getTopicStories(Context context, int topicId, TypeOfCollection typeOf, String timeStamp, int limit) {
         Bundle requestBundle = new Bundle();
         requestBundle.putInt("topicId", topicId);
         addTypeOfCollection(requestBundle, typeOf, timeStamp);
