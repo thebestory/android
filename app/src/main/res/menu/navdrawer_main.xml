@@ -2,38 +2,38 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group
-        android:id="@+id/navdrawer_group_primary">
+        android:id="@+id/navdrawer_main_group_primary">
         <item
-            android:id="@+id/navdrawer_stories"
+            android:id="@+id/navdrawer_main_stories"
             android:icon="@drawable/ic_navdrawer_stories"
             android:title="@string/navdrawer_main_stories" />
         <item
-            android:id="@+id/navdrawer_topics"
+            android:id="@+id/navdrawer_main_topics"
             android:icon="@drawable/ic_navdrawer_topics"
             android:title="@string/navdrawer_main_topics" />
     </group>
 
     <group
-        android:id="@+id/navdrawer_group_secondary">
+        android:id="@+id/navdrawer_main_group_secondary">
         <item
-            android:id="@+id/navdrawer_settings"
+            android:id="@+id/navdrawer_main_settings"
             android:icon="@drawable/ic_navdrawer_settings"
             android:title="@string/navdrawer_main_settings" />
         <item
-            android:id="@+id/navdrawer_about"
+            android:id="@+id/navdrawer_main_about"
             android:icon="@drawable/ic_navdrawer_about"
             android:title="@string/navdrawer_main_about" />
         <item
-            android:id="@+id/navdrawer_send_feedback"
+            android:id="@+id/navdrawer_main_send_feedback"
             android:icon="@drawable/ic_navdrawer_send_feedback"
             android:title="@string/navdrawer_main_send_feedback" />
     </group>
 
     <group
-        android:id="@+id/navdrawer_group_developer"
+        android:id="@+id/navdrawer_main_group_developer"
         android:visible="false">
         <item
-            android:id="@+id/navdrawer_debug"
+            android:id="@+id/navdrawer_main_debug"
             android:icon="@drawable/ic_navdrawer_debug"
             android:title="@string/navdrawer_main_debug" />
     </group>

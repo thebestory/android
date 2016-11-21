@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.inputmethod.InputMethodManager;
@@ -14,8 +15,7 @@ import android.view.inputmethod.InputMethodManager;
 import com.thebestory.android.R;
 import com.thebestory.android.fragment.main.*;
 
-public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
 
@@ -26,12 +26,12 @@ public class MainActivity extends BaseActivity
     private DebugFragment debugFragment;
 
     private static final int[] NAVDRAWER_MENU_RES_ID = new int[]{
-            R.id.navdrawer_stories,
-            R.id.navdrawer_topics,
-            R.id.navdrawer_settings,
-            R.id.navdrawer_about,
-            R.id.navdrawer_send_feedback,
-            R.id.navdrawer_debug
+            R.id.navdrawer_main_stories,
+            R.id.navdrawer_main_topics,
+            R.id.navdrawer_main_settings,
+            R.id.navdrawer_main_about,
+            R.id.navdrawer_main_send_feedback,
+            R.id.navdrawer_main_debug
     };
 
     private static final int[] NAVDRAWER_TITLE_RES_ID = new int[]{
@@ -90,22 +90,22 @@ public class MainActivity extends BaseActivity
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
         switch (item.getItemId()) {
-            case R.id.navdrawer_stories:
+            case R.id.navdrawer_main_stories:
                 transaction.replace(R.id.main_frame_layout, storiesFragment);
                 break;
-            case R.id.navdrawer_topics:
+            case R.id.navdrawer_main_topics:
                 transaction.replace(R.id.main_frame_layout, topicsFragment);
                 break;
-            case R.id.navdrawer_settings:
+            case R.id.navdrawer_main_settings:
                 transaction.replace(R.id.main_frame_layout, settingsFragment);
                 break;
-            case R.id.navdrawer_about:
+            case R.id.navdrawer_main_about:
                 transaction.replace(R.id.main_frame_layout, aboutFragment);
                 break;
-            case R.id.navdrawer_send_feedback:
+            case R.id.navdrawer_main_send_feedback:
                 // TODO: Send feedback (switch to Play Market)
                 break;
-            case R.id.navdrawer_debug:
+            case R.id.navdrawer_main_debug:
                 transaction.replace(R.id.main_frame_layout, debugFragment);
                 break;
         }
