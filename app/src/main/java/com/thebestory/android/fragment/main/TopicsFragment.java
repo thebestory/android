@@ -1,8 +1,10 @@
+/*
+ * The Bestory Project
+ */
+
 package com.thebestory.android.fragment.main;
 
 import android.app.FragmentTransaction;
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -21,31 +23,22 @@ import com.thebestory.android.R;
 import com.thebestory.android.activity.MainActivity;
 import com.thebestory.android.adapter.main.TopicsFragmentForTopicAdapter;
 import com.thebestory.android.fragment.main.stories.NewStoryFragment;
-import com.thebestory.android.models.Topic;
+import com.thebestory.android.model.Topic;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link TopicsFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
+ * Fragment for Topics screen.
  * Use the {@link TopicsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TopicsFragment extends Fragment { //TODO: When we create RecentTabFragment -> Do it!
+public class TopicsFragment extends Fragment { // TODO: We should discuss about this topic and Nariman can make it
     private View view;
     private MainActivity activity;
-
 
     private Toolbar toolbar;
     private RecyclerView rv;
     private List<Topic> topics;
-
-    private OnFragmentInteractionListener mListener;
-
-    private Fragment newStoryFragment;
 
     public TopicsFragment() {
         // Required empty public constructor
@@ -64,15 +57,11 @@ public class TopicsFragment extends Fragment { //TODO: When we create RecentTabF
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-
-        newStoryFragment = NewStoryFragment.newInstance();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         view = inflater.inflate(R.layout.fragment_main_topics, container, false);
         activity = (MainActivity) getActivity();
         toolbar = (Toolbar) view.findViewById(R.id.main_topics_toolbar);
@@ -96,7 +85,6 @@ public class TopicsFragment extends Fragment { //TODO: When we create RecentTabF
         return view;
     }
 
-
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.main_stories, menu);
     }
@@ -106,7 +94,7 @@ public class TopicsFragment extends Fragment { //TODO: When we create RecentTabF
 
         switch (item.getItemId()) {
             case R.id.main_stories_toolbar_action_new:
-                transaction.replace(R.id.main_frame_layout, newStoryFragment);
+                transaction.replace(R.id.main_frame_layout, NewStoryFragment.newInstance());
                 break;
             case R.id.main_stories_toolbar_action_search:
                 // TODO: Stories search
@@ -115,44 +103,6 @@ public class TopicsFragment extends Fragment { //TODO: When we create RecentTabF
 
         transaction.addToBackStack(null).commit();
         return super.onOptionsItemSelected(item);
-    }
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
     }
 
     /*private void debugInitializeData() {

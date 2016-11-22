@@ -1,8 +1,8 @@
-package com.thebestory.android.api.urlCollection;
-
-/**
- * Created by Alex on 19.11.2016.
+/*
+ * The Bestory Project
  */
+
+package com.thebestory.android.api.urlCollection;
 
 public enum TypeOfCollection {
     AROUND,

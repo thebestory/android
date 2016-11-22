@@ -1,3 +1,7 @@
+/*
+ * The Bestory Project
+ */
+
 package com.thebestory.android.api;
 
 import android.content.Context;
@@ -18,14 +22,11 @@ import com.thebestory.android.api.urlCollection.Topics.GetDetailsTopic;
 import com.thebestory.android.api.urlCollection.Topics.GetTopicStories;
 import com.thebestory.android.api.urlCollection.Topics.GetTopicsList;
 import com.thebestory.android.api.urlCollection.TypeOfCollection;
-import com.thebestory.android.models.Story;
-import com.thebestory.android.models.Topic;
+import com.thebestory.android.model.Story;
+import com.thebestory.android.model.Topic;
 
 import java.util.List;
 
-/**
- * Created by Alex on 16.10.2016.
- */
 public class ApiMethods {
     private static ApiMethods ourInstance = new ApiMethods();
 
@@ -33,7 +34,8 @@ public class ApiMethods {
         return ourInstance;
     }
 
-    private ApiMethods() {}
+    private ApiMethods() {
+    }
 
     private void addTypeOfCollection(Bundle requestBundle, TypeOfCollection typeOf, String id) {
         switch (typeOf) {

@@ -1,3 +1,7 @@
+/*
+ * The Bestory Project
+ */
+
 package com.thebestory.android.adapter.main;
 
 import android.content.Context;
@@ -6,10 +10,7 @@ import android.app.FragmentManager;
 import android.support.v13.app.FragmentPagerAdapter;
 
 import com.thebestory.android.R;
-import com.thebestory.android.fragment.main.stories.HotTabFragment;
-import com.thebestory.android.fragment.main.stories.RandomTabFragment;
-import com.thebestory.android.fragment.main.stories.RecentTabFragment;
-import com.thebestory.android.fragment.main.stories.TopTabFragment;
+import com.thebestory.android.fragment.main.stories.*;
 
 public class StoriesFragmentPagerAdapter extends FragmentPagerAdapter {
 

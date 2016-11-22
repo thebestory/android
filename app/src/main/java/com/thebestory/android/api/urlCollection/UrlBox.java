@@ -1,8 +1,8 @@
-package com.thebestory.android.api.urlCollection;
-
-/**
- * Created by Alex on 02.11.2016.
+/*
+ * The Bestory Project
  */
+
+package com.thebestory.android.api.urlCollection;
 
 public final class UrlBox {
     private UrlBox() {

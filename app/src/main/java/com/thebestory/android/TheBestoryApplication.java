@@ -1,3 +1,7 @@
+/*
+ * The Bestory Project
+ */
+
 package com.thebestory.android;
 
 import android.app.Application;

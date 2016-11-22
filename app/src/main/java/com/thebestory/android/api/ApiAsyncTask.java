@@ -1,3 +1,7 @@
+/*
+ * The Bestory Project
+ */
+
 package com.thebestory.android.api;
 
 import android.content.AsyncTaskLoader;
@@ -11,10 +15,6 @@ import com.thebestory.android.api.parseUrlRequest.ParseUrl;
 
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-
-/**
- * Created by Alex on 16.10.2016.
- */
 
 class ApiAsyncTask<T> extends AsyncTaskLoader<LoaderResult<T>> {
 
@@ -36,13 +36,13 @@ class ApiAsyncTask<T> extends AsyncTaskLoader<LoaderResult<T>> {
     @Override
     public LoaderResult<T> loadInBackground() {
         try {
-            Log.e("WRONG","Start1");
+            Log.e("WRONG", "Start1");
             HttpURLConnection urlConnection = parseUrlRequest.parse(args);
-            Log.e("WRONG","Start2");
+            Log.e("WRONG", "Start2");
             JsonReader jr = new JsonReader(new InputStreamReader(urlConnection.getInputStream(), "utf-8"));
-            Log.e("WRONG","Start3");
+            Log.e("WRONG", "Start3");
             T response = parseResponse.parse(jr);
-            Log.e("WRONG","Start4");
+            Log.e("WRONG", "Start4");
             return new LoaderResult(LoaderStatus.OK, response);
         } catch (Exception error) {
             Log.e("WRONG", error.toString());

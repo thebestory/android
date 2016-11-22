@@ -1,8 +1,8 @@
-package com.thebestory.android.util;
-
-/**
- * Created by Октай on 19.11.2016.
+/*
+ * The Bestory Project
  */
+
+package com.thebestory.android.util;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public final class IOUtils {
-
     /**
      * Читает содержимое потока в строку, используя указанный charset
      */
@@ -31,7 +30,6 @@ public final class IOUtils {
         final String content = new String(data, charset);
         return content;
     }
-
 
     /**
      * Читает до конца все, что есть в потоке (не закрывает)

@@ -1,18 +1,16 @@
+/*
+ * The Bestory Project
+ */
+
 package com.thebestory.android.api.parseResponse;
 
 import android.util.JsonReader;
 import android.util.Log;
 
-import com.thebestory.android.models.Story;
-import com.thebestory.android.models.Topic;
+import com.thebestory.android.model.Story;
 
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.ArrayList;
-
-/**
- * Created by Alex on 02.11.2016.
- */
 
 public class ParseStoriesArray implements ParseResponse<ArrayList<Story>> {
     @Override
@@ -21,13 +19,13 @@ public class ParseStoriesArray implements ParseResponse<ArrayList<Story>> {
         //while (!jr.nextName().equals("stories")) {
         //    jr.skipValue();
         //}
-        Log.e("WRONG","Start");
+        Log.e("WRONG", "Start");
         response.beginArray();
         while (response.hasNext()) {
-            stories.add(Story.parseStory(response));
+            stories.add(Story.parse(response));
         }
         response.endArray();
-        Log.e("WRONG","End");
+        Log.e("WRONG", "End");
         return stories;
     }
 }

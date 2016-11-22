@@ -1,15 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group
         android:id="@+id/navdrawer_main_group_primary">
         <item
             android:id="@+id/navdrawer_main_stories"
-            android:icon="@drawable/ic_navdrawer_stories"
+            android:icon="@drawable/ic_navdrawer_main_stories"
             android:title="@string/navdrawer_main_stories" />
         <item
             android:id="@+id/navdrawer_main_topics"
-            android:icon="@drawable/ic_navdrawer_topics"
+            android:icon="@drawable/ic_navdrawer_main_topics"
             android:title="@string/navdrawer_main_topics" />
     </group>
 
@@ -17,15 +16,15 @@
         android:id="@+id/navdrawer_main_group_secondary">
         <item
             android:id="@+id/navdrawer_main_settings"
-            android:icon="@drawable/ic_navdrawer_settings"
+            android:icon="@drawable/ic_navdrawer_main_settings"
             android:title="@string/navdrawer_main_settings" />
         <item
             android:id="@+id/navdrawer_main_about"
-            android:icon="@drawable/ic_navdrawer_about"
+            android:icon="@drawable/ic_navdrawer_main_about"
             android:title="@string/navdrawer_main_about" />
         <item
             android:id="@+id/navdrawer_main_send_feedback"
-            android:icon="@drawable/ic_navdrawer_send_feedback"
+            android:icon="@drawable/ic_navdrawer_main_send_feedback"
             android:title="@string/navdrawer_main_send_feedback" />
     </group>
 
@@ -34,7 +33,7 @@
         android:visible="false">
         <item
             android:id="@+id/navdrawer_main_debug"
-            android:icon="@drawable/ic_navdrawer_debug"
+            android:icon="@drawable/ic_navdrawer_main_debug"
             android:title="@string/navdrawer_main_debug" />
     </group>
 

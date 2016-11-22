@@ -1,3 +1,7 @@
+/*
+ * The Bestory Project
+ */
+
 package com.thebestory.android.adapter.main;
 
 import android.content.Context;
@@ -10,16 +14,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
 import com.thebestory.android.R;
-import com.thebestory.android.models.Story;
+import com.thebestory.android.model.Story;
 
 import java.util.ArrayList;
 import java.util.List;
-
-/**
- * Created by Октай on 18.10.2016.
- */
 
 public class StoriesFragmentForStoryAdapter extends RecyclerView.Adapter<StoriesFragmentForStoryAdapter.StoryViewHolder> {
 

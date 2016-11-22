@@ -1,8 +1,8 @@
-package com.thebestory.android.api;
-
-/**
- * Created by Alex on 16.10.2016.
+/*
+ * The Bestory Project
  */
+
+package com.thebestory.android.api;
 
 final class LoadersId {
     private LoadersId() {
