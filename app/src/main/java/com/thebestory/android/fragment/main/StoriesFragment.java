@@ -58,7 +58,7 @@ public class StoriesFragment extends Fragment {
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.main_stories_toolbar);
         TabLayout layout = (TabLayout) view.findViewById(R.id.main_stories_tab_layout);
-        ViewPager pager = (ViewPager) view.findViewById(R.id.main_stories_viewpager);
+        ViewPager pager = (ViewPager) view.findViewById(R.id.main_stories_pager);
 
         toolbar.setTitle(R.string.navdrawer_main_stories);
         activity.setSupportActionBar(toolbar);

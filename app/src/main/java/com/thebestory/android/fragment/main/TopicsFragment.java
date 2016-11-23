@@ -19,7 +19,7 @@ import android.view.ViewGroup;
 
 import com.thebestory.android.R;
 import com.thebestory.android.activity.MainActivity;
-import com.thebestory.android.adapter.main.TopicsFragmentForTopicAdapter;
+import com.thebestory.android.adapter.main.TopicsAdapter;
 import com.thebestory.android.fragment.main.stories.NewStoryFragment;
 import com.thebestory.android.model.Topic;
 
@@ -65,7 +65,7 @@ public class TopicsFragment extends Fragment {
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.main_topics_toolbar);
         RecyclerView rv = (RecyclerView) view.findViewById(R.id.rv_topics);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity().getApplicationContext());
-        TopicsFragmentForTopicAdapter adapter = new TopicsFragmentForTopicAdapter(topics);
+        TopicsAdapter adapter = new TopicsAdapter(topics);
 
         toolbar.setTitle(R.string.navdrawer_main_topics);
         activity.setSupportActionBar(toolbar);

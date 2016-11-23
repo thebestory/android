@@ -16,7 +16,7 @@ import com.thebestory.android.model.*;
 
 import java.util.List;
 
-public class TopicsFragmentForTopicAdapter extends RecyclerView.Adapter<TopicsFragmentForTopicAdapter.TopicViewHolder> {
+public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.TopicViewHolder> {
 
     static class TopicViewHolder extends RecyclerView.ViewHolder {
         CardView cv;
@@ -39,7 +39,7 @@ public class TopicsFragmentForTopicAdapter extends RecyclerView.Adapter<TopicsFr
 
     private List<Topic> topics;
 
-    public TopicsFragmentForTopicAdapter(List<Topic> topics) {
+    public TopicsAdapter(List<Topic> topics) {
         this.topics = topics;
     }
 

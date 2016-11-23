@@ -8,8 +8,6 @@ import android.util.JsonReader;
 
 import java.io.IOException;
 
-import static android.os.Build.ID;
-
 public final class Account {
     /**
      * Account unique ID

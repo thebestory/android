@@ -20,7 +20,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.thebestory.android.R;
-import com.thebestory.android.adapter.main.StoriesFragmentForStoryAdapter;
+import com.thebestory.android.adapter.main.StoriesAdapter;
 import com.thebestory.android.api.ApiMethods;
 import com.thebestory.android.api.LoaderResult;
 import com.thebestory.android.api.LoaderStatus;
@@ -48,7 +48,7 @@ public class RecentTabFragment extends Fragment implements LoaderManager.LoaderC
     private int currentIdStories;
 
     @Nullable
-    private StoriesFragmentForStoryAdapter adapter;
+    private StoriesAdapter adapter;
     private StoriesData storiesData;
 
     public RecentTabFragment() {
@@ -73,14 +73,14 @@ public class RecentTabFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_main_stories_recent_tab, container, false);
+        view = inflater.inflate(R.layout.fragment_main_stories_latest_tab, container, false);
 
         FragmentManager fm = getFragmentManager();
 
         progressView = (ProgressBar) view.findViewById(R.id.progress);
         errorTextView = (TextView) view.findViewById(R.id.error_text);
 
-        adapter = new StoriesFragmentForStoryAdapter(getActivity());
+        adapter = new StoriesAdapter(getActivity());
         storiesData = (StoriesData) fm.findFragmentByTag(StoriesData.TAG);
 
 
@@ -184,7 +184,7 @@ public class RecentTabFragment extends Fragment implements LoaderManager.LoaderC
     }
 
     private void initializeAdapter() {
-        //StoriesFragmentForStoryAdapter adapter = new StoriesFragmentForStoryAdapter(stories);
+        //StoriesAdapter adapter = new StoriesAdapter(stories);
         //rv.setAdapter(adapter);
     }
 
@@ -193,5 +193,4 @@ public class RecentTabFragment extends Fragment implements LoaderManager.LoaderC
         super.onSaveInstanceState(outState);
         outState.putInt("currentIdStories", currentIdStories);
     }
-
 }
