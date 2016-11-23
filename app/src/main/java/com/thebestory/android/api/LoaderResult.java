@@ -1,8 +1,8 @@
-package com.thebestory.android.api;
-
-/**
- * Created by Alex on 02.11.2016.
+/*
+ * The Bestory Project
  */
+
+package com.thebestory.android.api;
 
 public class LoaderResult<T> {
 

@@ -1,3 +1,7 @@
+/*
+ * The Bestory Project
+ */
+
 package com.thebestory.android.api.urlCollection.Topics;
 
 import android.net.Uri;
@@ -10,10 +14,6 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-/**
- * Created by Alex on 04.11.2016.
- */
-
 public class GetTopicStories implements ParseUrl {
     @Override
     public HttpURLConnection parse(Bundle args) throws IOException {
@@ -21,9 +21,9 @@ public class GetTopicStories implements ParseUrl {
         if (args.containsKey("after")) {
             url.appendQueryParameter("after", args.getString("after", ""));
         } else if (args.containsKey("before")) {
-            url.appendQueryParameter("before", args.getString("before",""));
+            url.appendQueryParameter("before", args.getString("before", ""));
         } else if (args.containsKey("around")) {
-            url.appendQueryParameter("around" , args.getString("around", ""));
+            url.appendQueryParameter("around", args.getString("around", ""));
         }
         url.appendQueryParameter("limit", Integer.toString(args.getInt("limit", 0)));
         HttpURLConnection connection = (HttpURLConnection) (new URL(url.toString())).openConnection();

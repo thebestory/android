@@ -1,6 +1,5 @@
 <resources>
-    <string name="thebestory">TheBestory</string>
-    <string name="app_name">@string/thebestory</string>
+    <string name="app_name">The Bestory</string>
 
     <!-- Navigation Drawer -->
 
@@ -21,6 +20,7 @@
     <!-- Main Activity - New Story Fragment -->
 
     <string name="main_stories_new_toolbar_title">New story</string>
+    <string name="main_stories_new_toolbar_action_cancel">Cancel</string>
     <string name="main_stories_new_toolbar_action_send">Send story</string>
 
     <!-- Main Activity - Stories Fragment - Toolbar -->
@@ -35,7 +35,6 @@
     <string name="main_stories_top_tab">Top</string>
     <string name="main_stories_random_tab">Random</string>
 
-
     <!-- Main Activity - RecentTabFragment - Errors -->
 
     <string name="stories_not_found">Stories not found</string>
@@ -47,19 +46,19 @@
     <string name="main_settings_general_category">General</string>
     <string name="main_settings_devtools_category">Developer tools</string>
 
-    <string name="main_settings_category_general_theme_title">Theme</string>
-    <string-array name="main_settings_category_general_theme_titles">
+    <string name="main_settings_general_theme_title">Theme</string>
+    <string-array name="main_settings_general_theme_titles">
         <item>Light</item>
         <item>Dark</item>
     </string-array>
-    <string-array name="main_settings_category_general_theme_values">
+    <string-array name="main_settings_general_theme_values">
         <item>light</item>
         <item>dark</item>
     </string-array>
 
-    <string name="main_settings_category_devtools_reset_cache_title">Reset cache</string>
-    <string name="main_settings_category_devtools_reset_cache_summary">Clear stories cache</string>
+    <string name="main_settings_devtools_reset_cache_title">Reset cache</string>
+    <string name="main_settings_devtools_reset_cache_summary">Clear stories cache</string>
 
-    <string name="main_settings_category_devtools_debug_title">Debug page</string>
+    <string name="main_settings_devtools_debug_title">Debug page</string>
 
 </resources>

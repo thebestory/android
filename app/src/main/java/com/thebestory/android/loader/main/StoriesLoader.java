@@ -1,3 +1,7 @@
+/*
+ * The Bestory Project
+ */
+
 package com.thebestory.android.loader.main;
 
 import android.content.AsyncTaskLoader;
@@ -5,7 +9,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.facebook.stetho.urlconnection.StethoURLConnectionManager;
-import com.thebestory.android.models.Story;
+import com.thebestory.android.model.Story;
 import com.thebestory.android.util.IOUtils;
 
 import java.io.IOException;
@@ -14,9 +18,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.util.List;
 
-/**
- * Created by Октай on 16.11.2016.
- */
 /*
 @deprecated class was written Oktai
 */

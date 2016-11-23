@@ -1,8 +1,8 @@
-package com.thebestory.android.loader.main;
-
-/**
- * Created by Октай on 16.11.2016.
+/*
+ * The Bestory Project
  */
+
+package com.thebestory.android.loader.main;
 
 public class BadResponseException extends Exception {
 

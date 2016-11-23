@@ -1,3 +1,7 @@
+/*
+ * The Bestory Project
+ */
+
 package com.thebestory.android.adapter.main;
 
 import android.support.v7.widget.CardView;
@@ -5,19 +9,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-
 import com.thebestory.android.R;
-import com.thebestory.android.models.Story;
-import com.thebestory.android.models.Topic;
+import com.thebestory.android.model.*;
 
 import java.util.List;
-
-/**
- * Created by Октай on 18.10.2016.
- */
 
 public class TopicsFragmentForTopicAdapter extends RecyclerView.Adapter<TopicsFragmentForTopicAdapter.TopicViewHolder> {
 

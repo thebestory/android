@@ -1,15 +1,15 @@
+/*
+ * The Bestory Project
+ */
+
 package com.thebestory.android.loader.main;
 
 import android.app.Fragment;
 import android.os.Bundle;
 
-import com.thebestory.android.models.Story;
+import com.thebestory.android.model.Story;
 
 import java.util.ArrayList;
-
-/**
- * Created by Октай on 16.11.2016.
- */
 
 public class StoriesData extends Fragment { //TODO: create interface StoriesData and make four class for everyone Fragment
 

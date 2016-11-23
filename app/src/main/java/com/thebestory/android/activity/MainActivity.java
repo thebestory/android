@@ -1,12 +1,17 @@
+/*
+ * The Bestory Project
+ */
+
 package com.thebestory.android.activity;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.app.FragmentTransaction;
-import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.inputmethod.InputMethodManager;
@@ -14,26 +19,23 @@ import android.view.inputmethod.InputMethodManager;
 import com.thebestory.android.R;
 import com.thebestory.android.fragment.main.*;
 
-public class MainActivity extends BaseActivity
+public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    private DrawerLayout drawerLayout;
-    private NavigationView navigationView;
-
-    private StoriesFragment storiesFragment;
-    private TopicsFragment topicsFragment;
-    private SettingsFragment settingsFragment;
-    private AboutFragment aboutFragment;
-    private DebugFragment debugFragment;
-
+    /**
+     * Navigation Drawer (Menu) resource ids for list
+     */
     private static final int[] NAVDRAWER_MENU_RES_ID = new int[]{
-            R.id.navdrawer_stories,
-            R.id.navdrawer_topics,
-            R.id.navdrawer_settings,
-            R.id.navdrawer_about,
-            R.id.navdrawer_send_feedback,
-            R.id.navdrawer_debug
+            R.id.navdrawer_main_stories,
+            R.id.navdrawer_main_topics,
+            R.id.navdrawer_main_settings,
+            R.id.navdrawer_main_about,
+            R.id.navdrawer_main_send_feedback,
+            R.id.navdrawer_main_debug
     };
 
+    /**
+     * Navigation Drawer (Menu) resource ids for titles
+     */
     private static final int[] NAVDRAWER_TITLE_RES_ID = new int[]{
             R.string.navdrawer_main_stories,
             R.string.navdrawer_main_topics,
@@ -43,14 +45,20 @@ public class MainActivity extends BaseActivity
             R.string.navdrawer_main_debug
     };
 
+    /**
+     * Navigation Drawer (Menu) resource ids for icons
+     */
     private static final int[] NAVDRAWER_ICON_RES_ID = new int[]{
-            R.drawable.ic_navdrawer_stories,
-            R.drawable.ic_navdrawer_topics,
-            R.drawable.ic_navdrawer_settings,
-            R.drawable.ic_navdrawer_about,
-            R.drawable.ic_navdrawer_send_feedback,
-            R.drawable.ic_navdrawer_debug
+            R.drawable.ic_navdrawer_main_stories,
+            R.drawable.ic_navdrawer_main_topics,
+            R.drawable.ic_navdrawer_main_settings,
+            R.drawable.ic_navdrawer_main_about,
+            R.drawable.ic_navdrawer_main_send_feedback,
+            R.drawable.ic_navdrawer_main_debug
     };
+
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,21 +69,13 @@ public class MainActivity extends BaseActivity
         navigationView = (NavigationView) findViewById(R.id.main_navdrawer);
         navigationView.setNavigationItemSelectedListener(this);
 
-        // TODO: we have to edit this
-        // Update: Why? It's okay
-        storiesFragment = StoriesFragment.newInstance();
-        topicsFragment = TopicsFragment.newInstance();
-        settingsFragment = SettingsFragment.newInstance();
-        aboutFragment = AboutFragment.newInstance();
-        debugFragment = DebugFragment.newInstance();
-
         getFragmentManager().beginTransaction()
-                .replace(R.id.main_frame_layout, storiesFragment).commit();
+                .replace(R.id.main_frame_layout, StoriesFragment.newInstance()).commit();
     }
 
-    //For button "Back"
     @Override
     public void onBackPressed() {
+        // TODO: Replace w/ native library
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
@@ -83,37 +83,37 @@ public class MainActivity extends BaseActivity
         }
     }
 
-    // Processing click on item NavigationMenu
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
         switch (item.getItemId()) {
-            case R.id.navdrawer_stories:
-                transaction.replace(R.id.main_frame_layout, storiesFragment);
+            case R.id.navdrawer_main_stories:
+                transaction.replace(R.id.main_frame_layout, StoriesFragment.newInstance());
                 break;
-            case R.id.navdrawer_topics:
-                transaction.replace(R.id.main_frame_layout, topicsFragment);
+            case R.id.navdrawer_main_topics:
+                transaction.replace(R.id.main_frame_layout, TopicsFragment.newInstance());
                 break;
-            case R.id.navdrawer_settings:
-                transaction.replace(R.id.main_frame_layout, settingsFragment);
+            case R.id.navdrawer_main_settings:
+                transaction.replace(R.id.main_frame_layout, SettingsFragment.newInstance());
                 break;
-            case R.id.navdrawer_about:
-                transaction.replace(R.id.main_frame_layout, aboutFragment);
+            case R.id.navdrawer_main_about:
+                transaction.replace(R.id.main_frame_layout, AboutFragment.newInstance());
                 break;
-            case R.id.navdrawer_send_feedback:
+            case R.id.navdrawer_main_send_feedback:
                 // TODO: Send feedback (switch to Play Market)
                 break;
-            case R.id.navdrawer_debug:
-                transaction.replace(R.id.main_frame_layout, debugFragment);
+            case R.id.navdrawer_main_debug:
+                transaction.replace(R.id.main_frame_layout, DebugFragment.newInstance());
                 break;
         }
 
         transaction.addToBackStack(null).commit();
 
+        // TODO: Replace w/ native library
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.main_drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+
         return true;
     }
 
@@ -132,9 +132,5 @@ public class MainActivity extends BaseActivity
 
     public DrawerLayout getDrawerLayout() {
         return drawerLayout;
-    }
-
-    public NavigationView getNavigationView() {
-        return navigationView;
     }
 }

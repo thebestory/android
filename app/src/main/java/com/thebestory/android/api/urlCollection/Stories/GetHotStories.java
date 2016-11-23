@@ -1,3 +1,7 @@
+/*
+ * The Bestory Project
+ */
+
 package com.thebestory.android.api.urlCollection.Stories;
 
 import android.net.Uri;
@@ -10,15 +14,11 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-/**
- * Created by Alex on 04.11.2016.
- */
-
 public class GetHotStories implements ParseUrl {
     @Override
     public HttpURLConnection parse(Bundle args) throws IOException {
         String url = Uri.parse(UrlBox.baseUrl).buildUpon().appendPath(UrlBox.storyWay).appendEncodedPath("hot")
-                .appendQueryParameter("after", Integer.toString(args.getInt("after",0)))
+                .appendQueryParameter("after", Integer.toString(args.getInt("after", 0)))
                 .appendQueryParameter("before", Integer.toString(args.getInt("before", 0)))
                 .appendQueryParameter("limit", Integer.toString(args.getInt("limit", 0)))
                 .toString();

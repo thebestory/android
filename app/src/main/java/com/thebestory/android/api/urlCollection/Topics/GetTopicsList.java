@@ -1,3 +1,7 @@
+/*
+ * The Bestory Project
+ */
+
 package com.thebestory.android.api.urlCollection.Topics;
 
 import android.net.Uri;
@@ -9,10 +13,6 @@ import com.thebestory.android.api.urlCollection.UrlBox;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-/**
- * Created by Alex on 04.11.2016.
- */
 
 public class GetTopicsList implements ParseUrl {
     @Override

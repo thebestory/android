@@ -1,12 +1,11 @@
+/*
+ * The Bestory Project
+ */
+
 package com.thebestory.android.loader.main;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-
-/**
- * Created by Октай on 16.11.2016.
- */
-
 
 /*
 @deprecated class was written Oktai

@@ -1,21 +1,23 @@
+/*
+ * The Bestory Project
+ */
+
 package com.thebestory.android.fragment.main;
 
-import android.content.Context;
-import android.net.Uri;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.design.widget.TabLayout;
-import android.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.v7.widget.Toolbar;
 
 import com.thebestory.android.R;
 import com.thebestory.android.activity.MainActivity;
@@ -23,10 +25,7 @@ import com.thebestory.android.adapter.main.StoriesFragmentPagerAdapter;
 import com.thebestory.android.fragment.main.stories.NewStoryFragment;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link StoriesFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
+ * Fragment for Stories screen.
  * Use the {@link StoriesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
@@ -37,10 +36,6 @@ public class StoriesFragment extends Fragment {
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-
-    private Fragment newStoryFragment;
-
-    private OnFragmentInteractionListener mListener;
 
     public StoriesFragment() {
         // Required empty public constructor
@@ -59,9 +54,6 @@ public class StoriesFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-
-        newStoryFragment = NewStoryFragment.newInstance();
     }
 
     @Override
@@ -101,7 +93,7 @@ public class StoriesFragment extends Fragment {
 
         switch (item.getItemId()) {
             case R.id.main_stories_toolbar_action_new:
-                transaction.replace(R.id.main_frame_layout, newStoryFragment);
+                transaction.replace(R.id.main_frame_layout, NewStoryFragment.newInstance());
                 break;
             case R.id.main_stories_toolbar_action_search:
                 // TODO: Stories search
@@ -112,42 +104,4 @@ public class StoriesFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
 }
