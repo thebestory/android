@@ -5,7 +5,7 @@
 package com.thebestory.android.fragment.main;
 
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +15,12 @@ import com.thebestory.android.activity.MainActivity;
 
 /**
  * Fragment for About screen.
+ * TODO: Create about screen
+ * TODO: We should ask Alexandr Afonin for helps this
  * Use the {@link AboutFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AboutFragment extends Fragment { // TODO: We should ask Alexandr Afonin for helps this
+public class AboutFragment extends Fragment {
     private View view;
     private MainActivity activity;
 
@@ -49,5 +51,4 @@ public class AboutFragment extends Fragment { // TODO: We should ask Alexandr Af
 
         return view;
     }
-
 }

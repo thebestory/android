@@ -4,14 +4,12 @@
 
 package com.thebestory.android.fragment.main.stories;
 
-import android.app.FragmentManager;
-import android.app.LoaderManager;
-import android.content.Context;
-import android.content.Loader;
-import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -38,7 +36,6 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class RecentTabFragment extends Fragment implements LoaderManager.LoaderCallbacks<LoaderResult<List<Story>>> {
-
     private View view;
     final RecentTabFragment thisFragment = this;
 
@@ -130,7 +127,6 @@ public class RecentTabFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public Loader<LoaderResult<List<Story>>> onCreateLoader(int id, Bundle args) {
-        //return new StoriesLoader(getActivity(), this.currentIdStories);
         Log.e("onCreateView: ", "i am here");
         Loader<LoaderResult<List<Story>>> temp = ApiMethods.getInstance().getLatestStories(getActivity(), TypeOfCollection.NONE, null, 5);
         temp.forceLoad();

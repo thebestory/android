@@ -5,7 +5,7 @@
 package com.thebestory.android.fragment.main.stories;
 
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -19,6 +19,7 @@ import com.thebestory.android.activity.MainActivity;
 
 /**
  * Fragment for New story screen.
+ * TODO: When we come up how to post request -> Do it!
  * Use the {@link NewStoryFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
@@ -28,7 +29,7 @@ public class NewStoryFragment extends Fragment {
 
     private Toolbar toolbar;
 
-    public NewStoryFragment() { //TODO: When we come up how to post request -> Do it!
+    public NewStoryFragment() {
         // Required empty public constructor
     }
 
@@ -53,6 +54,7 @@ public class NewStoryFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_main_stories_new, container, false);
         activity = (MainActivity) getActivity();
+
         toolbar = (Toolbar) view.findViewById(R.id.main_stories_new_toolbar);
 
         toolbar.setTitle(R.string.main_stories_new_toolbar_title);
@@ -73,5 +75,4 @@ public class NewStoryFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.main_stories_new, menu);
     }
-
 }

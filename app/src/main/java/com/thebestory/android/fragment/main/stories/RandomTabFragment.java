@@ -4,23 +4,21 @@
 
 package com.thebestory.android.fragment.main.stories;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.thebestory.android.R;
 
 /**
  * Fragment for Random tab on Stories screen.
+ * TODO: When we create RecentTabFragment -> Do it!
  * Use the {@link RandomTabFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RandomTabFragment extends Fragment { //TODO: When we create RecentTabFragment -> Do it!
+public class RandomTabFragment extends Fragment {
     private View view;
 
     public RandomTabFragment() {

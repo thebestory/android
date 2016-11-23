@@ -4,14 +4,17 @@
 
 package com.thebestory.android.activity;
 
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.os.Bundle;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.inputmethod.InputMethodManager;
@@ -69,7 +72,7 @@ public class MainActivity extends AppCompatActivity
         navigationView = (NavigationView) findViewById(R.id.main_navdrawer);
         navigationView.setNavigationItemSelectedListener(this);
 
-        getFragmentManager().beginTransaction()
+        getSupportFragmentManager().beginTransaction()
                 .replace(R.id.main_frame_layout, StoriesFragment.newInstance()).commit();
     }
 
@@ -85,7 +88,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
         switch (item.getItemId()) {
             case R.id.navdrawer_main_stories:
@@ -110,15 +113,24 @@ public class MainActivity extends AppCompatActivity
 
         transaction.addToBackStack(null).commit();
 
-        // TODO: Replace w/ native library
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.main_drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
 
         return true;
     }
 
+    @Override
+    public void setSupportActionBar(@Nullable Toolbar toolbar) {
+        super.setSupportActionBar(toolbar);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawerLayout, toolbar, R.string.navdrawer_open, R.string.navdrawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+    }
+
     // TODO: next two methods close keyboard from NewStoryFragment
-    // Update: It's a crutch, we need to change it
+    // XXX: It's a crutch, we need to change it
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) hideKeyboard();

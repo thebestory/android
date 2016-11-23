@@ -5,7 +5,7 @@
 package com.thebestory.android.fragment.main;
 
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +15,7 @@ import com.thebestory.android.activity.MainActivity;
 
 /**
  * Fragment for Debug screen.
+ * TODO: Create debug screen
  * Use the {@link DebugFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
@@ -49,5 +50,4 @@ public class DebugFragment extends Fragment {
 
         return view;
     }
-
 }

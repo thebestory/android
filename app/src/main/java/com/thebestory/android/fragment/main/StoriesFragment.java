@@ -4,13 +4,11 @@
 
 package com.thebestory.android.fragment.main;
 
-import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -32,10 +30,6 @@ import com.thebestory.android.fragment.main.stories.NewStoryFragment;
 public class StoriesFragment extends Fragment {
     private View view;
     private MainActivity activity;
-
-    private Toolbar toolbar;
-    private TabLayout tabLayout;
-    private ViewPager viewPager;
 
     public StoriesFragment() {
         // Required empty public constructor
@@ -61,23 +55,18 @@ public class StoriesFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_main_stories, container, false);
         activity = (MainActivity) getActivity();
-        toolbar = (Toolbar) view.findViewById(R.id.main_stories_toolbar);
-        tabLayout = (TabLayout) view.findViewById(R.id.main_stories_tab_layout);
-        viewPager = (ViewPager) view.findViewById(R.id.main_stories_viewpager);
+
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.main_stories_toolbar);
+        TabLayout layout = (TabLayout) view.findViewById(R.id.main_stories_tab_layout);
+        ViewPager pager = (ViewPager) view.findViewById(R.id.main_stories_viewpager);
 
         toolbar.setTitle(R.string.navdrawer_main_stories);
         activity.setSupportActionBar(toolbar);
 
-        DrawerLayout drawerLayout = activity.getDrawerLayout();
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                activity, drawerLayout, toolbar, R.string.navdrawer_open, R.string.navdrawer_close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
-
         StoriesFragmentPagerAdapter adapter = new StoriesFragmentPagerAdapter(
                 getChildFragmentManager(), activity);
-        viewPager.setAdapter(adapter);
-        tabLayout.setupWithViewPager(viewPager);
+        pager.setAdapter(adapter);
+        layout.setupWithViewPager(pager);
 
         return view;
     }
@@ -89,7 +78,7 @@ public class StoriesFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        FragmentTransaction transaction = activity.getFragmentManager().beginTransaction();
+        FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
 
         switch (item.getItemId()) {
             case R.id.main_stories_toolbar_action_new:
@@ -103,5 +92,4 @@ public class StoriesFragment extends Fragment {
         transaction.addToBackStack(null).commit();
         return super.onOptionsItemSelected(item);
     }
-
 }

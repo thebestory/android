@@ -5,22 +5,29 @@
 package com.thebestory.android.adapter.main;
 
 import android.content.Context;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.support.v13.app.FragmentPagerAdapter;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 
-import com.thebestory.android.R;
 import com.thebestory.android.fragment.main.stories.*;
 
-public class StoriesFragmentPagerAdapter extends FragmentPagerAdapter {
+import static com.thebestory.android.R.string.main_stories_latest_tab;
+import static com.thebestory.android.R.string.main_stories_hot_tab;
+import static com.thebestory.android.R.string.main_stories_top_tab;
+import static com.thebestory.android.R.string.main_stories_random_tab;
 
+
+public class StoriesFragmentPagerAdapter extends FragmentPagerAdapter {
     private Context context;
 
+    /**
+     * Tabs resource ids for titles
+     */
     private static final int[] TAB_TITLE_RES_ID = new int[]{
-            R.string.main_stories_recent_tab,
-            R.string.main_stories_hot_tab,
-            R.string.main_stories_top_tab,
-            R.string.main_stories_random_tab
+            main_stories_latest_tab,
+            main_stories_hot_tab,
+            main_stories_top_tab,
+            main_stories_random_tab
     };
 
     public StoriesFragmentPagerAdapter(FragmentManager fm, Context context) {

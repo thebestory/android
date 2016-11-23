@@ -30,7 +30,7 @@
 
     <!-- Main Activity - Stories Fragment - Tabs -->
 
-    <string name="main_stories_recent_tab">Recent</string>
+    <string name="main_stories_latest_tab">Latest</string>
     <string name="main_stories_hot_tab">Hot</string>
     <string name="main_stories_top_tab">Top</string>
     <string name="main_stories_random_tab">Random</string>

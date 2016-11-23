@@ -5,13 +5,11 @@
 package com.thebestory.android.fragment.main;
 
 import android.os.Bundle;
-import android.app.Fragment;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
+import android.support.v7.preference.ListPreference;
+import android.support.v7.preference.Preference;
+import android.support.v7.preference.PreferenceFragmentCompat;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,8 +26,6 @@ import com.thebestory.android.activity.MainActivity;
 public class SettingsFragment extends Fragment {
     private View view;
     private MainActivity activity;
-
-    private Toolbar toolbar;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -48,8 +44,6 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getChildFragmentManager().beginTransaction()
-                .replace(R.id.main_settings_frame_layout, new InnerSettingsFragment()).commit();
     }
 
     @Override
@@ -57,21 +51,19 @@ public class SettingsFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_main_settings, container, false);
         activity = (MainActivity) getActivity();
-        toolbar = (Toolbar) view.findViewById(R.id.main_settings_toolbar);
+
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.main_settings_toolbar);
 
         toolbar.setTitle(R.string.navdrawer_main_settings);
         activity.setSupportActionBar(toolbar);
 
-        DrawerLayout drawerLayout = activity.getDrawerLayout();
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                activity, drawerLayout, toolbar, R.string.navdrawer_open, R.string.navdrawer_close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
+        getChildFragmentManager().beginTransaction()
+                .replace(R.id.main_settings_frame_layout, new InnerSettingsFragment()).commit();
 
         return view;
     }
 
-    public static class InnerSettingsFragment extends PreferenceFragment {
+    public static class InnerSettingsFragment extends PreferenceFragmentCompat {
         /**
          * A preference value change listener that updates the preference's summary
          * to reflect its new value.
@@ -104,8 +96,7 @@ public class SettingsFragment extends Fragment {
                 };
 
         @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
+        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             addPreferencesFromResource(R.xml.settings);
             bindPreferenceSummaryToValue(findPreference("theme"));
         }

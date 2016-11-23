@@ -4,9 +4,9 @@
 
 package com.thebestory.android.api;
 
-import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.content.AsyncTaskLoader;
 import android.util.JsonReader;
 import android.util.Log;
 
@@ -43,11 +43,11 @@ class ApiAsyncTask<T> extends AsyncTaskLoader<LoaderResult<T>> {
             Log.e("WRONG", "Start3");
             T response = parseResponse.parse(jr);
             Log.e("WRONG", "Start4");
-            return new LoaderResult(LoaderStatus.OK, response);
+            return new LoaderResult<>(LoaderStatus.OK, response);
         } catch (Exception error) {
             Log.e("WRONG", error.toString());
         }
-        return new LoaderResult(LoaderStatus.ERROR, null);
+        return new LoaderResult<>(LoaderStatus.ERROR, null);
     }
 
 }

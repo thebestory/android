@@ -5,7 +5,7 @@
 package com.thebestory.android.fragment.main.stories;
 
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +14,11 @@ import com.thebestory.android.R;
 
 /**
  * Fragment for Hot tab on Stories screen.
+ * TODO: When we create RecentTabFragment -> Do it!
  * Use the {@link HotTabFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HotTabFragment extends Fragment { //TODO: When we create RecentTabFragment -> Do it!
+public class HotTabFragment extends Fragment {
     private View view;
 
     public HotTabFragment() {
@@ -45,5 +46,4 @@ public class HotTabFragment extends Fragment { //TODO: When we create RecentTabF
         view = inflater.inflate(R.layout.fragment_main_stories_hot_tab, container, false);
         return view;
     }
-
 }
