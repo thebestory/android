@@ -22,4 +22,10 @@
     <color name="dark_colorBackground">#EFEFEF</color>
     <color name="dark_colorContentBackground">#FFFFFF</color>
 
+    <!--            -->
+    <!--  FOR TEXT  -->
+    <!--            -->
+
+    <color name="black_colorText">#dc000000</color>
+
 </resources>
