@@ -9,7 +9,14 @@ import android.util.JsonReader;
 import java.io.IOException;
 
 public final class Story {
+    /**
+     * Story unique ID
+     */
     public final String id;
+
+    /**
+     * {@link Topic} instance with topic information
+     */
     public final Topic topic;
 
     public final String content;
@@ -36,11 +43,31 @@ public final class Story {
         this.publishDate = publishDate;
     }
 
+    public boolean isPublished() {
+        // TODO: Check, that publish date present and <= now.
+        return publishDate != null;
+    }
+
+    public boolean isScheduled() {
+        // TODO: Check, that publish date present and > now.
+        return publishDate != null;
+    }
+
+    /**
+     * Parses a story information ({@link Story}) from json object ({@link JsonReader}).
+     *
+     * @param jr json object data
+     * @return {@link Story} instance with parsed information
+     * @throws IOException
+     */
     public static Story parse(JsonReader jr) throws IOException {
         String id = null;
         Topic topic = null;
-        int likesCount = 0, commentsCount = 0;
-        String content = null, publishDate = null, submitDate = null;
+        int likesCount = 0;
+        int commentsCount = 0;
+        String content = null;
+        String publishDate = null;
+        String submitDate = null;
 
         jr.beginObject();
 

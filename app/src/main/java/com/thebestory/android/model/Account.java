@@ -8,7 +8,12 @@ import android.util.JsonReader;
 
 import java.io.IOException;
 
+import static android.os.Build.ID;
+
 public final class Account {
+    /**
+     * Account unique ID
+     */
     public final int id;
 
     public final String username;
@@ -26,6 +31,13 @@ public final class Account {
         this.storiesCount = storiesCount;
     }
 
+    /**
+     * Parses an account information ({@link Account}) from json object ({@link JsonReader}).
+     *
+     * @param jr json object data
+     * @return {@link Account} instance with parsed information
+     * @throws IOException
+     */
     public static Account parse(JsonReader jr) throws IOException {
         int id = 0;
         String username = null;

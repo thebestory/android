@@ -9,6 +9,9 @@ import android.util.JsonReader;
 import java.io.IOException;
 
 public final class Topic {
+    /**
+     * Topic unique ID
+     */
     public final int id;
 
     public final String title;
@@ -32,6 +35,13 @@ public final class Topic {
         this.storiesCount = storiesCount;
     }
 
+    /**
+     * Parses a topic information ({@link Topic}) from json object ({@link JsonReader}).
+     *
+     * @param jr json object data
+     * @return {@link Topic} instance with parsed information
+     * @throws IOException
+     */
     public static Topic parse(JsonReader jr) throws IOException {
         int id = 0;
         String title = null;
