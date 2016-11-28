@@ -35,7 +35,7 @@
     <string name="main_stories_top_tab">Top</string>
     <string name="main_stories_random_tab">Random</string>
 
-    <!-- Main Activity - RecentTabFragment - Errors -->
+    <!-- Main Activity - LatestTabFragment - Errors -->
 
     <string name="stories_not_found">Stories not found</string>
     <string name="no_internet">No internet</string>

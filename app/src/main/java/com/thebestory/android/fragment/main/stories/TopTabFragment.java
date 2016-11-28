@@ -5,21 +5,50 @@
 package com.thebestory.android.fragment.main.stories;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.thebestory.android.R;
+import com.thebestory.android.adapter.main.StoriesAdapter;
+import com.thebestory.android.api.ApiMethods;
+import com.thebestory.android.api.LoaderResult;
+import com.thebestory.android.api.LoaderStatus;
+import com.thebestory.android.api.urlCollection.TypeOfCollection;
+import com.thebestory.android.loader.main.TopStoriesData;
+import com.thebestory.android.model.Story;
+
+import java.util.List;
 
 /**
  * Fragment for Top tab on Stories screen.
- * TODO: When we create RecentTabFragment -> Do it!
+ * TODO: TODO: Hm.. Bags
  * Use the {@link TopTabFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TopTabFragment extends Fragment {
+public class TopTabFragment extends Fragment implements LoaderManager.LoaderCallbacks<LoaderResult<List<Story>>> {
+
     private View view;
+    final TopTabFragment thisFragment = this;
+
+    private RecyclerView rv;
+    private TextView errorTextView;
+    private ProgressBar progressView;
+
+    private boolean flagForLoader;
+
+    @Nullable
+    private StoriesAdapter adapter;
+    private TopStoriesData topStoriesData;
 
     public TopTabFragment() {
         // Required empty public constructor
@@ -44,7 +73,121 @@ public class TopTabFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_main_stories_top_tab, container, false);
+
+        FragmentManager fm = getFragmentManager();
+
+        progressView = (ProgressBar) view.findViewById(R.id.progress);
+        errorTextView = (TextView) view.findViewById(R.id.error_text);
+
+        adapter = new StoriesAdapter(getActivity());
+        topStoriesData = (TopStoriesData) fm.findFragmentByTag(TopStoriesData.TAG);
+
+
+        rv = (RecyclerView) view.findViewById(R.id.rv_stories_top_tab);
+        rv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        //rv.addItemDecoration(new RecylcerDividersDecorator(R.color.colorPrimaryDark));
+        rv.setAdapter(adapter);
+
+        if (topStoriesData == null) {
+            topStoriesData = new TopStoriesData();
+            fm.beginTransaction().add(topStoriesData, TopStoriesData.TAG).commit();
+        }
+
+        errorTextView.setVisibility(View.GONE);
+        rv.setVisibility(View.GONE);
+
+        if (savedInstanceState != null) {
+            displayNonEmptyData(topStoriesData.getCurrentStories());
+        } else {
+            flagForLoader = true;
+            //Log.e("onCreateView: ", "i am here");
+            getLoaderManager().initLoader(2, null, this);
+        }
+
+        rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (flagForLoader) {
+                    return;
+                }
+                super.onScrolled(recyclerView, dx, dy);
+                LinearLayoutManager llm = (LinearLayoutManager) recyclerView.getLayoutManager();
+                if (llm.findLastVisibleItemPosition() + 3 >= adapter.getItemCount()) {
+                    flagForLoader = true;
+                    getLoaderManager().restartLoader(2, null, thisFragment);
+                }
+            }
+        });
+
         return view;
+    }
+
+    @Override
+    public Loader<LoaderResult<List<Story>>> onCreateLoader(int id, Bundle args) {
+        String currentId = topStoriesData.getLastId();
+        Loader<LoaderResult<List<Story>>> temp;
+        if (currentId.equals("0")) {
+            temp = ApiMethods.getInstance().getTopStories(getActivity(), TypeOfCollection.NONE, null, 10);
+        } else {
+            temp = ApiMethods.getInstance().getTopStories(getActivity(), TypeOfCollection.BEFORE, currentId, 10);
+        }
+        temp.forceLoad();
+        return temp;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<LoaderResult<List<Story>>> loader, LoaderResult<List<Story>> result) {
+        flagForLoader = result.data.isEmpty();
+
+        if (result.status == LoaderStatus.OK) {
+            if (!result.data.isEmpty()) {
+                displayNonEmptyData(result.data);
+                topStoriesData.getCurrentStories().addAll(result.data);
+            } else if (topStoriesData.getCurrentStories().isEmpty()) {
+                displayEmptyData();
+            }
+        } else {
+            displayError(result.status);
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<LoaderResult<List<Story>>> loader) {
+        displayEmptyData();
+    }
+
+    private void displayEmptyData() {
+        progressView.setVisibility(View.GONE);
+        rv.setVisibility(View.GONE);
+        errorTextView.setVisibility(View.VISIBLE);
+        errorTextView.setText(R.string.stories_not_found);
+    }
+
+    private void displayNonEmptyData(List<Story> stories) {
+        if (adapter != null) {
+            adapter.addStories(stories);
+        }
+        progressView.setVisibility(View.GONE);
+        errorTextView.setVisibility(View.GONE);
+        rv.setVisibility(View.VISIBLE);
+    }
+
+    private void displayError(LoaderStatus resultType) {
+        progressView.setVisibility(View.GONE);
+        rv.setVisibility(View.GONE);
+        errorTextView.setVisibility(View.VISIBLE);
+        final int messageResId;
+        if (resultType == LoaderStatus.ERROR) { //TODO: Add in LoaderStatus NO_INTERNET
+            messageResId = R.string.no_internet;
+        } else {
+            messageResId = R.string.error;
+        }
+        errorTextView.setText(messageResId);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 
 }

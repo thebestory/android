@@ -44,7 +44,7 @@ public class StoriesFragmentPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return RecentTabFragment.newInstance();
+                return LatestTabFragment.newInstance();
             case 1:
                 return HotTabFragment.newInstance();
             case 2:

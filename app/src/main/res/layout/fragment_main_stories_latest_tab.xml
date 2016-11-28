@@ -1,10 +1,9 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:layout_height="match_parent">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_stories_recent_tab"
+        android:id="@+id/rv_stories_latest_tab"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="12dp">
@@ -25,4 +24,4 @@
         android:layout_gravity="center"
         android:visibility="gone" />
 
-</LinearLayout>
+</FrameLayout>

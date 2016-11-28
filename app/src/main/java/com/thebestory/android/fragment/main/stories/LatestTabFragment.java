@@ -12,7 +12,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,33 +24,32 @@ import com.thebestory.android.api.ApiMethods;
 import com.thebestory.android.api.LoaderResult;
 import com.thebestory.android.api.LoaderStatus;
 import com.thebestory.android.api.urlCollection.TypeOfCollection;
-import com.thebestory.android.loader.main.StoriesData;
+import com.thebestory.android.loader.main.LatestStoriesData;
 import com.thebestory.android.model.Story;
 
 import java.util.List;
 
 /**
  * Fragment for Recent tab on Stories screen.
- * Use the {@link RecentTabFragment#newInstance} factory method to
+ * Use the {@link LatestTabFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RecentTabFragment extends Fragment implements LoaderManager.LoaderCallbacks<LoaderResult<List<Story>>> {
-    private View view;
-    final RecentTabFragment thisFragment = this;
+public class LatestTabFragment extends Fragment implements LoaderManager.LoaderCallbacks<LoaderResult<List<Story>>> {
 
-    private List<Story> stories;
+    private View view;
+    final LatestTabFragment thisFragment = this;
+
     private RecyclerView rv;
     private TextView errorTextView;
     private ProgressBar progressView;
 
     private boolean flagForLoader;
-    private int currentIdStories;
 
     @Nullable
     private StoriesAdapter adapter;
-    private StoriesData storiesData;
+    private LatestStoriesData latestStoriesData;
 
-    public RecentTabFragment() {
+    public LatestTabFragment() {
         // Required empty public constructor
     }
 
@@ -59,10 +57,10 @@ public class RecentTabFragment extends Fragment implements LoaderManager.LoaderC
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @return A new instance of fragment RecentTabFragment.
+     * @return A new instance of fragment LatestTabFragment.
      */
-    public static RecentTabFragment newInstance() {
-        return new RecentTabFragment();
+    public static LatestTabFragment newInstance() {
+        return new LatestTabFragment();
     }
 
     @Override
@@ -81,30 +79,28 @@ public class RecentTabFragment extends Fragment implements LoaderManager.LoaderC
         errorTextView = (TextView) view.findViewById(R.id.error_text);
 
         adapter = new StoriesAdapter(getActivity());
-        storiesData = (StoriesData) fm.findFragmentByTag(StoriesData.TAG);
+        latestStoriesData = (LatestStoriesData) fm.findFragmentByTag(LatestStoriesData.TAG);
 
 
-        rv = (RecyclerView) view.findViewById(R.id.rv_stories_recent_tab);
+        rv = (RecyclerView) view.findViewById(R.id.rv_stories_latest_tab);
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
         //rv.addItemDecoration(new RecylcerDividersDecorator(R.color.colorPrimaryDark));
         rv.setAdapter(adapter);
 
-        if (storiesData == null) {
-            storiesData = new StoriesData();
-            fm.beginTransaction().add(storiesData, StoriesData.TAG).commit();
+        if (latestStoriesData == null) {
+            latestStoriesData = new LatestStoriesData();
+            fm.beginTransaction().add(latestStoriesData, LatestStoriesData.TAG).commit();
         }
 
         errorTextView.setVisibility(View.GONE);
         rv.setVisibility(View.GONE);
 
         if (savedInstanceState != null) {
-            currentIdStories = savedInstanceState.getInt("currentIdStories");
-            displayNonEmptyData(storiesData.getCurrentStories());
+            displayNonEmptyData(latestStoriesData.getCurrentStories());
         } else {
-            currentIdStories = 0;
             flagForLoader = true;
             //Log.e("onCreateView: ", "i am here");
-            getLoaderManager().initLoader(currentIdStories, null, this);
+            getLoaderManager().initLoader(0, null, this);
         }
 
         rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -117,7 +113,7 @@ public class RecentTabFragment extends Fragment implements LoaderManager.LoaderC
                 LinearLayoutManager llm = (LinearLayoutManager) recyclerView.getLayoutManager();
                 if (llm.findLastVisibleItemPosition() + 3 >= adapter.getItemCount()) {
                     flagForLoader = true;
-                    getLoaderManager().initLoader(++currentIdStories, null, thisFragment);
+                    getLoaderManager().restartLoader(0, null, thisFragment);
                 }
             }
         });
@@ -127,20 +123,26 @@ public class RecentTabFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public Loader<LoaderResult<List<Story>>> onCreateLoader(int id, Bundle args) {
-        Log.e("onCreateView: ", "i am here");
-        Loader<LoaderResult<List<Story>>> temp = ApiMethods.getInstance().getLatestStories(getActivity(), TypeOfCollection.NONE, null, 5);
+        String currentId = latestStoriesData.getLastId();
+        Loader<LoaderResult<List<Story>>> temp;
+        if (currentId.equals("0")) {
+            temp = ApiMethods.getInstance().getLatestStories(getActivity(), TypeOfCollection.NONE, null, 10);
+        } else {
+            temp = ApiMethods.getInstance().getLatestStories(getActivity(), TypeOfCollection.BEFORE, currentId, 10);
+        }
         temp.forceLoad();
         return temp;
     }
 
     @Override
     public void onLoadFinished(Loader<LoaderResult<List<Story>>> loader, LoaderResult<List<Story>> result) {
-        flagForLoader = false;
+        flagForLoader = result.data.isEmpty();
+
         if (result.status == LoaderStatus.OK) {
-            if (result.data != null && !result.data.isEmpty()) {
+            if (!result.data.isEmpty()) {
                 displayNonEmptyData(result.data);
-                storiesData.getCurrentStories().addAll(result.data);
-            } else {
+                latestStoriesData.getCurrentStories().addAll(result.data);
+            } else if (latestStoriesData.getCurrentStories().isEmpty()) {
                 displayEmptyData();
             }
         } else {
@@ -183,14 +185,8 @@ public class RecentTabFragment extends Fragment implements LoaderManager.LoaderC
         errorTextView.setText(messageResId);
     }
 
-    private void initializeAdapter() {
-        //StoriesAdapter adapter = new StoriesAdapter(stories);
-        //rv.setAdapter(adapter);
-    }
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt("currentIdStories", currentIdStories);
     }
 }
