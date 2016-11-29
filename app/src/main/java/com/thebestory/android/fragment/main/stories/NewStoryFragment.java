@@ -19,7 +19,7 @@ import com.thebestory.android.activity.MainActivity;
 
 /**
  * Fragment for New story screen.
- * TODO: When we come up how to post request -> Do it!
+ * TODO: Don't WORK! When we come up how to post request -> Do it!
  * Use the {@link NewStoryFragment#newInstance} factory method to
  * create an instance of this fragment.
  */

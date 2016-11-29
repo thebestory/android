@@ -31,7 +31,7 @@ import java.util.List;
 
 /**
  * Fragment for Random tab on Stories screen.
- * TODO: Hm.. Bags
+ * TODO: Work, but we have one problem with repeating stories
  * Use the {@link RandomTabFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
@@ -122,13 +122,14 @@ public class RandomTabFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public Loader<LoaderResult<List<Story>>> onCreateLoader(int id, Bundle args) {
-        String currentId = randomStoriesData.getLastId();
+        //String currentId = randomStoriesData.getLastId();
         Loader<LoaderResult<List<Story>>> temp;
-        if (currentId.equals("0")) {
+        temp = ApiMethods.getInstance().getRandomStories(getActivity(), TypeOfCollection.NONE, null, 10);
+        /*if (currentId.equals("0")) {
             temp = ApiMethods.getInstance().getRandomStories(getActivity(), TypeOfCollection.NONE, null, 10);
         } else {
             temp = ApiMethods.getInstance().getRandomStories(getActivity(), TypeOfCollection.BEFORE, null, 10);
-        }
+        }*/
         temp.forceLoad();
         return temp;
     }
