@@ -12,5 +12,6 @@ public final class UrlBox {
     public static String baseUrl = "https://thebestory.herokuapp.com";
     public static String storyWay = "stories";
     public static String topicWay = "topics";
+    public static String commentWay = "comments";
 
 }

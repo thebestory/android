@@ -7,24 +7,35 @@ package com.thebestory.android.api;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.thebestory.android.api.parseResponse.ParseComment;
+import com.thebestory.android.api.parseResponse.ParseCommentArray;
 import com.thebestory.android.api.parseResponse.ParseStoriesArray;
 import com.thebestory.android.api.parseResponse.ParseStory;
 import com.thebestory.android.api.parseResponse.ParseTopic;
 import com.thebestory.android.api.parseResponse.ParseTopicsArray;
 import com.thebestory.android.api.parseUrlRequest.ParseUrl;
+import com.thebestory.android.api.urlCollection.Comments.GetDetailsComment;
+import com.thebestory.android.api.urlCollection.PostUrls.PostComment;
+import com.thebestory.android.api.urlCollection.PostUrls.PostCommentLike;
+import com.thebestory.android.api.urlCollection.PostUrls.PostCommentUnlike;
+import com.thebestory.android.api.urlCollection.PostUrls.PostStoryLike;
+import com.thebestory.android.api.urlCollection.PostUrls.PostStory;
+import com.thebestory.android.api.urlCollection.PostUrls.PostStoryUnlike;
 import com.thebestory.android.api.urlCollection.Stories.GetDetailsStory;
 import com.thebestory.android.api.urlCollection.Stories.GetHotStories;
 import com.thebestory.android.api.urlCollection.Stories.GetLatestStories;
 import com.thebestory.android.api.urlCollection.Stories.GetRandomStories;
+import com.thebestory.android.api.urlCollection.Stories.GetStoryComments;
 import com.thebestory.android.api.urlCollection.Stories.GetTopStories;
-import com.thebestory.android.api.urlCollection.Stories.SubmitStory;
 import com.thebestory.android.api.urlCollection.Topics.GetDetailsTopic;
 import com.thebestory.android.api.urlCollection.Topics.GetTopicStories;
 import com.thebestory.android.api.urlCollection.Topics.GetTopicsList;
 import com.thebestory.android.api.urlCollection.TypeOfCollection;
+import com.thebestory.android.model.Comment;
 import com.thebestory.android.model.Story;
 import com.thebestory.android.model.Topic;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ApiMethods {
@@ -84,12 +95,6 @@ public class ApiMethods {
         return getTeamplateStories(context, typeOf, id, limit, new GetTopStories());
     }
 
-    public ApiAsyncTask<Boolean> SubmitStory(Context context, String story) {
-        Bundle requestBundle = new Bundle();
-        requestBundle.putString("story", story);
-        ApiAsyncTask task = new ApiAsyncTask(context, new SubmitStory(), null, requestBundle);
-        return task;
-    }
 
     public ApiAsyncTask<Topic> getDetailsTopic(Context context, int id) {
         Bundle requestBundle = new Bundle();
@@ -109,6 +114,77 @@ public class ApiMethods {
         addTypeOfCollection(requestBundle, typeOf, timeStamp);
 
         ApiAsyncTask task = new ApiAsyncTask(context, new GetTopicStories(), new ParseStoriesArray(), requestBundle);
+        return task;
+    }
+
+    public ApiAsyncTask<Story> postStory(Context context, String topic, String content) {
+        Bundle requestBundle = new Bundle();
+        requestBundle.putString("content", content);
+        requestBundle.putString("id", topic);
+        ApiAsyncTask task = new ApiAsyncTask(context, new PostStory(), new ParseStory(), requestBundle);
+        return task;
+    }
+
+
+    public ApiAsyncTask<Story> postStoryLike(Context context, String id) {
+        Bundle requestBundle = new Bundle();
+        requestBundle.putString("id", id);
+        //TODO: Add more information
+        ApiAsyncTask task = new ApiAsyncTask(context, new PostStoryLike(), new ParseStory(), requestBundle);
+        return task;
+    }
+
+    public ApiAsyncTask<Story> postStoryUnlike(Context context, String id) {
+        Bundle requestBundle = new Bundle();
+        requestBundle.putString("id", id);
+        //TODO: Add more information
+        ApiAsyncTask task = new ApiAsyncTask(context, new PostStoryUnlike(), new ParseStory(), requestBundle);
+        return task;
+    }
+
+    public ApiAsyncTask<Comment> postCommentLike(Context context, String id) {
+        Bundle requestBundle = new Bundle();
+        requestBundle.putString("id", id);
+        //TODO: Add more information
+        ApiAsyncTask task = new ApiAsyncTask(context, new PostCommentLike(), new ParseComment(), requestBundle);
+        return task;
+    }
+
+    public ApiAsyncTask<Comment> postCommentUnlike(Context context, String id) {
+        Bundle requestBundle = new Bundle();
+        requestBundle.putString("id", id);
+        //TODO: Add more information
+        ApiAsyncTask task = new ApiAsyncTask(context, new PostCommentUnlike(), new ParseComment(), requestBundle);
+        return task;
+    }
+
+    public ApiAsyncTask<Comment> postCommentToStory(Context context, String storyId, String content) {
+        Bundle requestBundle = new Bundle();
+        requestBundle.putString("storyId", storyId);
+        requestBundle.putString("content", content);
+        ApiAsyncTask task = new ApiAsyncTask(context, new PostComment(), new ParseComment(), requestBundle);
+        return task;
+    }
+
+    public ApiAsyncTask<Comment> postCommentToComment(Context context, String commentId, String content) {
+        Bundle requestBundle = new Bundle();
+        requestBundle.putString("commentId", commentId);
+        requestBundle.putString("content", content);
+        ApiAsyncTask task = new ApiAsyncTask(context, new PostComment(), new ParseComment(), requestBundle);
+        return task;
+    }
+
+    public ApiAsyncTask<Comment> getDetailsComment(Context context, String id) {
+        Bundle requestBundle = new Bundle();
+        requestBundle.putString("id", id);
+        ApiAsyncTask task = new ApiAsyncTask(context, new GetDetailsComment(), new ParseComment(), requestBundle);
+        return task;
+    }
+
+    public ApiAsyncTask<ArrayList<Comment>> getStoryComments(Context context, String id) {
+        Bundle requestBundle = new Bundle();
+        requestBundle.putString("id", id);
+        ApiAsyncTask task = new ApiAsyncTask(context, new GetStoryComments(), new ParseCommentArray(), requestBundle);
         return task;
     }
 

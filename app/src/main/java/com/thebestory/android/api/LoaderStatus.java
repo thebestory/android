@@ -6,5 +6,6 @@ package com.thebestory.android.api;
 
 public enum LoaderStatus {
     OK,
-    ERROR
+    ERROR,
+    WARNING
 }

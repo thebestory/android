@@ -12,6 +12,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -131,7 +132,7 @@ public class HotTabFragment extends Fragment implements LoaderManager.LoaderCall
         } else {
             temp = ApiMethods.getInstance().getHotStories(getActivity(), TypeOfCollection.BEFORE, currentId, 10); //TODO: Change this
         }
-        temp.forceLoad();
+        temp.startLoading(); //ALEX HAVE CHANGE THIS FROM FORSELOAD
         return temp;
     }
 

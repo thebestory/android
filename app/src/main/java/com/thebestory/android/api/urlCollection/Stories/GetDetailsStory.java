@@ -7,6 +7,8 @@ package com.thebestory.android.api.urlCollection.Stories;
 import android.net.Uri;
 import android.os.Bundle;
 
+import com.thebestory.android.api.RequestType;
+import com.thebestory.android.api.parseResponse.ParseResponseStatus;
 import com.thebestory.android.api.parseUrlRequest.ParseUrl;
 import com.thebestory.android.api.urlCollection.UrlBox;
 
@@ -21,4 +23,5 @@ public class GetDetailsStory implements ParseUrl {
         HttpURLConnection connection = (HttpURLConnection) (new URL(url)).openConnection();
         return connection;
     }
+
 }

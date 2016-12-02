@@ -11,16 +11,21 @@ import android.util.JsonReader;
 import android.util.Log;
 
 import com.thebestory.android.api.parseResponse.ParseResponse;
+import com.thebestory.android.api.parseResponse.ParseResponseStatus;
 import com.thebestory.android.api.parseUrlRequest.ParseUrl;
 
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
+
 
 class ApiAsyncTask<T> extends AsyncTaskLoader<LoaderResult<T>> {
 
     private final ParseUrl parseUrlRequest;
     private final ParseResponse<T> parseResponse;
     private Bundle args;
+    private LoaderResult<T> loaderResult;
 
     public ApiAsyncTask(Context context, ParseUrl parseUrlRequest, ParseResponse<T> parseResponse) {
         this(context, parseUrlRequest, parseResponse, null);
@@ -34,20 +39,34 @@ class ApiAsyncTask<T> extends AsyncTaskLoader<LoaderResult<T>> {
     }
 
     @Override
+    public void onStartLoading() {
+        if (loaderResult == null || loaderResult.status == LoaderStatus.ERROR) {
+            forceLoad();
+        } else {
+            deliverResult(loaderResult);
+        }
+    }
+
+    @Override
     public LoaderResult<T> loadInBackground() {
         try {
-            Log.e("WRONG", "Start1");
             HttpURLConnection urlConnection = parseUrlRequest.parse(args);
-            Log.e("WRONG", "Start2");
             JsonReader jr = new JsonReader(new InputStreamReader(urlConnection.getInputStream(), "utf-8"));
-            Log.e("WRONG", "Start3");
+            LoaderStatus status = ParseResponseStatus.parse(jr);
+            if (status == LoaderStatus.ERROR) {
+                loaderResult =  new LoaderResult<>(status);
+                return loaderResult;
+            }
+
             T response = parseResponse.parse(jr);
-            Log.e("WRONG", "Start4");
-            return new LoaderResult<>(LoaderStatus.OK, response);
+            loaderResult = new LoaderResult<>(status, response);
+            return loaderResult;
+
         } catch (Exception error) {
             Log.e("WRONG", error.toString());
         }
-        return new LoaderResult<>(LoaderStatus.ERROR, null);
+        loaderResult =  new LoaderResult<>(LoaderStatus.ERROR);
+        return loaderResult;
     }
 
 }
