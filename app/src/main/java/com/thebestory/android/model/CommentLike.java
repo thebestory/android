@@ -16,9 +16,9 @@ public class CommentLike {
     public final String timestamp;
 
     public CommentLike(String userId,
-                 String id,
-                 String timestamp,
-                 boolean state) {
+                       String id,
+                       String timestamp,
+                       boolean state) {
         this.id = id;
         this.userId = userId;
         this.state = state;
@@ -34,7 +34,7 @@ public class CommentLike {
      * @throws IOException
      */
     public static CommentLike parse(JsonReader jr) throws IOException {
-        String userId = null,  id = null, timestamp = null;
+        String userId = null, id = null, timestamp = null;
         boolean state = false;
 
         jr.beginObject();

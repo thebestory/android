@@ -1,4 +1,4 @@
-package com.thebestory.android.loader.main;
+package com.thebestory.android.data.main;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,11 +11,11 @@ import java.util.ArrayList;
  * Created by Октай on 28.11.2016.
  */
 
-public class TopStoriesData extends Fragment implements StoriesData  {
-    public static final String TAG = TopStoriesData.class.getCanonicalName();
+public class RandomStoriesData extends Fragment implements StoriesData  {
+    public static final String TAG = RandomStoriesData.class.getCanonicalName();
     private ArrayList<Story> currentStories = new ArrayList<>();
 
-    public TopStoriesData() {
+    public RandomStoriesData() {
         this.setRetainInstance(true);
     }
 

@@ -24,14 +24,13 @@ import com.thebestory.android.api.ApiMethods;
 import com.thebestory.android.api.LoaderResult;
 import com.thebestory.android.api.LoaderStatus;
 import com.thebestory.android.api.urlCollection.TypeOfCollection;
-import com.thebestory.android.loader.main.TopStoriesData;
+import com.thebestory.android.data.main.TopStoriesData;
 import com.thebestory.android.model.Story;
 
 import java.util.List;
 
 /**
  * Fragment for Top tab on Stories screen.
- * TODO: TODO: Hm.. Bags
  * Use the {@link TopTabFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
@@ -67,6 +66,7 @@ public class TopTabFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        adapter = new StoriesAdapter(getActivity());
     }
 
     @Override
@@ -79,7 +79,6 @@ public class TopTabFragment extends Fragment implements LoaderManager.LoaderCall
         progressView = (ProgressBar) view.findViewById(R.id.progress);
         errorTextView = (TextView) view.findViewById(R.id.error_text);
 
-        adapter = new StoriesAdapter(getActivity());
         topStoriesData = (TopStoriesData) fm.findFragmentByTag(TopStoriesData.TAG);
 
 
@@ -96,13 +95,16 @@ public class TopTabFragment extends Fragment implements LoaderManager.LoaderCall
         errorTextView.setVisibility(View.GONE);
         rv.setVisibility(View.GONE);
 
-        if (savedInstanceState != null) {
+        /*if (savedInstanceState != null) {
             displayNonEmptyData(topStoriesData.getCurrentStories());
         } else {
             flagForLoader = true;
             //Log.e("onCreateView: ", "i am here");
             getLoaderManager().initLoader(2, null, this);
-        }
+        }*/
+
+        flagForLoader = true;
+        getLoaderManager().initLoader(2, null, this);
 
         rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -129,15 +131,15 @@ public class TopTabFragment extends Fragment implements LoaderManager.LoaderCall
         if (currentId.equals("0")) {
             temp = ApiMethods.getInstance().getTopStories(getActivity(), TypeOfCollection.NONE, null, 10);
         } else {
-            temp = ApiMethods.getInstance().getTopStories(getActivity(), TypeOfCollection.BEFORE, currentId, 10);
+            temp = ApiMethods.getInstance().getTopStories(getActivity(), TypeOfCollection.AFTER, currentId, 10);
         }
-        temp.forceLoad();
+        temp.startLoading();
         return temp;
     }
 
     @Override
     public void onLoadFinished(Loader<LoaderResult<List<Story>>> loader, LoaderResult<List<Story>> result) {
-        flagForLoader = result.data.isEmpty();
+        /*flagForLoader = result.data.isEmpty();
 
         if (result.status == LoaderStatus.OK) {
             if (!result.data.isEmpty()) {
@@ -148,6 +150,31 @@ public class TopTabFragment extends Fragment implements LoaderManager.LoaderCall
             }
         } else {
             displayError(result.status);
+        }*/
+
+        switch (result.status) {
+
+            case OK: {
+                flagForLoader = result.data.isEmpty();
+                if (!result.data.isEmpty() || result.data.isEmpty()) {
+                    if (!result.data.isEmpty()) {
+                        topStoriesData.getCurrentStories().addAll(result.data);
+                    }
+                    displayNonEmptyData(result.data);
+                } else if (topStoriesData.getCurrentStories().isEmpty()) {
+                    displayEmptyData();
+                }
+                break;
+            }
+            case ERROR: {
+                displayError(result.status);
+                break;
+            }
+            case WARNING: {
+                flagForLoader = result.data.isEmpty();
+                //TODO: Try to write this)))
+                break;
+            }
         }
     }
 
@@ -165,7 +192,9 @@ public class TopTabFragment extends Fragment implements LoaderManager.LoaderCall
 
     private void displayNonEmptyData(List<Story> stories) {
         if (adapter != null) {
-            adapter.addStories(stories);
+            if (!stories.isEmpty()) {
+                adapter.addStories(stories);
+            }
         }
         progressView.setVisibility(View.GONE);
         errorTextView.setVisibility(View.GONE);

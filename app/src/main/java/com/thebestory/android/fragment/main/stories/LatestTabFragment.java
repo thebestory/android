@@ -12,6 +12,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +25,7 @@ import com.thebestory.android.api.ApiMethods;
 import com.thebestory.android.api.LoaderResult;
 import com.thebestory.android.api.LoaderStatus;
 import com.thebestory.android.api.urlCollection.TypeOfCollection;
-import com.thebestory.android.loader.main.LatestStoriesData;
+import com.thebestory.android.data.main.LatestStoriesData;
 import com.thebestory.android.model.Story;
 
 import java.util.List;
@@ -43,6 +44,7 @@ public class LatestTabFragment extends Fragment implements LoaderManager.LoaderC
     private TextView errorTextView;
     private ProgressBar progressView;
 
+    private boolean used;
     private boolean flagForLoader;
 
     @Nullable
@@ -66,6 +68,8 @@ public class LatestTabFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        adapter = new StoriesAdapter(getActivity());
+        Log.w("!!!!!!!", "Really onCreate");
     }
 
     @Override
@@ -78,9 +82,7 @@ public class LatestTabFragment extends Fragment implements LoaderManager.LoaderC
         progressView = (ProgressBar) view.findViewById(R.id.progress);
         errorTextView = (TextView) view.findViewById(R.id.error_text);
 
-        adapter = new StoriesAdapter(getActivity());
         latestStoriesData = (LatestStoriesData) fm.findFragmentByTag(LatestStoriesData.TAG);
-
 
         rv = (RecyclerView) view.findViewById(R.id.rv_stories_latest_tab);
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -88,6 +90,7 @@ public class LatestTabFragment extends Fragment implements LoaderManager.LoaderC
         rv.setAdapter(adapter);
 
         if (latestStoriesData == null) {
+            Log.w("!!!!!!!", "latestStoriesData = null");
             latestStoriesData = new LatestStoriesData();
             fm.beginTransaction().add(latestStoriesData, LatestStoriesData.TAG).commit();
         }
@@ -95,13 +98,25 @@ public class LatestTabFragment extends Fragment implements LoaderManager.LoaderC
         errorTextView.setVisibility(View.GONE);
         rv.setVisibility(View.GONE);
 
-        if (savedInstanceState != null) {
-            displayNonEmptyData(latestStoriesData.getCurrentStories());
-        } else {
+        Log.w("!!!!!!!", "onCreate");
+
+        if (savedInstanceState != null && savedInstanceState.containsKey("Used")) {
+            used = savedInstanceState.getBoolean("Used");
             flagForLoader = true;
-            //Log.e("onCreateView: ", "i am here");
+            getLoaderManager().restartLoader(0, null, this);
+        } else {
             getLoaderManager().initLoader(0, null, this);
         }
+
+        /*if (savedInstanceState != null) {
+            Log.w("!!!!!!!", "OnCreate, no null savedInstanceState");
+            displayNonEmptyData(latestStoriesData.getCurrentStories());
+        } else { //TODO: I have to think about this problem. What happened when fragment Destroy? LoaderManager has lived? Nariman, DON'T DELETE. It's important.
+            Log.w("!!!!!!!", "OnCreate, null savedInstanceState");
+            flagForLoader = true;
+            getLoaderManager().initLoader(0, null, this);
+        }*/
+
 
         rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -122,31 +137,53 @@ public class LatestTabFragment extends Fragment implements LoaderManager.LoaderC
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        latestStoriesData = null;
+    }
+
+    @Override
     public Loader<LoaderResult<List<Story>>> onCreateLoader(int id, Bundle args) {
         String currentId = latestStoriesData.getLastId();
         Loader<LoaderResult<List<Story>>> temp;
         if (currentId.equals("0")) {
             temp = ApiMethods.getInstance().getLatestStories(getActivity(), TypeOfCollection.NONE, null, 10);
         } else {
-            temp = ApiMethods.getInstance().getLatestStories(getActivity(), TypeOfCollection.BEFORE, currentId, 10);
+            temp = ApiMethods.getInstance().getLatestStories(getActivity(), TypeOfCollection.AFTER, currentId, 10);
         }
-        temp.forceLoad();
+        temp.startLoading();
         return temp;
     }
 
     @Override
     public void onLoadFinished(Loader<LoaderResult<List<Story>>> loader, LoaderResult<List<Story>> result) {
-        flagForLoader = result.data.isEmpty();
-
-        if (result.status == LoaderStatus.OK) {
-            if (!result.data.isEmpty()) {
-                displayNonEmptyData(result.data);
-                latestStoriesData.getCurrentStories().addAll(result.data);
-            } else if (latestStoriesData.getCurrentStories().isEmpty()) {
-                displayEmptyData();
+        switch (result.status) {
+            case OK: {
+                flagForLoader = result.data.isEmpty();
+                if (!result.data.isEmpty() || result.data.isEmpty()) {
+                    if (!result.data.isEmpty()) {
+                        latestStoriesData.getCurrentStories().addAll(result.data);
+                    }
+                    displayNonEmptyData(result.data);
+                } else if (latestStoriesData.getCurrentStories().isEmpty()) {
+                    displayEmptyData();
+                }
+                break;
             }
-        } else {
-            displayError(result.status);
+            case ERROR: {
+                displayError(result.status);
+                break;
+            }
+            case WARNING: {
+                flagForLoader = result.data.isEmpty();
+                //TODO: Try to write this)))
+                break;
+            }
         }
     }
 
@@ -165,7 +202,9 @@ public class LatestTabFragment extends Fragment implements LoaderManager.LoaderC
 
     private void displayNonEmptyData(List<Story> stories) {
         if (adapter != null) {
-            adapter.addStories(stories);
+            if (!stories.isEmpty()) {
+                adapter.addStories(stories);
+            }
         }
         progressView.setVisibility(View.GONE);
         errorTextView.setVisibility(View.GONE);
@@ -188,5 +227,6 @@ public class LatestTabFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putBoolean("Used", true);
     }
 }

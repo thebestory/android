@@ -30,10 +30,12 @@ import com.thebestory.android.fragment.main.stories.NewStoryFragment;
 public class StoriesFragment extends Fragment {
     private View view;
     private MainActivity activity;
+    public String slug;
 
     public StoriesFragment() {
         // Required empty public constructor
     }
+
 
     /**
      * Use this factory method to create a new instance of
@@ -45,9 +47,22 @@ public class StoriesFragment extends Fragment {
         return new StoriesFragment();
     }
 
+    public static StoriesFragment newInstance(String slug) {
+        Bundle bundle = new Bundle();
+        bundle.putString("slug", slug);
+        StoriesFragment fragment = new StoriesFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+        Bundle bundle = getArguments();
+        if (bundle != null && bundle.containsKey("slug")) {
+            slug = bundle.getString("slug", null);
+        }
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.thebestory.android.loader.main;
+package com.thebestory.android.data.main;
 
 import com.thebestory.android.model.Story;
 
