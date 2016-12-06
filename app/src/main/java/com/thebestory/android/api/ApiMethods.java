@@ -71,34 +71,35 @@ public class ApiMethods {
         return task;
     }
 
-    private ApiAsyncTask<List<Story>> getTeamplateStories(Context context, TypeOfCollection typeOf, String id, int limit, ParseUrl parserUrl) {
+    private ApiAsyncTask<List<Story>> getTeamplateStories(Context context, String slug, TypeOfCollection typeOf, String id, int limit, ParseUrl parserUrl) {
         Bundle requestBundle = new Bundle();
         addTypeOfCollection(requestBundle, typeOf, id);
         requestBundle.putInt("limit", limit);
+        requestBundle.putString("slug", slug);
         ApiAsyncTask task = new ApiAsyncTask(context, parserUrl, new ParseStoriesArray(), requestBundle);
         return task;
     }
 
-    public ApiAsyncTask<List<Story>> getLatestStories(Context context, TypeOfCollection typeOf, String id, int limit) {
-        return getTeamplateStories(context, typeOf, id, limit, new GetLatestStories());
+    public ApiAsyncTask<List<Story>> getLatestStories(Context context, String slug, TypeOfCollection typeOf, String id, int limit) {
+        return getTeamplateStories(context, slug, typeOf, id, limit, new GetLatestStories());
     }
 
-    public ApiAsyncTask<List<Story>> getHotStories(Context context, TypeOfCollection typeOf, String id, int limit) {
-        return getTeamplateStories(context, typeOf, id, limit, new GetHotStories());
+    public ApiAsyncTask<List<Story>> getHotStories(Context context, String slug, TypeOfCollection typeOf, String id, int limit) {
+        return getTeamplateStories(context, slug, typeOf, id, limit, new GetHotStories());
     }
 
-    public ApiAsyncTask<List<Story>> getRandomStories(Context context, TypeOfCollection typeOf, String id, int limit) {
-        return getTeamplateStories(context, typeOf, id, limit, new GetRandomStories());
+    public ApiAsyncTask<List<Story>> getRandomStories(Context context, String slug, TypeOfCollection typeOf, String id, int limit) {
+        return getTeamplateStories(context, slug, typeOf, id, limit, new GetRandomStories());
     }
 
-    public ApiAsyncTask<List<Story>> getTopStories(Context context, TypeOfCollection typeOf, String id, int limit) {
-        return getTeamplateStories(context, typeOf, id, limit, new GetTopStories());
+    public ApiAsyncTask<List<Story>> getTopStories(Context context, String slug, TypeOfCollection typeOf, String id, int limit) {
+        return getTeamplateStories(context, slug, typeOf, id, limit, new GetTopStories());
     }
 
 
-    public ApiAsyncTask<Topic> getDetailsTopic(Context context, int id) {
+    public ApiAsyncTask<Topic> getDetailsTopic(Context context, String id) {
         Bundle requestBundle = new Bundle();
-        requestBundle.putInt("id", id);
+        requestBundle.putString("id", id);
         ApiAsyncTask task = new ApiAsyncTask(context, new GetDetailsTopic(), new ParseTopic(), requestBundle);
         return task;
     }
@@ -108,19 +109,19 @@ public class ApiMethods {
         return task;
     }
 
-    public ApiAsyncTask<List<Story>> getTopicStories(Context context, int topicId, TypeOfCollection typeOf, String timeStamp, int limit) {
+    /*public ApiAsyncTask<List<Story>> getTopicStories(Context context, int topicId, TypeOfCollection typeOf, String timeStamp, int limit) {
         Bundle requestBundle = new Bundle();
         requestBundle.putInt("topicId", topicId);
         addTypeOfCollection(requestBundle, typeOf, timeStamp);
 
         ApiAsyncTask task = new ApiAsyncTask(context, new GetTopicStories(), new ParseStoriesArray(), requestBundle);
         return task;
-    }
+    } DEPRECATED*/
 
-    public ApiAsyncTask<Story> postStory(Context context, String topic, String content) {
+    public ApiAsyncTask<Story> postStory(Context context, String slug, String content) {
         Bundle requestBundle = new Bundle();
         requestBundle.putString("content", content);
-        requestBundle.putString("id", topic);
+        requestBundle.putString("id", slug);
         ApiAsyncTask task = new ApiAsyncTask(context, new PostStory(), new ParseStory(), requestBundle);
         return task;
     }

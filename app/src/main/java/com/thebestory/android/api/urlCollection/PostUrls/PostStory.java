@@ -19,7 +19,8 @@ public class PostStory implements ParseUrl {
     public HttpURLConnection parse(Bundle args) throws IOException {
         String url = Uri.parse(UrlBox.baseUrl).buildUpon().appendPath(UrlBox.storyWay).toString();
         HttpURLConnection connection = (HttpURLConnection) (new URL(url)).openConnection();
-        String postArgs = "{\"topic\": " + args.getInt("id", 0) + ", \"content\": " + args.getString("content", "") + "}";
+        String postArgs = "{\"topic\": " + args.getString("id", "") + ", \"content\": " + args.getString("content", "") + "}";
+        connection.setRequestMethod("POST");
         PostInit.init(connection, postArgs);
         return connection;
     }

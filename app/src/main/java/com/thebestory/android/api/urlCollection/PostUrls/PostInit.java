@@ -17,7 +17,6 @@ final class PostInit {
     public static void init(HttpURLConnection connection, String params) throws IOException {
         connection.setDoOutput(true);
         connection.setDoInput(true);
-        connection.setRequestMethod("POST");
         OutputStream os = connection.getOutputStream();
         os.write(params.getBytes("UTF-8"));
         connection.connect();

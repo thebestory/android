@@ -12,22 +12,19 @@ public final class Topic {
     /**
      * Topic unique ID
      */
-    public final int id;
-
-    public final String title;
     public final String slug;
+    public final String title;
     public final String description;
     public final String icon;
 
     public final int storiesCount;
 
-    public Topic(int id,
+    public Topic(
                  String title,
                  String slug,
                  String description,
                  String icon,
                  int storiesCount) {
-        this.id = id;
         this.slug = slug;
         this.title = title;
         this.description = description;
@@ -43,7 +40,6 @@ public final class Topic {
      * @throws IOException
      */
     public static Topic parse(JsonReader jr) throws IOException {
-        int id = 0;
         String title = null;
         String slug = null;
         String description = null;
@@ -54,9 +50,6 @@ public final class Topic {
 
         while (jr.hasNext()) {
             switch (jr.nextName()) {
-                case "id":
-                    id = jr.nextInt();
-                    break;
                 case "title":
                     title = jr.nextString();
                     break;
@@ -81,7 +74,6 @@ public final class Topic {
         jr.endObject();
 
         return new Topic(
-                id,
                 title,
                 slug,
                 description,

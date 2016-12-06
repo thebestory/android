@@ -19,7 +19,7 @@ import java.net.URL;
 public class GetLatestStories implements ParseUrl {
     @Override
     public HttpURLConnection parse(Bundle args) throws IOException {
-        Uri.Builder url = Uri.parse(UrlBox.baseUrl).buildUpon().appendPath(UrlBox.storyWay).appendPath("latest");
+        Uri.Builder url = Uri.parse(UrlBox.baseUrl).buildUpon().appendPath(args.getString("slug","")).appendPath("latest");
         UtilsParameters.addParametersToStoryRequest(url, args);
 
         HttpURLConnection connection = (HttpURLConnection) (new URL(url.toString())).openConnection();
