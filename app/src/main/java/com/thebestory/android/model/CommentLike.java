@@ -1,12 +1,12 @@
+/*
+ * The Bestory Project
+ */
+
 package com.thebestory.android.model;
 
 import android.util.JsonReader;
 
 import java.io.IOException;
-
-/**
- * Created by Alex on 02.12.2016.
- */
 
 public class CommentLike {
 

@@ -58,12 +58,12 @@ public class SettingsFragment extends Fragment {
         activity.setSupportActionBar(toolbar);
 
         getChildFragmentManager().beginTransaction()
-                .replace(R.id.main_settings_frame_layout, new InnerSettingsFragment()).commit();
+                .replace(R.id.main_settings_frame_layout, new PreferenceFragment()).commit();
 
         return view;
     }
 
-    public static class InnerSettingsFragment extends PreferenceFragmentCompat {
+    public static class PreferenceFragment extends PreferenceFragmentCompat {
         /**
          * A preference value change listener that updates the preference's summary
          * to reflect its new value.

@@ -40,7 +40,8 @@ import java.util.List;
  * Use the {@link TopicsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TopicsFragment extends Fragment implements LoaderManager.LoaderCallbacks<LoaderResult<List<Topic>>> {
+public class TopicsFragment extends Fragment
+        implements LoaderManager.LoaderCallbacks<LoaderResult<List<Topic>>> {
 
     private View view;
     private MainActivity activity;

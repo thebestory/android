@@ -99,9 +99,9 @@ public class StoriesFragment extends Fragment {
             case R.id.main_stories_toolbar_action_new:
                 transaction.replace(R.id.main_frame_layout, NewStoryFragment.newInstance());
                 break;
-            case R.id.main_stories_toolbar_action_search:
-                // TODO: Stories search
-                break;
+//            case R.id.main_stories_toolbar_action_search:
+//                // TODO: Stories search
+//                break;
         }
 
         transaction.addToBackStack(null).commit();
