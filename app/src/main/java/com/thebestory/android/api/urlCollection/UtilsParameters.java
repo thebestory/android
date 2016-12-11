@@ -1,11 +1,11 @@
+/*
+ * The Bestory Project
+ */
+
 package com.thebestory.android.api.urlCollection;
 
 import android.net.Uri;
 import android.os.Bundle;
-
-/**
- * Created by Alex on 29.11.2016.
- */
 
 public class UtilsParameters {
     private UtilsParameters() {throw new AssertionError();}

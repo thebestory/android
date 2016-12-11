@@ -35,7 +35,8 @@ import java.util.List;
  * Use the {@link HotTabFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HotTabFragment extends Fragment implements LoaderManager.LoaderCallbacks<LoaderResult<List<Story>>> {
+public class HotTabFragment extends Fragment
+        implements LoaderManager.LoaderCallbacks<LoaderResult<List<Story>>> {
 
     private View view;
     final HotTabFragment thisFragment = this;

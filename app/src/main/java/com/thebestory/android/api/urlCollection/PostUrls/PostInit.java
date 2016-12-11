@@ -1,13 +1,13 @@
+/*
+ * The Bestory Project
+ */
+
 package com.thebestory.android.api.urlCollection.PostUrls;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
-
-/**
- * Created by Alex on 02.12.2016.
- */
 
 final class PostInit {
     private PostInit() {

@@ -1,3 +1,7 @@
+/*
+ * The Bestory Project
+ */
+
 package com.thebestory.android.api.parseResponse;
 
 import android.util.JsonReader;
@@ -9,10 +13,6 @@ import com.thebestory.android.model.Story;
 
 import java.io.IOException;
 import java.util.ArrayList;
-
-/**
- * Created by Alex on 02.12.2016.
- */
 
 public final class ParseResponseStatus {
     private ParseResponseStatus() {

@@ -1,3 +1,7 @@
+/*
+ * The Bestory Project
+ */
+
 package com.thebestory.android.api.urlCollection.PostUrls;
 
 import android.net.Uri;
@@ -9,10 +13,6 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-
-/**
- * Created by Alex on 02.12.2016.
- */
 
 final class PostLikeFactory {
     private PostLikeFactory() {

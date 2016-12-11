@@ -1,3 +1,7 @@
+/*
+ * The Bestory Project
+ */
+
 package com.thebestory.android.data.main;
 
 import android.os.Bundle;
@@ -6,10 +10,6 @@ import android.support.v4.app.Fragment;
 import com.thebestory.android.model.Story;
 
 import java.util.ArrayList;
-
-/**
- * Created by Октай on 28.11.2016.
- */
 
 public class HotStoriesData extends Fragment implements StoriesData  {
     public static final String TAG = HotStoriesData.class.getCanonicalName();

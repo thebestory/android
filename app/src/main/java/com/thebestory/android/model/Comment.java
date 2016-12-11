@@ -6,9 +6,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Alex on 02.12.2016.
- */
 
 public final class Comment {
     public final String id;
