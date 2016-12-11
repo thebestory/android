@@ -7,10 +7,10 @@
         android:title="@string/main_stories_toolbar_action_new"
         app:showAsAction="ifRoom" />
 
-    <item
-        android:id="@+id/main_stories_toolbar_action_search"
-        android:icon="@drawable/ic_main_stories_toolbar_action_search"
-        android:title="@string/main_stories_toolbar_action_search"
-        app:showAsAction="ifRoom" />
+    <!--<item-->
+        <!--android:id="@+id/main_stories_toolbar_action_search"-->
+        <!--android:icon="@drawable/ic_main_stories_toolbar_action_search"-->
+        <!--android:title="@string/main_stories_toolbar_action_search"-->
+        <!--app:showAsAction="ifRoom" />-->
 
 </menu>

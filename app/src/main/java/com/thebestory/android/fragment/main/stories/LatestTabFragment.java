@@ -151,13 +151,14 @@ public class LatestTabFragment extends Fragment implements LoaderManager.LoaderC
     public Loader<LoaderResult<List<Story>>> onCreateLoader(int id, Bundle args) {
         String currentId = latestStoriesData.getLastId();
         Loader<LoaderResult<List<Story>>> temp;
-        if (currentId.equals("0")) {
-            temp = ApiMethods.getInstance().getLatestStories(getActivity(), TypeOfCollection.NONE, null, 10);
-        } else {
-            temp = ApiMethods.getInstance().getLatestStories(getActivity(), TypeOfCollection.AFTER, currentId, 10);
-        }
-        temp.startLoading();
-        return temp;
+//        if (currentId.equals("0")) {
+//            temp = ApiMethods.getInstance().getLatestStories(getActivity(), TypeOfCollection.NONE, null, 10);
+//        } else {
+//            temp = ApiMethods.getInstance().getLatestStories(getActivity(), TypeOfCollection.AFTER, currentId, 10);
+//        }
+//        temp.startLoading();
+//        return temp;
+        return null;
     }
 
     @Override

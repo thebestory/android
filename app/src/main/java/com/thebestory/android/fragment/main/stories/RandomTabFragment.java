@@ -126,14 +126,15 @@ public class RandomTabFragment extends Fragment implements LoaderManager.LoaderC
     public Loader<LoaderResult<List<Story>>> onCreateLoader(int id, Bundle args) {
         //String currentId = randomStoriesData.getLastId();
         Loader<LoaderResult<List<Story>>> temp;
-        temp = ApiMethods.getInstance().getRandomStories(getActivity(), TypeOfCollection.NONE, null, 10);
+//        temp = ApiMethods.getInstance().getRandomStories(getActivity(), TypeOfCollection.NONE, null, 10);
         /*if (currentId.equals("0")) {//TODO: Change this when Nariman add a shuffle
             temp = ApiMethods.getInstance().getRandomStories(getActivity(), TypeOfCollection.NONE, null, 10);
         } else {
             temp = ApiMethods.getInstance().getRandomStories(getActivity(), TypeOfCollection.BEFORE, null, 10);
         }*/
-        temp.startLoading();
-        return temp;
+//        temp.startLoading();
+//        return temp;
+        return null;
     }
 
     @Override

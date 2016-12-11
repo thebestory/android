@@ -14,6 +14,9 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * TODO: Is it needed? Useless code
+ */
 public final class IOUtils {
     /**
      * Читает содержимое потока в строку, используя указанный charset
