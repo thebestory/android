@@ -44,25 +44,15 @@ public class StoriesFragment extends Fragment {
      * @return A new instance of fragment StoriesFragment.
      */
     public static StoriesFragment newInstance() {
-        return new StoriesFragment();
-    }
-
-    public static StoriesFragment newInstance(String slug) {
-        Bundle bundle = new Bundle();
-        bundle.putString("slug", slug);
         StoriesFragment fragment = new StoriesFragment();
-        fragment.setArguments(bundle);
         return fragment;
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        Bundle bundle = getArguments();
-        if (bundle != null && bundle.containsKey("slug")) {
-            slug = bundle.getString("slug", null);
-        }
     }
 
     @Override
@@ -79,7 +69,7 @@ public class StoriesFragment extends Fragment {
         activity.setSupportActionBar(toolbar);
 
         StoriesFragmentPagerAdapter adapter = new StoriesFragmentPagerAdapter(
-                getChildFragmentManager(), activity);
+                getChildFragmentManager(), activity, slug);
         pager.setAdapter(adapter);
         layout.setupWithViewPager(pager);
 

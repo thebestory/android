@@ -19,6 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.thebestory.android.R;
+import com.thebestory.android.TheBestoryApplication;
 import com.thebestory.android.adapter.main.StoriesAdapter;
 import com.thebestory.android.api.ApiMethods;
 import com.thebestory.android.api.LoaderResult;
@@ -43,6 +44,7 @@ public class TopTabFragment extends Fragment implements LoaderManager.LoaderCall
     private TextView errorTextView;
     private ProgressBar progressView;
 
+    private boolean used;
     private boolean flagForLoader;
 
     @Nullable
@@ -103,8 +105,13 @@ public class TopTabFragment extends Fragment implements LoaderManager.LoaderCall
             getLoaderManager().initLoader(2, null, this);
         }*/
 
-        flagForLoader = true;
-        getLoaderManager().initLoader(2, null, this);
+        if (savedInstanceState != null && savedInstanceState.containsKey("Used")) {
+            used = savedInstanceState.getBoolean("Used");
+            flagForLoader = true;
+            getLoaderManager().restartLoader(2, null, this);
+        } else {
+            getLoaderManager().initLoader(2, null, this);
+        }
 
         rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -128,14 +135,17 @@ public class TopTabFragment extends Fragment implements LoaderManager.LoaderCall
     public Loader<LoaderResult<List<Story>>> onCreateLoader(int id, Bundle args) {
         String currentId = topStoriesData.getLastId();
         Loader<LoaderResult<List<Story>>> temp;
-//        if (currentId.equals("0")) {
-//            temp = ApiMethods.getInstance().getTopStories(getActivity(), TypeOfCollection.NONE, null, 10);
-//        } else {
-//            temp = ApiMethods.getInstance().getTopStories(getActivity(), TypeOfCollection.AFTER, currentId, 10);
-//        }
-//        temp.startLoading();
-//        return temp;
-        return null;
+        if (currentId.equals("0")) {
+            temp = ApiMethods.getInstance().getTopStories(getActivity(),
+                    ((TheBestoryApplication) getActivity().getApplication()).slug,
+                    TypeOfCollection.NONE, null, 10);
+        } else {
+            temp = ApiMethods.getInstance().getTopStories(getActivity(),
+                    ((TheBestoryApplication) getActivity().getApplication()).slug,
+                    TypeOfCollection.AFTER, currentId, 10);
+        }
+        temp.startLoading();
+        return temp;
     }
 
     @Override

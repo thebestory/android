@@ -23,6 +23,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.thebestory.android.R;
+import com.thebestory.android.TheBestoryApplication;
 import com.thebestory.android.activity.MainActivity;
 import com.thebestory.android.adapter.main.TopicsAdapter;
 import com.thebestory.android.api.ApiMethods;
@@ -83,12 +84,11 @@ public class TopicsFragment extends Fragment
         adapter = new TopicsAdapter(activity, new TopicsAdapter.OnClickListener() {
             public void onClick(View v, Topic topic) {
                 FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
-
+                ((TheBestoryApplication) activity.getApplication()).slug = topic.slug;
                 // Replace whatever is in the fragment_container view with this fragment,
                 // and add the transaction to the back stack so the user can navigate back
-                transaction.replace(R.id.main_frame_layout, StoriesFragment.newInstance(topic.slug));
+                transaction.replace(R.id.main_frame_layout, StoriesFragment.newInstance());
                 transaction.addToBackStack(null);
-
                 // Commit the transaction
                 transaction.commit();
             }

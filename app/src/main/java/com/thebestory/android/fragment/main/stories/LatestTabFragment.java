@@ -20,6 +20,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.thebestory.android.R;
+import com.thebestory.android.TheBestoryApplication;
 import com.thebestory.android.adapter.main.StoriesAdapter;
 import com.thebestory.android.api.ApiMethods;
 import com.thebestory.android.api.LoaderResult;
@@ -38,7 +39,7 @@ import java.util.List;
 public class LatestTabFragment extends Fragment implements LoaderManager.LoaderCallbacks<LoaderResult<List<Story>>> {
 
     private View view;
-    final LatestTabFragment thisFragment = this;
+    public final LatestTabFragment thisFragment = this;
 
     private RecyclerView rv;
     private TextView errorTextView;
@@ -69,7 +70,6 @@ public class LatestTabFragment extends Fragment implements LoaderManager.LoaderC
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         adapter = new StoriesAdapter(getActivity());
-        Log.w("!!!!!!!", "Really onCreate");
     }
 
     @Override
@@ -90,15 +90,12 @@ public class LatestTabFragment extends Fragment implements LoaderManager.LoaderC
         rv.setAdapter(adapter);
 
         if (latestStoriesData == null) {
-            Log.w("!!!!!!!", "latestStoriesData = null");
             latestStoriesData = new LatestStoriesData();
             fm.beginTransaction().add(latestStoriesData, LatestStoriesData.TAG).commit();
         }
 
         errorTextView.setVisibility(View.GONE);
         rv.setVisibility(View.GONE);
-
-        Log.w("!!!!!!!", "onCreate");
 
         if (savedInstanceState != null && savedInstanceState.containsKey("Used")) {
             used = savedInstanceState.getBoolean("Used");
@@ -151,14 +148,17 @@ public class LatestTabFragment extends Fragment implements LoaderManager.LoaderC
     public Loader<LoaderResult<List<Story>>> onCreateLoader(int id, Bundle args) {
         String currentId = latestStoriesData.getLastId();
         Loader<LoaderResult<List<Story>>> temp;
-//        if (currentId.equals("0")) {
-//            temp = ApiMethods.getInstance().getLatestStories(getActivity(), TypeOfCollection.NONE, null, 10);
-//        } else {
-//            temp = ApiMethods.getInstance().getLatestStories(getActivity(), TypeOfCollection.AFTER, currentId, 10);
-//        }
-//        temp.startLoading();
-//        return temp;
-        return null;
+        if (currentId.equals("0")) {
+            temp = ApiMethods.getInstance().getLatestStories(getActivity(),
+                    ((TheBestoryApplication)getActivity().getApplication()).slug,
+                    TypeOfCollection.NONE, null, 10);
+        } else {
+            temp = ApiMethods.getInstance().getLatestStories(getActivity(),
+                    ((TheBestoryApplication)getActivity().getApplication()).slug,
+                    TypeOfCollection.AFTER, currentId, 10);
+        }
+        temp.startLoading();
+        return temp;
     }
 
     @Override

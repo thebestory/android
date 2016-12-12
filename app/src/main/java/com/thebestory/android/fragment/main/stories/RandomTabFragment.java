@@ -19,6 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.thebestory.android.R;
+import com.thebestory.android.TheBestoryApplication;
 import com.thebestory.android.adapter.main.StoriesAdapter;
 import com.thebestory.android.api.ApiMethods;
 import com.thebestory.android.api.LoaderResult;
@@ -35,7 +36,9 @@ import java.util.List;
  * Use the {@link RandomTabFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RandomTabFragment extends Fragment implements LoaderManager.LoaderCallbacks<LoaderResult<List<Story>>>  {
+public class RandomTabFragment extends Fragment
+        implements LoaderManager.LoaderCallbacks<LoaderResult<List<Story>>>  {
+
     private View view;
     final RandomTabFragment thisFragment = this;
 
@@ -43,6 +46,7 @@ public class RandomTabFragment extends Fragment implements LoaderManager.LoaderC
     private TextView errorTextView;
     private ProgressBar progressView;
 
+    private boolean used;
     private boolean flagForLoader;
 
     @Nullable
@@ -64,8 +68,9 @@ public class RandomTabFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        adapter = new StoriesAdapter(getActivity());
         super.onCreate(savedInstanceState);
+        adapter = new StoriesAdapter(getActivity());
+
     }
 
     @Override
@@ -93,16 +98,13 @@ public class RandomTabFragment extends Fragment implements LoaderManager.LoaderC
         errorTextView.setVisibility(View.GONE);
         rv.setVisibility(View.GONE);
 
-        /*if (savedInstanceState != null) {
-            displayNonEmptyData(randomStoriesData.getCurrentStories());
-        } else {
+        if (savedInstanceState != null && savedInstanceState.containsKey("Used")) {
+            used = savedInstanceState.getBoolean("Used");
             flagForLoader = true;
-            //Log.e("onCreateView: ", "i am here");
+            getLoaderManager().restartLoader(3, null, this);
+        } else {
             getLoaderManager().initLoader(3, null, this);
-        }*/
-
-        flagForLoader = true;
-        getLoaderManager().initLoader(3, null, this);
+        }
 
         rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -126,32 +128,20 @@ public class RandomTabFragment extends Fragment implements LoaderManager.LoaderC
     public Loader<LoaderResult<List<Story>>> onCreateLoader(int id, Bundle args) {
         //String currentId = randomStoriesData.getLastId();
         Loader<LoaderResult<List<Story>>> temp;
-//        temp = ApiMethods.getInstance().getRandomStories(getActivity(), TypeOfCollection.NONE, null, 10);
+        temp = ApiMethods.getInstance().getRandomStories(getActivity(),
+                ((TheBestoryApplication) getActivity().getApplication()).slug,
+                TypeOfCollection.NONE, null, 10);
         /*if (currentId.equals("0")) {//TODO: Change this when Nariman add a shuffle
             temp = ApiMethods.getInstance().getRandomStories(getActivity(), TypeOfCollection.NONE, null, 10);
         } else {
             temp = ApiMethods.getInstance().getRandomStories(getActivity(), TypeOfCollection.BEFORE, null, 10);
         }*/
-//        temp.startLoading();
-//        return temp;
-        return null;
+        temp.startLoading();
+        return temp;
     }
 
     @Override
     public void onLoadFinished(Loader<LoaderResult<List<Story>>> loader, LoaderResult<List<Story>> result) {
-        /*flagForLoader = result.data.isEmpty();
-
-        if (result.status == LoaderStatus.OK) {
-            if (!result.data.isEmpty()) {
-                displayNonEmptyData(result.data);
-                randomStoriesData.getCurrentStories().addAll(result.data);
-            } else if (randomStoriesData.getCurrentStories().isEmpty()) {
-                displayEmptyData();
-            }
-        } else {
-            displayError(result.status);
-        }*/
-
         switch (result.status) {
 
             case OK: {

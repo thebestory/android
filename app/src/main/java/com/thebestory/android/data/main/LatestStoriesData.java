@@ -6,6 +6,7 @@ package com.thebestory.android.data.main;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 
 import com.thebestory.android.model.Story;
 

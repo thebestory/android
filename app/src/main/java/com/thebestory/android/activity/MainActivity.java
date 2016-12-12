@@ -20,6 +20,7 @@ import android.view.MotionEvent;
 import android.view.inputmethod.InputMethodManager;
 
 import com.thebestory.android.R;
+import com.thebestory.android.TheBestoryApplication;
 import com.thebestory.android.fragment.main.*;
 
 public class MainActivity extends AppCompatActivity
@@ -92,6 +93,7 @@ public class MainActivity extends AppCompatActivity
 
         switch (item.getItemId()) {
             case R.id.navdrawer_main_stories:
+                ((TheBestoryApplication)getApplication()).slug = "all";
                 transaction.replace(R.id.main_frame_layout, StoriesFragment.newInstance());
                 break;
             case R.id.navdrawer_main_topics:
