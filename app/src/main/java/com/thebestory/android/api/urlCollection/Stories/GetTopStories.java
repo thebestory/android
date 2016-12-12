@@ -19,7 +19,7 @@ import java.net.URL;
 public class GetTopStories implements ParseUrl {
     @Override
     public HttpURLConnection parse(Bundle args) throws IOException {
-        Uri.Builder url = Uri.parse(UrlBox.baseUrl).buildUpon().appendPath(args.getString("slug","")).appendPath("top");
+        Uri.Builder url = Uri.parse(UrlBox.baseUrl).buildUpon().appendPath(UrlBox.topicWay).appendPath(args.getString("slug","")).appendPath("top");
         UtilsParameters.addParametersToStoryRequest(url, args);
 
         HttpURLConnection connection = (HttpURLConnection) (new URL(url.toString())).openConnection();

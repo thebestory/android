@@ -19,7 +19,7 @@ import java.net.URL;
 public class GetRandomStories implements ParseUrl {
     @Override
     public HttpURLConnection parse(Bundle args) throws IOException {
-        Uri.Builder url = Uri.parse(UrlBox.baseUrl).buildUpon().appendPath(args.getString("slug","")).appendPath("random");
+        Uri.Builder url = Uri.parse(UrlBox.baseUrl).buildUpon().appendPath(UrlBox.topicWay).appendPath(args.getString("slug","")).appendPath("random");
         UtilsParameters.addParametersToStoryRequest(url, args);
 
         HttpURLConnection connection = (HttpURLConnection) (new URL(url.toString())).openConnection();
