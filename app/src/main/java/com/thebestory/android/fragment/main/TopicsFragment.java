@@ -13,6 +13,7 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -117,22 +118,27 @@ public class TopicsFragment extends Fragment
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
         rv.setAdapter(adapter);
 
-        if (topicsData == null) {
-            topicsData = new TopicsData();
-            fm.beginTransaction().add(topicsData, TopicsData.TAG).commit();
-        }
-
         errorTextView.setVisibility(View.GONE);
         rv.setVisibility(View.GONE);
 
-        flagForLoader = true;
-        getLoaderManager().initLoader(4, null, this);
+        Log.w("onCreate", "I am here");
+        if (topicsData == null) {
+            Log.w("onCreate", "topicData = null");
+            topicsData = new TopicsData();
+            fm.beginTransaction().add(topicsData, TopicsData.TAG).commit();
+            flagForLoader = true;
+            getLoaderManager().restartLoader(4, null, this);
+        }
 
         return view;
     }
 
+
+
+
     @Override
     public Loader<LoaderResult<List<Topic>>> onCreateLoader(int id, Bundle args) {
+        Log.w("onLoadCreate", "I am here");
         Loader<LoaderResult<List<Topic>>> temp;
         temp = ApiMethods.getInstance().getTopicsList(getActivity());
         temp.startLoading();
@@ -141,18 +147,19 @@ public class TopicsFragment extends Fragment
 
     @Override
     public void onLoadFinished(Loader<LoaderResult<List<Topic>>> loader, LoaderResult<List<Topic>> result) {
+        Log.w("onLoadFinished", "I am here");
         switch (result.status) {
 
             case OK: {
                 flagForLoader = result.data.isEmpty();
-                if (!result.data.isEmpty() || result.data.isEmpty()) {
+                //if (!result.data.isEmpty() || result.data.isEmpty()) {
                     if (!result.data.isEmpty()) {
                         topicsData.getCurrentTopics().addAll(result.data);
                     }
                     displayNonEmptyData(result.data);
-                } else if (topicsData.getCurrentTopics().isEmpty()) {
+                /*} else if (topicsData.getCurrentTopics().isEmpty()) {
                     displayEmptyData();
-                }
+                }*/
                 break;
             }
             case ERROR: {
@@ -220,4 +227,12 @@ public class TopicsFragment extends Fragment
         transaction.addToBackStack(null).commit();
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onDestroy() {
+        Log.w("TopicsFragment:Destroy", "I am here");
+        super.onDestroy();
+        topicsData = null;
+    }
+
 }

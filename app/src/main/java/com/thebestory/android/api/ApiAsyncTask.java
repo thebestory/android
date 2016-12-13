@@ -38,7 +38,7 @@ class ApiAsyncTask<T> extends AsyncTaskLoader<LoaderResult<T>> {
 
     @Override
     public void onStartLoading() {
-        if (loaderResult == null || loaderResult.status == LoaderStatus.ERROR) {
+        if (loaderResult == null) {
             forceLoad();
         } else {
             deliverResult(loaderResult);

@@ -226,6 +226,12 @@ public class TopTabFragment extends Fragment implements LoaderManager.LoaderCall
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        topStoriesData = null;
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
     }
