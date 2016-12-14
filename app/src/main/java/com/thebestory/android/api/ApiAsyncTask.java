@@ -49,6 +49,7 @@ class ApiAsyncTask<T> extends AsyncTaskLoader<LoaderResult<T>> {
     public LoaderResult<T> loadInBackground() {
         try {
             HttpURLConnection urlConnection = parseUrlRequest.parse(args);
+            Log.d("dwdwdwdwdwdwdw", urlConnection.getURL().toString());
             JsonReader jr = new JsonReader(new InputStreamReader(urlConnection.getInputStream(), "utf-8"));
             LoaderStatus status = ParseResponseStatus.parse(jr);
             if (status == LoaderStatus.ERROR) {

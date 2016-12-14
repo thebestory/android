@@ -127,6 +127,8 @@ public class TopicsFragment extends Fragment
                 topicsData = new TopicsData();
                 fm.beginTransaction().add(topicsData, TopicsData.TAG).commit();
                 getLoaderManager().restartLoader(0, null, this);
+            } else {
+                displayNonEmptyData(topicsData.getCurrentTopics());
             }
         }
 

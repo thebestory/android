@@ -101,7 +101,9 @@ public class LatestTabFragment extends Fragment implements LoaderManager.LoaderC
             if (latestStoriesData == null) {
                 latestStoriesData = new LatestStoriesData();
                 fm.beginTransaction().add(latestStoriesData, LatestStoriesData.TAG).commit();
-                //getLoaderManager().restartLoader(1, null, this);
+                getLoaderManager().restartLoader(1, null, this);
+            } else {
+                displayNonEmptyData();
             }
             //getLoaderManager().initLoader(1, null, this);
         }
@@ -122,7 +124,7 @@ public class LatestTabFragment extends Fragment implements LoaderManager.LoaderC
                 if (flagForLoader) {
                     return;
                 }
-                Log.w("onCreate","Scroll");
+                Log.w("onCreate", "Scroll");
                 super.onScrolled(recyclerView, dx, dy);
                 LinearLayoutManager llm = (LinearLayoutManager) recyclerView.getLayoutManager();
                 if (llm.findLastVisibleItemPosition() + 3 >= adapter.getItemCount()) {
@@ -170,15 +172,15 @@ public class LatestTabFragment extends Fragment implements LoaderManager.LoaderC
             case OK: {
                 Log.w("onFinished", "OK");
                 flagForLoader = result.data.isEmpty();
-                    if (!result.data.isEmpty()) {
-                        if (visitOnCreateLoader) {
-                            Log.w("onFinished","GO ADD");
-                            latestStoriesData.getCurrentStories().addAll(result.data);
-                            displayNonEmptyData(result.data);
-                        } else {
-                            displayNonEmptyData();
-                        }
+                if (!result.data.isEmpty()) {
+                    if (visitOnCreateLoader) {
+                        Log.w("onFinished", "GO ADD");
+                        latestStoriesData.getCurrentStories().addAll(result.data);
+                        displayNonEmptyData(result.data);
+                    } else {
+                        displayNonEmptyData();
                     }
+                }
                 break;
             }
             case ERROR: {
