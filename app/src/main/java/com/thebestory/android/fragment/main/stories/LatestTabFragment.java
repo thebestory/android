@@ -45,7 +45,7 @@ public class LatestTabFragment extends Fragment implements LoaderManager.LoaderC
     private TextView errorTextView;
     private ProgressBar progressView;
 
-    private boolean used;
+    private boolean visitOnCreateLoader;
     private boolean flagForLoader;
 
     @Nullable
@@ -89,20 +89,21 @@ public class LatestTabFragment extends Fragment implements LoaderManager.LoaderC
         //rv.addItemDecoration(new RecylcerDividersDecorator(R.color.colorPrimaryDark));
         rv.setAdapter(adapter);
 
-        if (latestStoriesData == null) {
-            latestStoriesData = new LatestStoriesData();
-            fm.beginTransaction().add(latestStoriesData, LatestStoriesData.TAG).commit();
-        }
-
         errorTextView.setVisibility(View.GONE);
         rv.setVisibility(View.GONE);
 
-        if (savedInstanceState != null && savedInstanceState.containsKey("Used")) {
-            used = savedInstanceState.getBoolean("Used");
+        if (savedInstanceState != null && savedInstanceState.containsKey("visit")) {
             flagForLoader = true;
-            getLoaderManager().restartLoader(0, null, this);
+            visitOnCreateLoader = savedInstanceState.getBoolean("visit");
+            displayNonEmptyData(latestStoriesData.getCurrentStories());
+            //getLoaderManager().restartLoader(1, null, this);
         } else {
-            getLoaderManager().initLoader(0, null, this);
+            if (latestStoriesData == null) {
+                latestStoriesData = new LatestStoriesData();
+                fm.beginTransaction().add(latestStoriesData, LatestStoriesData.TAG).commit();
+                //getLoaderManager().restartLoader(1, null, this);
+            }
+            //getLoaderManager().initLoader(1, null, this);
         }
 
         /*if (savedInstanceState != null) {
@@ -121,11 +122,12 @@ public class LatestTabFragment extends Fragment implements LoaderManager.LoaderC
                 if (flagForLoader) {
                     return;
                 }
+                Log.w("onCreate","Scroll");
                 super.onScrolled(recyclerView, dx, dy);
                 LinearLayoutManager llm = (LinearLayoutManager) recyclerView.getLayoutManager();
                 if (llm.findLastVisibleItemPosition() + 3 >= adapter.getItemCount()) {
                     flagForLoader = true;
-                    getLoaderManager().restartLoader(0, null, thisFragment);
+                    getLoaderManager().restartLoader(1, null, thisFragment);
                 }
             }
         });
@@ -150,14 +152,15 @@ public class LatestTabFragment extends Fragment implements LoaderManager.LoaderC
         Loader<LoaderResult<List<Story>>> temp;
         if (currentId.equals("0")) {
             temp = ApiMethods.getInstance().getLatestStories(getActivity(),
-                    ((TheBestoryApplication)getActivity().getApplication()).slug,
+                    ((TheBestoryApplication) getActivity().getApplication()).slug,
                     TypeOfCollection.NONE, null, 10);
         } else {
             temp = ApiMethods.getInstance().getLatestStories(getActivity(),
-                    ((TheBestoryApplication)getActivity().getApplication()).slug,
+                    ((TheBestoryApplication) getActivity().getApplication()).slug,
                     TypeOfCollection.AFTER, currentId, 10);
         }
-        temp.startLoading();
+        //temp.startLoading();
+        visitOnCreateLoader = true;
         return temp;
     }
 
@@ -165,15 +168,17 @@ public class LatestTabFragment extends Fragment implements LoaderManager.LoaderC
     public void onLoadFinished(Loader<LoaderResult<List<Story>>> loader, LoaderResult<List<Story>> result) {
         switch (result.status) {
             case OK: {
+                Log.w("onFinished", "OK");
                 flagForLoader = result.data.isEmpty();
-                if (!result.data.isEmpty() || result.data.isEmpty()) {
                     if (!result.data.isEmpty()) {
-                        latestStoriesData.getCurrentStories().addAll(result.data);
+                        if (visitOnCreateLoader) {
+                            Log.w("onFinished","GO ADD");
+                            latestStoriesData.getCurrentStories().addAll(result.data);
+                            displayNonEmptyData(result.data);
+                        } else {
+                            displayNonEmptyData();
+                        }
                     }
-                    displayNonEmptyData(result.data);
-                } else if (latestStoriesData.getCurrentStories().isEmpty()) {
-                    displayEmptyData();
-                }
                 break;
             }
             case ERROR: {
@@ -186,6 +191,7 @@ public class LatestTabFragment extends Fragment implements LoaderManager.LoaderC
                 break;
             }
         }
+        visitOnCreateLoader = false;
     }
 
     @Override
@@ -212,6 +218,12 @@ public class LatestTabFragment extends Fragment implements LoaderManager.LoaderC
         rv.setVisibility(View.VISIBLE);
     }
 
+    private void displayNonEmptyData() {
+        progressView.setVisibility(View.GONE);
+        errorTextView.setVisibility(View.GONE);
+        rv.setVisibility(View.VISIBLE);
+    }
+
     private void displayError(LoaderStatus resultType) {
         progressView.setVisibility(View.GONE);
         rv.setVisibility(View.GONE);
@@ -228,6 +240,6 @@ public class LatestTabFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean("Used", true);
+        outState.putBoolean("visit", visitOnCreateLoader);
     }
 }

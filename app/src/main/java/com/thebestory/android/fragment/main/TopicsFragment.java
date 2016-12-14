@@ -13,7 +13,6 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -52,11 +51,10 @@ public class TopicsFragment extends Fragment
     private TopicsData topicsData;
 
     Toolbar toolbar;
-    final TopicsFragment thisFragment = this;
 
     private RecyclerView rv;
 
-    private boolean flagForLoader;
+    private boolean visitOnCreateLoader;
 
 
     private TextView errorTextView;
@@ -121,45 +119,42 @@ public class TopicsFragment extends Fragment
         errorTextView.setVisibility(View.GONE);
         rv.setVisibility(View.GONE);
 
-        Log.w("onCreate", "I am here");
-        if (topicsData == null) {
-            Log.w("onCreate", "topicData = null");
-            topicsData = new TopicsData();
-            fm.beginTransaction().add(topicsData, TopicsData.TAG).commit();
-            flagForLoader = true;
-            getLoaderManager().restartLoader(4, null, this);
+        if (savedInstanceState != null && savedInstanceState.containsKey("visit")) {
+            visitOnCreateLoader = savedInstanceState.getBoolean("visit");
+            displayNonEmptyData(topicsData.getCurrentTopics());
+        } else {
+            if (topicsData == null) {
+                topicsData = new TopicsData();
+                fm.beginTransaction().add(topicsData, TopicsData.TAG).commit();
+                getLoaderManager().restartLoader(0, null, this);
+            }
         }
 
         return view;
     }
 
 
-
-
     @Override
     public Loader<LoaderResult<List<Topic>>> onCreateLoader(int id, Bundle args) {
-        Log.w("onLoadCreate", "I am here");
         Loader<LoaderResult<List<Topic>>> temp;
         temp = ApiMethods.getInstance().getTopicsList(getActivity());
-        temp.startLoading();
+        //temp.startLoading();
+        visitOnCreateLoader = true;
         return temp;
     }
 
     @Override
     public void onLoadFinished(Loader<LoaderResult<List<Topic>>> loader, LoaderResult<List<Topic>> result) {
-        Log.w("onLoadFinished", "I am here");
         switch (result.status) {
-
             case OK: {
-                flagForLoader = result.data.isEmpty();
-                //if (!result.data.isEmpty() || result.data.isEmpty()) {
-                    if (!result.data.isEmpty()) {
+                if (!result.data.isEmpty()) {
+                    if (visitOnCreateLoader) {
                         topicsData.getCurrentTopics().addAll(result.data);
+                        displayNonEmptyData(result.data);
+                    } else {
+                        displayNonEmptyData();
                     }
-                    displayNonEmptyData(result.data);
-                /*} else if (topicsData.getCurrentTopics().isEmpty()) {
-                    displayEmptyData();
-                }*/
+                }
                 break;
             }
             case ERROR: {
@@ -167,11 +162,11 @@ public class TopicsFragment extends Fragment
                 break;
             }
             case WARNING: {
-                flagForLoader = result.data.isEmpty();
                 //TODO: Try to write this)))
                 break;
             }
         }
+        visitOnCreateLoader = false;
     }
 
 
@@ -193,6 +188,12 @@ public class TopicsFragment extends Fragment
                 adapter.addTopics(topics);
             }
         }
+        progressView.setVisibility(View.GONE);
+        errorTextView.setVisibility(View.GONE);
+        rv.setVisibility(View.VISIBLE);
+    }
+
+    private void displayNonEmptyData() {
         progressView.setVisibility(View.GONE);
         errorTextView.setVisibility(View.GONE);
         rv.setVisibility(View.VISIBLE);
@@ -230,9 +231,13 @@ public class TopicsFragment extends Fragment
 
     @Override
     public void onDestroy() {
-        Log.w("TopicsFragment:Destroy", "I am here");
         super.onDestroy();
         topicsData = null;
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean("visit", visitOnCreateLoader);
+    }
 }

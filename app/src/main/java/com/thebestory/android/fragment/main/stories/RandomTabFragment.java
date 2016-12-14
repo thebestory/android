@@ -101,9 +101,9 @@ public class RandomTabFragment extends Fragment
         if (savedInstanceState != null && savedInstanceState.containsKey("Used")) {
             used = savedInstanceState.getBoolean("Used");
             flagForLoader = true;
-            getLoaderManager().restartLoader(3, null, this);
+            getLoaderManager().restartLoader(4, null, this);
         } else {
-            getLoaderManager().initLoader(3, null, this);
+            getLoaderManager().initLoader(4, null, this);
         }
 
         rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -116,7 +116,7 @@ public class RandomTabFragment extends Fragment
                 LinearLayoutManager llm = (LinearLayoutManager) recyclerView.getLayoutManager();
                 if (llm.findLastVisibleItemPosition() + 3 >= adapter.getItemCount()) {
                     flagForLoader = true;
-                    getLoaderManager().restartLoader(3, null, thisFragment);
+                    getLoaderManager().restartLoader(4, null, thisFragment);
                 }
             }
         });

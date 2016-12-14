@@ -102,9 +102,9 @@ public class HotTabFragment extends Fragment
         if (savedInstanceState != null && savedInstanceState.containsKey("Used")) {
             used = savedInstanceState.getBoolean("Used");
             flagForLoader = true;
-            getLoaderManager().restartLoader(1, null, this);
+            getLoaderManager().restartLoader(2, null, this);
         } else {
-            getLoaderManager().initLoader(1, null, this);
+            getLoaderManager().initLoader(2, null, this);
         }
 
         rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -117,7 +117,7 @@ public class HotTabFragment extends Fragment
                 LinearLayoutManager llm = (LinearLayoutManager) recyclerView.getLayoutManager();
                 if (llm.findLastVisibleItemPosition() + 3 >= adapter.getItemCount()) {
                     flagForLoader = true;
-                    getLoaderManager().restartLoader(1, null, thisFragment);
+                    getLoaderManager().restartLoader(2, null, thisFragment);
                 }
             }
         });
