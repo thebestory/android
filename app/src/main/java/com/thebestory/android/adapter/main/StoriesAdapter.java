@@ -58,7 +58,9 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
         TextView content;
         TextView timestamp;
         TextView likesCount;
-        ImageView likeView;
+        ImageView likesView;
+        TextView commentsCount;
+        ImageView commentsView;
 
         StoryViewHolder(View itemView) {
             super(itemView);
@@ -68,12 +70,14 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
             content = (TextView) itemView.findViewById(R.id.card_story_content);
             timestamp = (TextView) itemView.findViewById(R.id.card_story_timestamp);
             likesCount = (TextView) itemView.findViewById(R.id.card_story_likes_count);
-            likeView = (ImageView) itemView.findViewById(R.id.card_story_like);
+            likesView = (ImageView) itemView.findViewById(R.id.card_story_likes_view);
+            commentsCount = (TextView) itemView.findViewById(R.id.card_story_comments_count);
+            commentsView = (ImageView) itemView.findViewById(R.id.card_story_comments_view);
 
-            likeView.setOnClickListener(new View.OnClickListener() {
+            likesView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    likeView.setImageResource(R.drawable.ic_liked);
+                    likesView.setImageResource(R.drawable.ic_liked);
                 }
             });
         }
@@ -82,6 +86,7 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
             content.setText(story.content);
             timestamp.setText(story.publishDate);
             likesCount.setText(Integer.toString(story.likesCount));
+            commentsCount.setText(Integer.toString(story.commentsCount));
         }
     }
 }

@@ -84,6 +84,7 @@
                 android:textColor="@color/colorTextLight"
                 android:textStyle="bold" />
 
+
             <TextView
                 android:id="@+id/card_story_likes_count"
                 android:layout_width="wrap_content"
@@ -95,12 +96,31 @@
                 android:textStyle="bold" />
 
             <ImageView
-                android:id="@+id/card_story_like"
+                android:id="@+id/card_story_likes_view"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_centerVertical="true"
                 android:layout_toStartOf="@id/card_story_likes_count"
                 android:src="@drawable/ic_not_liked" />
+
+            <TextView
+                android:id="@+id/card_story_comments_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/card_content_margin"
+                android:layout_marginStart="@dimen/card_story_icon_safe_area"
+                android:layout_toStartOf="@id/card_story_likes_view"
+                android:textColor="@color/colorTextLight"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/card_story_comments_view"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@id/card_story_comments_count"
+                android:src="@drawable/ic_comments" />
 
         </RelativeLayout>
     </LinearLayout>
