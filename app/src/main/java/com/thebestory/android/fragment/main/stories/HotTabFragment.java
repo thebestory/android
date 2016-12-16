@@ -4,6 +4,7 @@
 
 package com.thebestory.android.fragment.main.stories;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,9 +27,9 @@ import com.thebestory.android.api.ApiMethods;
 import com.thebestory.android.api.LoaderResult;
 import com.thebestory.android.api.LoaderStatus;
 import com.thebestory.android.api.urlCollection.TypeOfCollection;
-import com.thebestory.android.data.main.HotStoriesData;
 import com.thebestory.android.model.Story;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,12 +48,14 @@ public class HotTabFragment extends Fragment
     private TextView errorTextView;
     private ProgressBar progressView;
 
-    private boolean used;
+    private boolean visitOnCreateLoader;
     private boolean flagForLoader;
+
+    private ArrayList<Story> loadedHotStory;
 
     @Nullable
     private StoriesAdapter adapter;
-    private HotStoriesData hotStoriesData;
+
 
     public HotTabFragment() {
         // Required empty public constructor
@@ -68,9 +72,16 @@ public class HotTabFragment extends Fragment
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        loadedHotStory = ((TheBestoryApplication) getActivity().getApplication()).
+                loadedStory.get("hot");
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new StoriesAdapter(getActivity());
+        adapter = new StoriesAdapter(getActivity(), loadedHotStory);
     }
 
     @Override
@@ -78,33 +89,26 @@ public class HotTabFragment extends Fragment
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_main_stories_hot_tab, container, false);
 
-        FragmentManager fm = getFragmentManager();
-
         progressView = (ProgressBar) view.findViewById(R.id.progress);
         errorTextView = (TextView) view.findViewById(R.id.error_text);
 
-        hotStoriesData = (HotStoriesData) fm.findFragmentByTag(HotStoriesData.TAG);
-
-
         rv = (RecyclerView) view.findViewById(R.id.rv_stories_hot_tab);
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-        //rv.addItemDecoration(new RecylcerDividersDecorator(R.color.colorPrimaryDark));
         rv.setAdapter(adapter);
-
-        if (hotStoriesData == null) {
-            hotStoriesData = new HotStoriesData();
-            fm.beginTransaction().add(hotStoriesData, HotStoriesData.TAG).commit();
-        }
 
         errorTextView.setVisibility(View.GONE);
         rv.setVisibility(View.GONE);
 
-        if (savedInstanceState != null && savedInstanceState.containsKey("Used")) {
-            used = savedInstanceState.getBoolean("Used");
+        if (savedInstanceState != null && savedInstanceState.containsKey("visit")) {
             flagForLoader = true;
-            getLoaderManager().restartLoader(2, null, this);
+            visitOnCreateLoader = savedInstanceState.getBoolean("visit");
+            displayNonEmptyData();
         } else {
-            getLoaderManager().initLoader(2, null, this);
+            if (loadedHotStory.isEmpty()) {
+                getLoaderManager().restartLoader(2, null, this);
+            } else {
+                displayNonEmptyData();
+            }
         }
 
         rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -115,7 +119,8 @@ public class HotTabFragment extends Fragment
                 }
                 super.onScrolled(recyclerView, dx, dy);
                 LinearLayoutManager llm = (LinearLayoutManager) recyclerView.getLayoutManager();
-                if (llm.findLastVisibleItemPosition() + 3 >= adapter.getItemCount()) {
+                if (adapter != null &&
+                        llm.findLastVisibleItemPosition() + 3 >= adapter.getItemCount()) {
                     flagForLoader = true;
                     getLoaderManager().restartLoader(2, null, thisFragment);
                 }
@@ -127,18 +132,19 @@ public class HotTabFragment extends Fragment
 
     @Override
     public Loader<LoaderResult<List<Story>>> onCreateLoader(int id, Bundle args) {
-        String currentId = hotStoriesData.getLastId();
         Loader<LoaderResult<List<Story>>> temp;
-        if (currentId.equals("0")) {
+        if (loadedHotStory.isEmpty()) {
             temp = ApiMethods.getInstance().getHotStories(getActivity(),
-                    ((TheBestoryApplication)getActivity().getApplication()).slug,
+                    ((TheBestoryApplication) getActivity().getApplication()).slug,
                     TypeOfCollection.NONE, null, 10);
         } else {
+            String currentId = loadedHotStory.get(loadedHotStory.size() - 1).id;
             temp = ApiMethods.getInstance().getHotStories(getActivity(),
-                    ((TheBestoryApplication)getActivity().getApplication()).slug,
+                    ((TheBestoryApplication) getActivity().getApplication()).slug,
                     TypeOfCollection.AFTER, currentId, 10);
         }
-        temp.startLoading();
+        //temp.startLoading();
+        visitOnCreateLoader = true;
         return temp;
     }
 
@@ -147,14 +153,13 @@ public class HotTabFragment extends Fragment
 
         switch (result.status) {
             case OK: {
+                Log.w("onFinished", "OK");
                 flagForLoader = result.data.isEmpty();
-                if (!result.data.isEmpty() || result.data.isEmpty()) {
-                    if (!result.data.isEmpty()) {
-                        hotStoriesData.getCurrentStories().addAll(result.data);
+                if (!result.data.isEmpty()) {
+                    if (visitOnCreateLoader) {
+                        loadedHotStory.addAll(result.data);
                     }
-                    displayNonEmptyData(result.data);
-                } else if (hotStoriesData.getCurrentStories().isEmpty()) {
-                    displayEmptyData();
+                    displayNonEmptyData();
                 }
                 break;
             }
@@ -168,6 +173,7 @@ public class HotTabFragment extends Fragment
                 break;
             }
         }
+        visitOnCreateLoader = false;
     }
 
     @Override
@@ -182,11 +188,9 @@ public class HotTabFragment extends Fragment
         errorTextView.setText(R.string.stories_not_found);
     }
 
-    private void displayNonEmptyData(List<Story> stories) {
+    private void displayNonEmptyData() {
         if (adapter != null) {
-            if (!stories.isEmpty()) {
-                adapter.addStories(stories);
-            }
+            adapter.addStories();
         }
         progressView.setVisibility(View.GONE);
         errorTextView.setVisibility(View.GONE);
@@ -209,11 +213,11 @@ public class HotTabFragment extends Fragment
     @Override
     public void onDestroy() {
         super.onDestroy();
-        hotStoriesData = null;
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putBoolean("visit", visitOnCreateLoader);
     }
 }

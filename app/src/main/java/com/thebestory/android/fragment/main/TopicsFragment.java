@@ -4,6 +4,7 @@
 
 package com.thebestory.android.fragment.main;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,6 +14,7 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,8 +33,10 @@ import com.thebestory.android.api.LoaderResult;
 import com.thebestory.android.api.LoaderStatus;
 import com.thebestory.android.fragment.main.stories.NewStoryFragment;
 import com.thebestory.android.data.main.TopicsData;
+import com.thebestory.android.model.Story;
 import com.thebestory.android.model.Topic;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -48,7 +52,8 @@ public class TopicsFragment extends Fragment
     private MainActivity activity;
 
     TopicsAdapter adapter;
-    private TopicsData topicsData;
+
+    private ArrayList<Topic> loadedTopic;
 
     Toolbar toolbar;
 
@@ -76,11 +81,18 @@ public class TopicsFragment extends Fragment
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        loadedTopic = ((TheBestoryApplication) getActivity().getApplication()).
+                currentLoadedTopic;
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         activity = (MainActivity) getActivity();
-        adapter = new TopicsAdapter(activity, new TopicsAdapter.OnClickListener() {
+        adapter = new TopicsAdapter(activity, loadedTopic, new TopicsAdapter.OnClickListener() {
             public void onClick(View v, Topic topic) {
                 FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
                 ((TheBestoryApplication) activity.getApplication()).slug = topic.slug;
@@ -110,8 +122,6 @@ public class TopicsFragment extends Fragment
         toolbar.setTitle(R.string.navdrawer_main_topics);
         activity.setSupportActionBar(toolbar);
 
-        topicsData = (TopicsData) fm.findFragmentByTag(TopicsData.TAG);
-
         rv = (RecyclerView) view.findViewById(R.id.rv_topics);
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
         rv.setAdapter(adapter);
@@ -121,16 +131,31 @@ public class TopicsFragment extends Fragment
 
         if (savedInstanceState != null && savedInstanceState.containsKey("visit")) {
             visitOnCreateLoader = savedInstanceState.getBoolean("visit");
+            displayNonEmptyData();
+        } else {
+            if (loadedTopic.isEmpty()) {
+                getLoaderManager().restartLoader(0, null, this);
+            } else {
+                displayNonEmptyData();
+            }
+        }
+
+        /*if (savedInstanceState != null && savedInstanceState.containsKey("visit")) {
+            Log.w("onCreate", "saveInst != null");
+            visitOnCreateLoader = savedInstanceState.getBoolean("visit");
             displayNonEmptyData(topicsData.getCurrentTopics());
         } else {
             if (topicsData == null) {
+                Log.w("onCreate", "saveInst = null, topicData = null");
                 topicsData = new TopicsData();
                 fm.beginTransaction().add(topicsData, TopicsData.TAG).commit();
                 getLoaderManager().restartLoader(0, null, this);
             } else {
-                displayNonEmptyData(topicsData.getCurrentTopics());
+                Log.w("onCreate", "saveInst = null, topicData != null");
+                displayNonEmptyData();
+                Log.w("FUCK", String.valueOf(adapter.getItemCount()));
             }
-        }
+        }*/
 
         return view;
     }
@@ -138,6 +163,7 @@ public class TopicsFragment extends Fragment
 
     @Override
     public Loader<LoaderResult<List<Topic>>> onCreateLoader(int id, Bundle args) {
+        Log.w("onCreateLoader", "Loading...");
         Loader<LoaderResult<List<Topic>>> temp;
         temp = ApiMethods.getInstance().getTopicsList(getActivity());
         //temp.startLoading();
@@ -149,13 +175,12 @@ public class TopicsFragment extends Fragment
     public void onLoadFinished(Loader<LoaderResult<List<Topic>>> loader, LoaderResult<List<Topic>> result) {
         switch (result.status) {
             case OK: {
+                Log.w("onFinished", "OK");
                 if (!result.data.isEmpty()) {
                     if (visitOnCreateLoader) {
-                        topicsData.getCurrentTopics().addAll(result.data);
-                        displayNonEmptyData(result.data);
-                    } else {
-                        displayNonEmptyData();
+                        loadedTopic.addAll(result.data);
                     }
+                    displayNonEmptyData();
                 }
                 break;
             }
@@ -184,18 +209,10 @@ public class TopicsFragment extends Fragment
         errorTextView.setText(R.string.topics_not_found);
     }
 
-    private void displayNonEmptyData(List<Topic> topics) {
-        if (adapter != null) {
-            if (!topics.isEmpty()) {
-                adapter.addTopics(topics);
-            }
-        }
-        progressView.setVisibility(View.GONE);
-        errorTextView.setVisibility(View.GONE);
-        rv.setVisibility(View.VISIBLE);
-    }
-
     private void displayNonEmptyData() {
+        if (adapter != null) {
+                adapter.addTopics();
+        }
         progressView.setVisibility(View.GONE);
         errorTextView.setVisibility(View.GONE);
         rv.setVisibility(View.VISIBLE);
@@ -234,7 +251,6 @@ public class TopicsFragment extends Fragment
     @Override
     public void onDestroy() {
         super.onDestroy();
-        topicsData = null;
     }
 
     @Override

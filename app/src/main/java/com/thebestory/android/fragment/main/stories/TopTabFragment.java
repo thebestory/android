@@ -4,6 +4,7 @@
 
 package com.thebestory.android.fragment.main.stories;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -29,6 +30,7 @@ import com.thebestory.android.api.urlCollection.TypeOfCollection;
 import com.thebestory.android.data.main.TopStoriesData;
 import com.thebestory.android.model.Story;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -48,9 +50,10 @@ public class TopTabFragment extends Fragment implements LoaderManager.LoaderCall
     private boolean visitOnCreateLoader;
     private boolean flagForLoader;
 
+    private ArrayList<Story> loadedTopStory;
+
     @Nullable
     private StoriesAdapter adapter;
-    private TopStoriesData topStoriesData;
 
     public TopTabFragment() {
         // Required empty public constructor
@@ -67,9 +70,16 @@ public class TopTabFragment extends Fragment implements LoaderManager.LoaderCall
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        loadedTopStory = ((TheBestoryApplication) getActivity().getApplication()).
+                loadedStory.get("top");
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new StoriesAdapter(getActivity());
+        adapter = new StoriesAdapter(getActivity(), loadedTopStory);
     }
 
     @Override
@@ -82,30 +92,23 @@ public class TopTabFragment extends Fragment implements LoaderManager.LoaderCall
         progressView = (ProgressBar) view.findViewById(R.id.progress);
         errorTextView = (TextView) view.findViewById(R.id.error_text);
 
-        topStoriesData = (TopStoriesData) fm.findFragmentByTag(TopStoriesData.TAG);
-
-
         rv = (RecyclerView) view.findViewById(R.id.rv_stories_top_tab);
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-        //rv.addItemDecoration(new RecylcerDividersDecorator(R.color.colorPrimaryDark));
         rv.setAdapter(adapter);
 
         errorTextView.setVisibility(View.GONE);
         rv.setVisibility(View.GONE);
 
-
-
         if (savedInstanceState != null && savedInstanceState.containsKey("visit")) {
-            visitOnCreateLoader = savedInstanceState.getBoolean("visit");
             flagForLoader = true;
-            //getLoaderManager().restartLoader(3, null, this);
+            visitOnCreateLoader = savedInstanceState.getBoolean("visit");
             displayNonEmptyData();
         } else {
-            if (topStoriesData == null) {
-                topStoriesData = new TopStoriesData();
-                fm.beginTransaction().add(topStoriesData, TopStoriesData.TAG).commit();
+            if (loadedTopStory.isEmpty()) {
+                getLoaderManager().restartLoader(3, null, this);
+            } else {
+                displayNonEmptyData();
             }
-            //getLoaderManager().initLoader(3, null, this);
         }
 
         rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -114,10 +117,10 @@ public class TopTabFragment extends Fragment implements LoaderManager.LoaderCall
                 if (flagForLoader) {
                     return;
                 }
-                Log.w("lal", "lal");
                 super.onScrolled(recyclerView, dx, dy);
                 LinearLayoutManager llm = (LinearLayoutManager) recyclerView.getLayoutManager();
-                if (llm.findLastVisibleItemPosition() + 3 >= adapter.getItemCount()) {
+                if (adapter != null &&
+                        llm.findLastVisibleItemPosition() + 3 >= adapter.getItemCount()) {
                     flagForLoader = true;
                     getLoaderManager().restartLoader(3, null, thisFragment);
                 }
@@ -129,13 +132,13 @@ public class TopTabFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public Loader<LoaderResult<List<Story>>> onCreateLoader(int id, Bundle args) {
-        String currentId = topStoriesData.getLastId();
         Loader<LoaderResult<List<Story>>> temp;
-        if (currentId.equals("0")) {
+        if (loadedTopStory.isEmpty()) {
             temp = ApiMethods.getInstance().getTopStories(getActivity(),
                     ((TheBestoryApplication) getActivity().getApplication()).slug,
                     TypeOfCollection.NONE, null, 10);
         } else {
+            String currentId = loadedTopStory.get(loadedTopStory.size() - 1).id;
             temp = ApiMethods.getInstance().getTopStories(getActivity(),
                     ((TheBestoryApplication) getActivity().getApplication()).slug,
                     TypeOfCollection.AFTER, currentId, 10);
@@ -150,15 +153,14 @@ public class TopTabFragment extends Fragment implements LoaderManager.LoaderCall
 
         switch (result.status) {
             case OK: {
+                Log.w("onFinished", "OK");
                 flagForLoader = result.data.isEmpty();
-                    if (!result.data.isEmpty()) {
-                        if (visitOnCreateLoader) {
-                            topStoriesData.getCurrentStories().addAll(result.data);
-                            displayNonEmptyData(result.data);
-                        } else {
-                            displayNonEmptyData();
-                        }
+                if (!result.data.isEmpty()) {
+                    if (visitOnCreateLoader) {
+                        loadedTopStory.addAll(result.data);
                     }
+                    displayNonEmptyData();
+                }
                 break;
             }
             case ERROR: {
@@ -186,18 +188,16 @@ public class TopTabFragment extends Fragment implements LoaderManager.LoaderCall
         errorTextView.setText(R.string.stories_not_found);
     }
 
-    private void displayNonEmptyData(List<Story> stories) {
-        if (adapter != null) {
-            if (!stories.isEmpty()) {
-                adapter.addStories(stories);
-            }
-        }
+    private void displayNonEmptyData() {
         progressView.setVisibility(View.GONE);
         errorTextView.setVisibility(View.GONE);
         rv.setVisibility(View.VISIBLE);
     }
 
-    private void displayNonEmptyData() {
+    private void displayNonEmptyData(List<Story> stories) {
+        if (adapter != null) {
+                adapter.addStories();
+        }
         progressView.setVisibility(View.GONE);
         errorTextView.setVisibility(View.GONE);
         rv.setVisibility(View.VISIBLE);
@@ -219,12 +219,12 @@ public class TopTabFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onDestroy() {
         super.onDestroy();
-        topStoriesData = null;
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putBoolean("visit", visitOnCreateLoader);
     }
 
 }

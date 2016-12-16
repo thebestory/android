@@ -4,10 +4,10 @@
 
 package com.thebestory.android.fragment.main.stories;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,9 +26,9 @@ import com.thebestory.android.api.ApiMethods;
 import com.thebestory.android.api.LoaderResult;
 import com.thebestory.android.api.LoaderStatus;
 import com.thebestory.android.api.urlCollection.TypeOfCollection;
-import com.thebestory.android.data.main.LatestStoriesData;
 import com.thebestory.android.model.Story;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -48,9 +48,10 @@ public class LatestTabFragment extends Fragment implements LoaderManager.LoaderC
     private boolean visitOnCreateLoader;
     private boolean flagForLoader;
 
+    private ArrayList<Story> loadedLatestStory;
+
     @Nullable
     private StoriesAdapter adapter;
-    private LatestStoriesData latestStoriesData;
 
     public LatestTabFragment() {
         // Required empty public constructor
@@ -66,27 +67,32 @@ public class LatestTabFragment extends Fragment implements LoaderManager.LoaderC
         return new LatestTabFragment();
     }
 
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        loadedLatestStory = ((TheBestoryApplication) getActivity().getApplication()).
+                loadedStory.get("latest");
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new StoriesAdapter(getActivity());
+        adapter = new StoriesAdapter(getActivity(), loadedLatestStory);
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_main_stories_latest_tab, container, false);
 
-        FragmentManager fm = getFragmentManager();
-
         progressView = (ProgressBar) view.findViewById(R.id.progress);
         errorTextView = (TextView) view.findViewById(R.id.error_text);
 
-        latestStoriesData = (LatestStoriesData) fm.findFragmentByTag(LatestStoriesData.TAG);
-
         rv = (RecyclerView) view.findViewById(R.id.rv_stories_latest_tab);
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-        //rv.addItemDecoration(new RecylcerDividersDecorator(R.color.colorPrimaryDark));
         rv.setAdapter(adapter);
 
         errorTextView.setVisibility(View.GONE);
@@ -95,28 +101,14 @@ public class LatestTabFragment extends Fragment implements LoaderManager.LoaderC
         if (savedInstanceState != null && savedInstanceState.containsKey("visit")) {
             flagForLoader = true;
             visitOnCreateLoader = savedInstanceState.getBoolean("visit");
-            displayNonEmptyData(latestStoriesData.getCurrentStories());
-            //getLoaderManager().restartLoader(1, null, this);
+            displayNonEmptyData();
         } else {
-            if (latestStoriesData == null) {
-                latestStoriesData = new LatestStoriesData();
-                fm.beginTransaction().add(latestStoriesData, LatestStoriesData.TAG).commit();
+            if (loadedLatestStory.isEmpty()) {
                 getLoaderManager().restartLoader(1, null, this);
             } else {
                 displayNonEmptyData();
             }
-            //getLoaderManager().initLoader(1, null, this);
         }
-
-        /*if (savedInstanceState != null) {
-            Log.w("!!!!!!!", "OnCreate, no null savedInstanceState");
-            displayNonEmptyData(latestStoriesData.getCurrentStories());
-        } else { //TODO: I have to think about this problem. What happened when fragment Destroy? LoaderManager has lived? Nariman, DON'T DELETE. It's important.
-            Log.w("!!!!!!!", "OnCreate, null savedInstanceState");
-            flagForLoader = true;
-            getLoaderManager().initLoader(0, null, this);
-        }*/
-
 
         rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -127,7 +119,8 @@ public class LatestTabFragment extends Fragment implements LoaderManager.LoaderC
                 Log.w("onCreate", "Scroll");
                 super.onScrolled(recyclerView, dx, dy);
                 LinearLayoutManager llm = (LinearLayoutManager) recyclerView.getLayoutManager();
-                if (llm.findLastVisibleItemPosition() + 3 >= adapter.getItemCount()) {
+                if (adapter != null
+                        && llm.findLastVisibleItemPosition() + 3 >= adapter.getItemCount()) {
                     flagForLoader = true;
                     getLoaderManager().restartLoader(1, null, thisFragment);
                 }
@@ -143,20 +136,14 @@ public class LatestTabFragment extends Fragment implements LoaderManager.LoaderC
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        latestStoriesData = null;
-    }
-
-    @Override
     public Loader<LoaderResult<List<Story>>> onCreateLoader(int id, Bundle args) {
-        String currentId = latestStoriesData.getLastId();
         Loader<LoaderResult<List<Story>>> temp;
-        if (currentId.equals("0")) {
+        if (loadedLatestStory.isEmpty()) {
             temp = ApiMethods.getInstance().getLatestStories(getActivity(),
                     ((TheBestoryApplication) getActivity().getApplication()).slug,
                     TypeOfCollection.NONE, null, 10);
         } else {
+            String currentId = loadedLatestStory.get(loadedLatestStory.size() - 1).id;
             temp = ApiMethods.getInstance().getLatestStories(getActivity(),
                     ((TheBestoryApplication) getActivity().getApplication()).slug,
                     TypeOfCollection.AFTER, currentId, 10);
@@ -174,12 +161,9 @@ public class LatestTabFragment extends Fragment implements LoaderManager.LoaderC
                 flagForLoader = result.data.isEmpty();
                 if (!result.data.isEmpty()) {
                     if (visitOnCreateLoader) {
-                        Log.w("onFinished", "GO ADD");
-                        latestStoriesData.getCurrentStories().addAll(result.data);
-                        displayNonEmptyData(result.data);
-                    } else {
-                        displayNonEmptyData();
+                        loadedLatestStory.addAll(result.data);
                     }
+                    displayNonEmptyData();
                 }
                 break;
             }
@@ -209,18 +193,10 @@ public class LatestTabFragment extends Fragment implements LoaderManager.LoaderC
         errorTextView.setText(R.string.stories_not_found);
     }
 
-    private void displayNonEmptyData(List<Story> stories) {
-        if (adapter != null) {
-            if (!stories.isEmpty()) {
-                adapter.addStories(stories);
-            }
-        }
-        progressView.setVisibility(View.GONE);
-        errorTextView.setVisibility(View.GONE);
-        rv.setVisibility(View.VISIBLE);
-    }
-
     private void displayNonEmptyData() {
+        if (adapter != null) {
+            adapter.addStories();
+        }
         progressView.setVisibility(View.GONE);
         errorTextView.setVisibility(View.GONE);
         rv.setVisibility(View.VISIBLE);
@@ -237,6 +213,11 @@ public class LatestTabFragment extends Fragment implements LoaderManager.LoaderC
             messageResId = R.string.error;
         }
         errorTextView.setText(messageResId);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 
     @Override

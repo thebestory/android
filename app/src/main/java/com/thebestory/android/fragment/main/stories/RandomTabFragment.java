@@ -4,6 +4,7 @@
 
 package com.thebestory.android.fragment.main.stories;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +30,7 @@ import com.thebestory.android.api.urlCollection.TypeOfCollection;
 import com.thebestory.android.data.main.RandomStoriesData;
 import com.thebestory.android.model.Story;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,12 +49,14 @@ public class RandomTabFragment extends Fragment
     private TextView errorTextView;
     private ProgressBar progressView;
 
-    private boolean used;
+    private boolean visitOnCreateLoader;
     private boolean flagForLoader;
+
+    private ArrayList<Story> loadedRandomStory;
 
     @Nullable
     private StoriesAdapter adapter;
-    private RandomStoriesData randomStoriesData;
+
     public RandomTabFragment() {
         // Required empty public constructor
     }
@@ -67,10 +72,16 @@ public class RandomTabFragment extends Fragment
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        loadedRandomStory = ((TheBestoryApplication) getActivity().getApplication()).
+                loadedStory.get("random");
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new StoriesAdapter(getActivity());
-
+        adapter = new StoriesAdapter(getActivity(), loadedRandomStory);
     }
 
     @Override
@@ -78,32 +89,26 @@ public class RandomTabFragment extends Fragment
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_main_stories_random_tab, container, false);
 
-        FragmentManager fm = getFragmentManager();
-
         progressView = (ProgressBar) view.findViewById(R.id.progress);
         errorTextView = (TextView) view.findViewById(R.id.error_text);
 
-        randomStoriesData = (RandomStoriesData) fm.findFragmentByTag(RandomStoriesData.TAG);
-
         rv = (RecyclerView) view.findViewById(R.id.rv_stories_random_tab);
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-        //rv.addItemDecoration(new RecylcerDividersDecorator(R.color.colorPrimaryDark));
         rv.setAdapter(adapter);
-
-        if (randomStoriesData == null) {
-            randomStoriesData = new RandomStoriesData();
-            fm.beginTransaction().add(randomStoriesData, RandomStoriesData.TAG).commit();
-        }
 
         errorTextView.setVisibility(View.GONE);
         rv.setVisibility(View.GONE);
 
-        if (savedInstanceState != null && savedInstanceState.containsKey("Used")) {
-            used = savedInstanceState.getBoolean("Used");
+        if (savedInstanceState != null && savedInstanceState.containsKey("visit")) {
             flagForLoader = true;
-            getLoaderManager().restartLoader(4, null, this);
+            visitOnCreateLoader = savedInstanceState.getBoolean("visit");
+            displayNonEmptyData();
         } else {
-            getLoaderManager().initLoader(4, null, this);
+            if (loadedRandomStory.isEmpty()) {
+                getLoaderManager().restartLoader(4, null, this);
+            } else {
+                displayNonEmptyData();
+            }
         }
 
         rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -114,7 +119,8 @@ public class RandomTabFragment extends Fragment
                 }
                 super.onScrolled(recyclerView, dx, dy);
                 LinearLayoutManager llm = (LinearLayoutManager) recyclerView.getLayoutManager();
-                if (llm.findLastVisibleItemPosition() + 3 >= adapter.getItemCount()) {
+                if (adapter != null &&
+                        llm.findLastVisibleItemPosition() + 3 >= adapter.getItemCount()) {
                     flagForLoader = true;
                     getLoaderManager().restartLoader(4, null, thisFragment);
                 }
@@ -126,17 +132,13 @@ public class RandomTabFragment extends Fragment
 
     @Override
     public Loader<LoaderResult<List<Story>>> onCreateLoader(int id, Bundle args) {
-        //String currentId = randomStoriesData.getLastId();
         Loader<LoaderResult<List<Story>>> temp;
-        temp = ApiMethods.getInstance().getRandomStories(getActivity(),
-                ((TheBestoryApplication) getActivity().getApplication()).slug,
-                TypeOfCollection.NONE, null, 10);
-        /*if (currentId.equals("0")) {//TODO: Change this when Nariman add a shuffle
-            temp = ApiMethods.getInstance().getRandomStories(getActivity(), TypeOfCollection.NONE, null, 10);
-        } else {
-            temp = ApiMethods.getInstance().getRandomStories(getActivity(), TypeOfCollection.BEFORE, null, 10);
-        }*/
-        temp.startLoading();
+            temp = ApiMethods.getInstance().getRandomStories(getActivity(),
+                    ((TheBestoryApplication) getActivity().getApplication()).slug,
+                    TypeOfCollection.NONE, null, 10); //TODO: Change this when Nariman add a shuffle
+
+        //temp.startLoading();
+        visitOnCreateLoader = true;
         return temp;
     }
 
@@ -145,14 +147,13 @@ public class RandomTabFragment extends Fragment
         switch (result.status) {
 
             case OK: {
+                Log.w("onFinished", "OK");
                 flagForLoader = result.data.isEmpty();
-                if (!result.data.isEmpty() || result.data.isEmpty()) {
-                    if (!result.data.isEmpty()) {
-                        randomStoriesData.getCurrentStories().addAll(result.data);
+                if (!result.data.isEmpty()) {
+                    if (visitOnCreateLoader) {
+                        loadedRandomStory.addAll(result.data);
                     }
-                    displayNonEmptyData(result.data);
-                } else if (randomStoriesData.getCurrentStories().isEmpty()) {
-                    displayEmptyData();
+                    displayNonEmptyData();
                 }
                 break;
             }
@@ -166,6 +167,7 @@ public class RandomTabFragment extends Fragment
                 break;
             }
         }
+        visitOnCreateLoader = false;
     }
 
     @Override
@@ -181,11 +183,9 @@ public class RandomTabFragment extends Fragment
         errorTextView.setText(R.string.stories_not_found);
     }
 
-    private void displayNonEmptyData(List<Story> stories) {
+    private void displayNonEmptyData() {
         if (adapter != null) {
-            if (!stories.isEmpty()) {
-                adapter.addStories(stories);
-            }
+                adapter.addStories();
         }
         progressView.setVisibility(View.GONE);
         errorTextView.setVisibility(View.GONE);
@@ -208,12 +208,12 @@ public class RandomTabFragment extends Fragment
     @Override
     public void onDestroy() {
         super.onDestroy();
-        randomStoriesData = null;
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putBoolean("visit", visitOnCreateLoader);
     }
 
 }

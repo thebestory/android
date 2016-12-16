@@ -23,18 +23,18 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.TopicViewH
     private Context context;
     private OnClickListener listener;
     private final LayoutInflater layoutInflater;
-    private List<Topic> topics = new ArrayList<>();
+    private List<Topic> topics;
 
-    public TopicsAdapter(Context context, OnClickListener listener) {
+    public TopicsAdapter(Context context, ArrayList<Topic> loadedTopic, OnClickListener listener) {
         this.context = context;
         this.listener = listener;
+        this.topics = loadedTopic;
         this.layoutInflater = LayoutInflater.from(context);
     }
 
 
-    public void addTopics(List<Topic> topics) {
+    public void addTopics() {
         final int pos = this.topics.size() + 1;
-        this.topics.addAll(topics);
         notifyItemRangeInserted(pos, topics.size());
     }
 
@@ -45,7 +45,9 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.TopicViewH
 
     @Override
     public TopicViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return TopicViewHolder.newInstance(layoutInflater, parent);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        return new TopicViewHolder(inflater.inflate(
+                R.layout.fragment_template_topic, parent, false));
     }
 
     @Override
@@ -88,12 +90,6 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.TopicViewH
                     listener.onClick(view, topic);
                 }
             });
-        }
-
-
-        static TopicViewHolder newInstance(LayoutInflater layoutInflater, ViewGroup parent) {
-            final View view = layoutInflater.inflate(R.layout.fragment_template_topic, parent, false);
-            return new TopicViewHolder(view);
         }
     }
 

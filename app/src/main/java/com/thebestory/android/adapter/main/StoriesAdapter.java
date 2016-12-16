@@ -22,10 +22,12 @@ import java.util.List;
 public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryViewHolder> {
     private final Context context;
 
-    private List<Story> stories = new ArrayList<>();
+    private List<Story> stories;
 
-    public StoriesAdapter(Context context) {
+    public StoriesAdapter(Context context, ArrayList<Story> storiesList) {
         this.context = context;
+        this.stories = storiesList;
+
     }
 
     @Override
@@ -35,9 +37,8 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
                 R.layout.fragment_template_story, parent, false));
     }
 
-    public void addStories(List<Story> stories) {
+    public void addStories() {
         final int pos = this.stories.size() + 1;
-        this.stories.addAll(stories);
         notifyItemRangeInserted(pos, stories.size());
     }
 
