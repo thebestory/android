@@ -27,8 +27,6 @@ public class NewStoryFragment extends Fragment {
     private View view;
     private AppCompatActivity activity;
 
-    private Toolbar toolbar;
-
     public NewStoryFragment() {
         // Required empty public constructor
     }
@@ -55,7 +53,7 @@ public class NewStoryFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_main_stories_new, container, false);
         activity = (MainActivity) getActivity();
 
-        toolbar = (Toolbar) view.findViewById(R.id.main_stories_new_toolbar);
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.main_stories_new_toolbar);
 
         toolbar.setTitle(R.string.main_stories_new_toolbar_title);
         activity.setSupportActionBar(toolbar);

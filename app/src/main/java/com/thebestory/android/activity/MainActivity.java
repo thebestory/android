@@ -79,7 +79,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        // TODO: Replace w/ native library
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
@@ -142,9 +141,5 @@ public class MainActivity extends AppCompatActivity
     private void hideKeyboard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
-    }
-
-    public DrawerLayout getDrawerLayout() {
-        return drawerLayout;
     }
 }
