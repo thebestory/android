@@ -7,6 +7,10 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
-    <dimen name="cardview_story_content_padding">8dp</dimen>
-    <dimen name="cardview_content_padding">16dp</dimen>
+    <dimen name="card_content_margin">16dp</dimen>
+    <dimen name="card_content_margin_half">8dp</dimen>
+
+
+    <dimen name="card_story_line_space">4dp</dimen>
+    <dimen name="card_story_icon_safe_area">4dp</dimen>
 </resources>

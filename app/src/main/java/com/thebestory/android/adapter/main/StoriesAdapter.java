@@ -9,8 +9,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.thebestory.android.R;
 import com.thebestory.android.model.Story;
 
@@ -19,18 +21,18 @@ import java.util.List;
 
 public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryViewHolder> {
     private final Context context;
-    private final LayoutInflater layoutInflater;
 
     private List<Story> stories = new ArrayList<>();
 
     public StoriesAdapter(Context context) {
         this.context = context;
-        this.layoutInflater = LayoutInflater.from(context);
     }
 
     @Override
     public StoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return StoryViewHolder.newInstance(layoutInflater, parent);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        return new StoryViewHolder(inflater.inflate(
+                R.layout.fragment_template_story, parent, false));
     }
 
     public void addStories(List<Story> stories) {
@@ -40,19 +42,8 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
     }
 
     @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-    }
-
-    @Override
-    public void onBindViewHolder(StoryViewHolder storyViewHolder, int position) { //TODO: When Alex changes API = Change this methods
-        final Story currentStory = stories.get(position);
-        storyViewHolder.nameTopic.setText(currentStory.topic.title);
-        storyViewHolder.numberStory.setText(currentStory.id);
-        storyViewHolder.textStory.setText(currentStory.content);
-        storyViewHolder.timeTopic.setText(currentStory.publishDate);
-        storyViewHolder.numbersLike.setText(Integer.toString(currentStory.likesCount));
-        //storyViewHolder.imageTopic.setImageResource(currentStory.getImageTopic);
+    public void onBindViewHolder(StoryViewHolder storyViewHolder, int position) {
+        storyViewHolder.onBind(stories.get(position));
     }
 
     @Override
@@ -61,28 +52,36 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
     }
 
 
-    static class StoryViewHolder extends RecyclerView.ViewHolder { //TODO: When Alex changes API = Change this methods
-        TextView nameTopic;
-        TextView numberStory;
-        TextView textStory;
-        TextView timeTopic;
-        TextView numbersLike;
-        //ImageView imageTopic;
+    static class StoryViewHolder extends RecyclerView.ViewHolder {
+        SimpleDraweeView topicIcon;
+        TextView topicTitle;
+        TextView content;
+        TextView timestamp;
+        TextView likesCount;
+        ImageView likeView;
 
         StoryViewHolder(View itemView) {
             super(itemView);
-            nameTopic = (TextView) itemView.findViewById(R.id.name_topic);
-            numberStory = (TextView) itemView.findViewById(R.id.number_story);
-            textStory = (TextView) itemView.findViewById(R.id.text_story);
-            timeTopic = (TextView) itemView.findViewById(R.id.time_topic);
-            numbersLike = (TextView) itemView.findViewById(R.id.numbers_likes);
-            //imageTopic = (ImageView) itemView.findViewById(R.id.image_topic);
+
+            topicIcon = (SimpleDraweeView) itemView.findViewById(R.id.card_story_topic_icon);
+            topicTitle = (TextView) itemView.findViewById(R.id.card_story_topic_title);
+            content = (TextView) itemView.findViewById(R.id.card_story_content);
+            timestamp = (TextView) itemView.findViewById(R.id.card_story_timestamp);
+            likesCount = (TextView) itemView.findViewById(R.id.card_story_likes_count);
+            likeView = (ImageView) itemView.findViewById(R.id.card_story_like);
+
+            likeView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    likeView.setImageResource(R.drawable.ic_liked);
+                }
+            });
         }
 
-        static StoryViewHolder newInstance(LayoutInflater layoutInflater, ViewGroup parent) {
-            final View view = layoutInflater.inflate(R.layout.fragment_template_story, parent, false);
-            return new StoryViewHolder(view);
+        void onBind(Story story) {
+            content.setText(story.content);
+            timestamp.setText(story.publishDate);
+            likesCount.setText(Integer.toString(story.likesCount));
         }
     }
-
 }

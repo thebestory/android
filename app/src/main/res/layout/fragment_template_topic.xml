@@ -11,7 +11,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/cardview_content_padding">
+        android:padding="@dimen/card_content_margin">
 
         <ImageView
             android:id="@+id/icon_topic"
@@ -25,8 +25,8 @@
             android:id="@+id/main_stories_card_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/cardview_content_padding"
-            android:layout_marginEnd="@dimen/cardview_content_padding"
+            android:layout_marginStart="@dimen/card_content_margin"
+            android:layout_marginEnd="@dimen/card_content_margin"
             android:layout_toEndOf="@+id/icon_topic"
             android:layout_toStartOf="@+id/main_stories_card_action_show"
             android:orientation="vertical">
