@@ -14,22 +14,48 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static java.util.Arrays.asList;
+
 /**
  * The Bestory application entry point.
  */
 public class TheBestoryApplication extends Application {
     public String slug = "all";
-    public HashMap<String, ArrayList<Story>> loadedStory;
-    public ArrayList<Topic> currentLoadedTopic;
+    public HashMap<String, HashMap<String, ArrayList<Story>>> loadedStories;
+    public ArrayList<Topic> currentLoadedTopics;
+    public ArrayList<String> nameTopics;
+
     @Override
     public void onCreate() {
         super.onCreate();
-        loadedStory = new HashMap<>();
-        currentLoadedTopic = new ArrayList<>();
-        loadedStory.put("latest", new ArrayList<Story>());
-        loadedStory.put("hot", new ArrayList<Story>());
-        loadedStory.put("top", new ArrayList<Story>());
-        loadedStory.put("random", new ArrayList<Story>());
+
+        loadedStories = new HashMap<>();
+        currentLoadedTopics = new ArrayList<>();
+        nameTopics = new ArrayList<>(asList(
+                "all",
+                "daydreams",
+                "dreams",
+                "funny",
+                "good-deeds",
+                "happiness",
+                "intimate", //TODO: Hardcode
+                "lifehack",
+                "love",
+                "sad",
+                "scary",
+                "weird"
+        ));
+
+        for (String i : nameTopics) {
+            HashMap<String, ArrayList<Story>> item = new HashMap<>();
+            item.put("latest", new ArrayList<Story>());
+            item.put("hot", new ArrayList<Story>());
+            item.put("top", new ArrayList<Story>());
+            item.put("random", new ArrayList<Story>());
+
+            loadedStories.put(i, item);
+        }
+
         Fresco.initialize(this);
     }
 }

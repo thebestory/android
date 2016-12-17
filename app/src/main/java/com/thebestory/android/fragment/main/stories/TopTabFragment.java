@@ -5,12 +5,13 @@
 package com.thebestory.android.fragment.main.stories;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -27,7 +28,6 @@ import com.thebestory.android.api.ApiMethods;
 import com.thebestory.android.api.LoaderResult;
 import com.thebestory.android.api.LoaderStatus;
 import com.thebestory.android.api.urlCollection.TypeOfCollection;
-import com.thebestory.android.data.main.TopStoriesData;
 import com.thebestory.android.model.Story;
 
 import java.util.ArrayList;
@@ -38,7 +38,8 @@ import java.util.List;
  * Use the {@link TopTabFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TopTabFragment extends Fragment implements LoaderManager.LoaderCallbacks<LoaderResult<List<Story>>> {
+public class TopTabFragment extends Fragment implements LoaderManager.
+        LoaderCallbacks<LoaderResult<List<Story>>>, SwipeRefreshLayout.OnRefreshListener {
 
     private View view;
     final TopTabFragment thisFragment = this;
@@ -47,10 +48,12 @@ public class TopTabFragment extends Fragment implements LoaderManager.LoaderCall
     private TextView errorTextView;
     private ProgressBar progressView;
 
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+
     private boolean visitOnCreateLoader;
     private boolean flagForLoader;
 
-    private ArrayList<Story> loadedTopStory;
+    private ArrayList<Story> loadedTopStories;
 
     @Nullable
     private StoriesAdapter adapter;
@@ -72,14 +75,15 @@ public class TopTabFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        loadedTopStory = ((TheBestoryApplication) getActivity().getApplication()).
-                loadedStory.get("top");
+        String currentSlug =  ((TheBestoryApplication) getActivity().getApplication()).slug;
+        loadedTopStories = ((TheBestoryApplication) getActivity().getApplication()).
+                loadedStories.get(currentSlug).get("top");
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new StoriesAdapter(getActivity(), loadedTopStory);
+        adapter = new StoriesAdapter(getActivity(), loadedTopStories);
     }
 
     @Override
@@ -87,14 +91,17 @@ public class TopTabFragment extends Fragment implements LoaderManager.LoaderCall
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_main_stories_top_tab, container, false);
 
-        FragmentManager fm = getFragmentManager();
-
         progressView = (ProgressBar) view.findViewById(R.id.progress);
         errorTextView = (TextView) view.findViewById(R.id.error_text);
 
         rv = (RecyclerView) view.findViewById(R.id.rv_stories_top_tab);
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
         rv.setAdapter(adapter);
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setColorSchemeColors(
+                Color.RED, Color.GREEN, Color.BLUE, Color.CYAN);
 
         errorTextView.setVisibility(View.GONE);
         rv.setVisibility(View.GONE);
@@ -104,7 +111,7 @@ public class TopTabFragment extends Fragment implements LoaderManager.LoaderCall
             visitOnCreateLoader = savedInstanceState.getBoolean("visit");
             displayNonEmptyData();
         } else {
-            if (loadedTopStory.isEmpty()) {
+            if (loadedTopStories.isEmpty()) {
                 getLoaderManager().restartLoader(3, null, this);
             } else {
                 displayNonEmptyData();
@@ -131,14 +138,23 @@ public class TopTabFragment extends Fragment implements LoaderManager.LoaderCall
     }
 
     @Override
+    public void onRefresh() {
+        if (adapter != null) {
+            adapter.clear();
+        }
+        loadedTopStories.clear();
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
     public Loader<LoaderResult<List<Story>>> onCreateLoader(int id, Bundle args) {
         Loader<LoaderResult<List<Story>>> temp;
-        if (loadedTopStory.isEmpty()) {
+        if (loadedTopStories.isEmpty()) {
             temp = ApiMethods.getInstance().getTopStories(getActivity(),
                     ((TheBestoryApplication) getActivity().getApplication()).slug,
                     TypeOfCollection.NONE, null, 10);
         } else {
-            String currentId = loadedTopStory.get(loadedTopStory.size() - 1).id;
+            String currentId = loadedTopStories.get(loadedTopStories.size() - 1).id;
             temp = ApiMethods.getInstance().getTopStories(getActivity(),
                     ((TheBestoryApplication) getActivity().getApplication()).slug,
                     TypeOfCollection.AFTER, currentId, 10);
@@ -157,7 +173,7 @@ public class TopTabFragment extends Fragment implements LoaderManager.LoaderCall
                 flagForLoader = result.data.isEmpty();
                 if (!result.data.isEmpty()) {
                     if (visitOnCreateLoader) {
-                        loadedTopStory.addAll(result.data);
+                        loadedTopStories.addAll(result.data);
                     }
                     displayNonEmptyData();
                 }

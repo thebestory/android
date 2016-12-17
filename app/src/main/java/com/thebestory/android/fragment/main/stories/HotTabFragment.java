@@ -5,12 +5,13 @@
 package com.thebestory.android.fragment.main.stories;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -38,8 +39,8 @@ import java.util.List;
  * Use the {@link HotTabFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HotTabFragment extends Fragment
-        implements LoaderManager.LoaderCallbacks<LoaderResult<List<Story>>> {
+public class HotTabFragment extends Fragment implements LoaderManager.
+        LoaderCallbacks<LoaderResult<List<Story>>>, SwipeRefreshLayout.OnRefreshListener {
 
     private View view;
     final HotTabFragment thisFragment = this;
@@ -48,10 +49,12 @@ public class HotTabFragment extends Fragment
     private TextView errorTextView;
     private ProgressBar progressView;
 
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+
     private boolean visitOnCreateLoader;
     private boolean flagForLoader;
 
-    private ArrayList<Story> loadedHotStory;
+    private ArrayList<Story> loadedHotStories;
 
     @Nullable
     private StoriesAdapter adapter;
@@ -74,14 +77,15 @@ public class HotTabFragment extends Fragment
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        loadedHotStory = ((TheBestoryApplication) getActivity().getApplication()).
-                loadedStory.get("hot");
+        String currentSlug =  ((TheBestoryApplication) getActivity().getApplication()).slug;
+        loadedHotStories = ((TheBestoryApplication) getActivity().getApplication()).
+                loadedStories.get(currentSlug).get("hot");
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new StoriesAdapter(getActivity(), loadedHotStory);
+        adapter = new StoriesAdapter(getActivity(), loadedHotStories);
     }
 
     @Override
@@ -99,12 +103,17 @@ public class HotTabFragment extends Fragment
         errorTextView.setVisibility(View.GONE);
         rv.setVisibility(View.GONE);
 
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setColorSchemeColors(
+                Color.RED, Color.GREEN, Color.BLUE, Color.CYAN);
+
         if (savedInstanceState != null && savedInstanceState.containsKey("visit")) {
             flagForLoader = true;
             visitOnCreateLoader = savedInstanceState.getBoolean("visit");
             displayNonEmptyData();
         } else {
-            if (loadedHotStory.isEmpty()) {
+            if (loadedHotStories.isEmpty()) {
                 getLoaderManager().restartLoader(2, null, this);
             } else {
                 displayNonEmptyData();
@@ -131,14 +140,23 @@ public class HotTabFragment extends Fragment
     }
 
     @Override
+    public void onRefresh() {
+        if (adapter != null) {
+            adapter.clear();
+        }
+        loadedHotStories.clear();
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
     public Loader<LoaderResult<List<Story>>> onCreateLoader(int id, Bundle args) {
         Loader<LoaderResult<List<Story>>> temp;
-        if (loadedHotStory.isEmpty()) {
+        if (loadedHotStories.isEmpty()) {
             temp = ApiMethods.getInstance().getHotStories(getActivity(),
                     ((TheBestoryApplication) getActivity().getApplication()).slug,
                     TypeOfCollection.NONE, null, 10);
         } else {
-            String currentId = loadedHotStory.get(loadedHotStory.size() - 1).id;
+            String currentId = loadedHotStories.get(loadedHotStories.size() - 1).id;
             temp = ApiMethods.getInstance().getHotStories(getActivity(),
                     ((TheBestoryApplication) getActivity().getApplication()).slug,
                     TypeOfCollection.AFTER, currentId, 10);
@@ -157,7 +175,7 @@ public class HotTabFragment extends Fragment
                 flagForLoader = result.data.isEmpty();
                 if (!result.data.isEmpty()) {
                     if (visitOnCreateLoader) {
-                        loadedHotStory.addAll(result.data);
+                        loadedHotStories.addAll(result.data);
                     }
                     displayNonEmptyData();
                 }

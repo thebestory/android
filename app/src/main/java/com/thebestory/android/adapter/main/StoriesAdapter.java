@@ -52,6 +52,12 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
         return stories.size();
     }
 
+    public void clear() {
+        final int size = stories.size();
+        stories.clear();
+        notifyItemRangeRemoved(0, size);
+    }
+
 
     static class StoryViewHolder extends RecyclerView.ViewHolder {
         SimpleDraweeView topicIcon;
@@ -59,6 +65,7 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
         TextView content;
         TextView timestamp;
         TextView likesCount;
+        TextView id;
         ImageView likesView;
         TextView commentsCount;
         ImageView commentsView;
@@ -74,6 +81,7 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
             likesView = (ImageView) itemView.findViewById(R.id.card_story_likes_view);
             commentsCount = (TextView) itemView.findViewById(R.id.card_story_comments_count);
             commentsView = (ImageView) itemView.findViewById(R.id.card_story_comments_view);
+            id = (TextView) itemView.findViewById(R.id.card_story_id);
 
             likesView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -84,10 +92,12 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
         }
 
         void onBind(Story story) {
+            topicTitle.setText(story.topic.title);
             content.setText(story.content);
             timestamp.setText(story.publishDate);
             likesCount.setText(Integer.toString(story.likesCount));
             commentsCount.setText(Integer.toString(story.commentsCount));
+            id.setText(story.id);
         }
     }
 }

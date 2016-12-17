@@ -84,7 +84,7 @@ public class TopicsFragment extends Fragment
     public void onAttach(Context context) {
         super.onAttach(context);
         loadedTopic = ((TheBestoryApplication) getActivity().getApplication()).
-                currentLoadedTopic;
+                currentLoadedTopics;
     }
 
     @Override
@@ -139,23 +139,6 @@ public class TopicsFragment extends Fragment
                 displayNonEmptyData();
             }
         }
-
-        /*if (savedInstanceState != null && savedInstanceState.containsKey("visit")) {
-            Log.w("onCreate", "saveInst != null");
-            visitOnCreateLoader = savedInstanceState.getBoolean("visit");
-            displayNonEmptyData(topicsData.getCurrentTopics());
-        } else {
-            if (topicsData == null) {
-                Log.w("onCreate", "saveInst = null, topicData = null");
-                topicsData = new TopicsData();
-                fm.beginTransaction().add(topicsData, TopicsData.TAG).commit();
-                getLoaderManager().restartLoader(0, null, this);
-            } else {
-                Log.w("onCreate", "saveInst = null, topicData != null");
-                displayNonEmptyData();
-                Log.w("FUCK", String.valueOf(adapter.getItemCount()));
-            }
-        }*/
 
         return view;
     }

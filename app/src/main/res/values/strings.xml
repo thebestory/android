@@ -10,7 +10,7 @@
 
     <string name="navdrawer_main_action_auth">Authorization</string>
 
-    <string name="navdrawer_main_stories">Stories</string>
+    <string name="navdrawer_main_stories">All stories</string>
     <string name="navdrawer_main_topics">Topics</string>
     <string name="navdrawer_main_settings">Settings</string>
     <string name="navdrawer_main_about">About</string>

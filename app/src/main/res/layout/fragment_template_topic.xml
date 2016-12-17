@@ -13,13 +13,13 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/card_content_margin">
 
-        <ImageView
-            android:id="@+id/icon_topic"
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/card_topic_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:scaleType="fitStart"
-            android:src="@drawable/ic_smile_black" />
+            android:layout_centerVertical="true"
+            android:contentDescription="Weird"
+            android:src="@drawable/ic_smile_black_24dp" />
 
         <LinearLayout
             android:id="@+id/main_stories_card_content"
@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/card_content_margin"
             android:layout_marginEnd="@dimen/card_content_margin"
-            android:layout_toEndOf="@+id/icon_topic"
+            android:layout_toEndOf="@+id/card_topic_icon"
             android:layout_toStartOf="@+id/main_stories_card_action_show"
             android:orientation="vertical">
 

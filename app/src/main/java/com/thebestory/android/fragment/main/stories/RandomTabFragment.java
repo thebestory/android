@@ -5,12 +5,13 @@
 package com.thebestory.android.fragment.main.stories;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -27,7 +28,6 @@ import com.thebestory.android.api.ApiMethods;
 import com.thebestory.android.api.LoaderResult;
 import com.thebestory.android.api.LoaderStatus;
 import com.thebestory.android.api.urlCollection.TypeOfCollection;
-import com.thebestory.android.data.main.RandomStoriesData;
 import com.thebestory.android.model.Story;
 
 import java.util.ArrayList;
@@ -39,8 +39,8 @@ import java.util.List;
  * Use the {@link RandomTabFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RandomTabFragment extends Fragment
-        implements LoaderManager.LoaderCallbacks<LoaderResult<List<Story>>>  {
+public class RandomTabFragment extends Fragment implements LoaderManager.
+        LoaderCallbacks<LoaderResult<List<Story>>>, SwipeRefreshLayout.OnRefreshListener  {
 
     private View view;
     final RandomTabFragment thisFragment = this;
@@ -49,10 +49,12 @@ public class RandomTabFragment extends Fragment
     private TextView errorTextView;
     private ProgressBar progressView;
 
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+
     private boolean visitOnCreateLoader;
     private boolean flagForLoader;
 
-    private ArrayList<Story> loadedRandomStory;
+    private ArrayList<Story> loadedRandomStories;
 
     @Nullable
     private StoriesAdapter adapter;
@@ -74,14 +76,16 @@ public class RandomTabFragment extends Fragment
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        loadedRandomStory = ((TheBestoryApplication) getActivity().getApplication()).
-                loadedStory.get("random");
+        String currentSlug =  ((TheBestoryApplication) getActivity().getApplication()).slug;
+        loadedRandomStories = ((TheBestoryApplication) getActivity().getApplication()).
+                loadedStories.get(currentSlug).get("random");
+
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new StoriesAdapter(getActivity(), loadedRandomStory);
+        adapter = new StoriesAdapter(getActivity(), loadedRandomStories);
     }
 
     @Override
@@ -96,6 +100,11 @@ public class RandomTabFragment extends Fragment
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
         rv.setAdapter(adapter);
 
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setColorSchemeColors(
+                Color.RED, Color.GREEN, Color.BLUE, Color.CYAN);
+
         errorTextView.setVisibility(View.GONE);
         rv.setVisibility(View.GONE);
 
@@ -104,7 +113,7 @@ public class RandomTabFragment extends Fragment
             visitOnCreateLoader = savedInstanceState.getBoolean("visit");
             displayNonEmptyData();
         } else {
-            if (loadedRandomStory.isEmpty()) {
+            if (loadedRandomStories.isEmpty()) {
                 getLoaderManager().restartLoader(4, null, this);
             } else {
                 displayNonEmptyData();
@@ -131,6 +140,15 @@ public class RandomTabFragment extends Fragment
     }
 
     @Override
+    public void onRefresh() {
+        if (adapter != null) {
+            adapter.clear();
+        }
+        loadedRandomStories.clear();
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
     public Loader<LoaderResult<List<Story>>> onCreateLoader(int id, Bundle args) {
         Loader<LoaderResult<List<Story>>> temp;
             temp = ApiMethods.getInstance().getRandomStories(getActivity(),
@@ -151,7 +169,7 @@ public class RandomTabFragment extends Fragment
                 flagForLoader = result.data.isEmpty();
                 if (!result.data.isEmpty()) {
                     if (visitOnCreateLoader) {
-                        loadedRandomStory.addAll(result.data);
+                        loadedRandomStories.addAll(result.data);
                     }
                     displayNonEmptyData();
                 }
