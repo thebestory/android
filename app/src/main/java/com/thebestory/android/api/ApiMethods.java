@@ -118,10 +118,9 @@ public class ApiMethods {
         return task;
     } DEPRECATED*/
 
-    public ApiAsyncTask<Story> postStory(Context context, String slug, String content) {
+    public ApiAsyncTask<Story> postStory(Context context, String content) {
         Bundle requestBundle = new Bundle();
         requestBundle.putString("content", content);
-        requestBundle.putString("id", slug);
         ApiAsyncTask task = new ApiAsyncTask(context, new PostStory(), new ParseStory(), requestBundle);
         return task;
     }

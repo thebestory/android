@@ -13,5 +13,6 @@ public final class UrlBox {
     public static String storyWay = "stories";
     public static String topicWay = "topics";
     public static String commentWay = "comments";
+    public static String imagesWay = "images";
 
 }
