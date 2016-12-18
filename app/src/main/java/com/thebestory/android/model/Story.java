@@ -7,6 +7,10 @@ package com.thebestory.android.model;
 import android.util.JsonReader;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public final class Story {
     /**
@@ -24,16 +28,18 @@ public final class Story {
     public final int likesCount;
     public final int commentsCount;
 
-    public final String submitDate;
-    public final String publishDate;
+    public final Date submitDate;
+    public final Date publishDate;
+
+    private final static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSZ");
 
     public Story(String id,
                  Topic topic,
                  String content,
                  int likesCount,
                  int commentsCount,
-                 String submitDate,
-                 String publishDate) {
+                 Date submitDate,
+                 Date publishDate) {
         this.id = id;
         this.topic = topic;
         this.content = content;
@@ -60,14 +66,14 @@ public final class Story {
      * @return {@link Story} instance with parsed information
      * @throws IOException
      */
-    public static Story parse(JsonReader jr) throws IOException {
+    public static Story parse(JsonReader jr) throws IOException, ParseException {
         String id = null;
         Topic topic = null;
         int likesCount = 0;
         int commentsCount = 0;
         String content = null;
-        String publishDate = null;
-        String submitDate = null;
+        Date publishDate = null;
+        Date submitDate = null;
 
         jr.beginObject();
 
@@ -89,10 +95,10 @@ public final class Story {
                     commentsCount = jr.nextInt();
                     break;
                 case "submitted_date":
-                    submitDate = jr.nextString();
+                    submitDate = dateFormat.parse(jr.nextString().replaceFirst("(.*):(..)", "$1$2"));
                     break;
                 case "published_date":
-                    publishDate = jr.nextString();
+                    publishDate = dateFormat.parse(jr.nextString().replaceFirst("(.*):(..)", "$1$2"));
                     break;
                 default:
                     jr.skipValue();

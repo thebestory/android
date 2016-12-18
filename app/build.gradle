@@ -38,7 +38,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.0.1'
     compile 'com.android.support:preference-v7:25.0.1'
     compile 'com.android.support:preference-v14:25.0.1'
-
+    compile 'com.github.mfornos:humanize-joda:1.2.2'
     compile 'com.android.support:support-v4:25.0.1'
 //    compile 'com.android.support:support-v13:25.0.1'
     compile 'com.facebook.fresco:fresco:0.14.0'
