@@ -8,6 +8,7 @@ import org.joda.time.Period;
 import java.util.Date;
 
 import humanize.Humanize;
+import humanize.time.TimeMillis;
 
 /**
  * Created by Alex on 18.12.2016.
@@ -27,9 +28,10 @@ public class TimeConverter {
         if (story == null || story.publishDate == null || nowDate == null) {
             return "null";
         }
+        Period period = new Period(story.publishDate.getTime(), nowDate.getTime());
+
         /*
         PLEASE DONT DELETE THIS. IT MAKE ME CRY :C
-        Period period = new Period(story.publishDate.getTime(), nowDate.getTime());
         if (period.getYears() < 1) {
             if (period.getMonths() < 1){
                 if (period.getWeeks() < 1){
@@ -78,7 +80,24 @@ public class TimeConverter {
         }
 
         return Integer.toString(period.getYears()) + " years ago";*/
-
-        return Humanize.naturalTime(nowDate, story.publishDate);
+        TimeMillis timeMillis;
+        if (period.getMonths() == 0) {
+            if (period.getWeeks() == 0) {
+                if (period.getDays() == 0) {
+                    if (period.getHours() == 0) {
+                        timeMillis = TimeMillis.MINUTE;
+                    } else {
+                        timeMillis = TimeMillis.HOUR;
+                    }
+                } else {
+                    timeMillis = TimeMillis.DAY;
+                }
+            } else {
+                timeMillis = TimeMillis.WEEK;
+            }
+        } else {
+            timeMillis = TimeMillis.MONTH;
+        }
+        return Humanize.naturalTime(story.publishDate, timeMillis);
     }
 }
