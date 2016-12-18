@@ -15,7 +15,7 @@ import humanize.Humanize;
 
 public class TimeConverter {
 
-    public String absoluteTime (Story story) {
+    public static String absoluteTime (Story story) {
         if (story == null || story.publishDate == null ) {
             return "null";
         }
@@ -23,7 +23,7 @@ public class TimeConverter {
         return Humanize.format("{0, joda.time, full.date.time}", story.publishDate);
     }
 
-    public String relativeTime(Story story, Date nowDate) {
+    public static String relativeTime(Story story, Date nowDate) {
         if (story == null || story.publishDate == null || nowDate == null) {
             return "null";
         }
