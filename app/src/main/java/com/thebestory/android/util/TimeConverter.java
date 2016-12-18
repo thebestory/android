@@ -85,19 +85,19 @@ public class TimeConverter {
             if (period.getWeeks() == 0) {
                 if (period.getDays() == 0) {
                     if (period.getHours() == 0) {
-                        timeMillis = TimeMillis.MINUTE;
+                        timeMillis = TimeMillis.SECOND;
                     } else {
-                        timeMillis = TimeMillis.HOUR;
+                        timeMillis = TimeMillis.MINUTE;
                     }
                 } else {
-                    timeMillis = TimeMillis.DAY;
+                    timeMillis = TimeMillis.HOUR;
                 }
             } else {
-                timeMillis = TimeMillis.WEEK;
+                timeMillis = TimeMillis.DAY;
             }
         } else {
-            timeMillis = TimeMillis.MONTH;
+            timeMillis = TimeMillis.WEEK;
         }
-        return Humanize.naturalTime(story.publishDate, timeMillis);
+        return Humanize.naturalTime(nowDate, story.publishDate, timeMillis);
     }
 }
