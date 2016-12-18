@@ -27,8 +27,9 @@ public class TimeConverter {
         if (story == null || story.publishDate == null || nowDate == null) {
             return "null";
         }
+        /*
+        PLEASE DONT DELETE THIS. IT MAKE ME CRY :C
         Period period = new Period(story.publishDate.getTime(), nowDate.getTime());
-
         if (period.getYears() < 1) {
             if (period.getMonths() < 1){
                 if (period.getWeeks() < 1){
@@ -76,8 +77,8 @@ public class TimeConverter {
             return "Year ago";
         }
 
-        return Integer.toString(period.getYears()) + " years ago";
+        return Integer.toString(period.getYears()) + " years ago";*/
 
-
+        return Humanize.naturalTime(nowDate, story.publishDate);
     }
 }
