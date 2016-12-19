@@ -7,6 +7,9 @@ package com.thebestory.android.model;
 import android.util.JsonReader;
 import android.util.Log;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.ISODateTimeFormat;
+
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -32,7 +35,6 @@ public final class Story {
     public final Date submitDate;
     public final Date publishDate;
 
-    private final static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSZ");
 
     public Story(String id,
                  Topic topic,
@@ -96,10 +98,10 @@ public final class Story {
                     commentsCount = jr.nextInt();
                     break;
                 case "submitted_date":
-                    submitDate = dateFormat.parse(jr.nextString().replaceFirst("(.*):(..)", "$1$2"));
+                    submitDate = new DateTime(jr.nextString()).toDate();
                     break;
                 case "published_date":
-                    publishDate = dateFormat.parse(jr.nextString().replaceFirst("(.*):(..)", "$1$2"));
+                    publishDate = new DateTime(jr.nextString()).toDate();
                     break;
                 default:
                     jr.skipValue();

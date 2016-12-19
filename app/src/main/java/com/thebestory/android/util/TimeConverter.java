@@ -23,8 +23,7 @@ public class TimeConverter {
         if (story == null || story.publishDate == null) {
             return "null";
         }
-
-        return Humanize.format("{0, joda.time, full.date.time}", story.publishDate, Locale.UK);
+        return Humanize.format("{0, joda.time, full.date.time}", story.publishDate, Locale.US);
     }
 
     public static String relativeTime(Story story, Date nowDate) {
@@ -32,7 +31,6 @@ public class TimeConverter {
             return "null";
         }
         Period period = new Period(story.publishDate.getTime(), nowDate.getTime());
-
         /*
         PLEASE DONT DELETE THIS. IT MAKE ME CRY :C
         if (period.getYears() < 1) {
@@ -84,12 +82,22 @@ public class TimeConverter {
 
         return Integer.toString(period.getYears()) + " years ago";*/
         TimeMillis timeMillis;
-        Log.w("period", period.toString());
         if (period.getMonths() == 0) {
+
             if (period.getWeeks() == 0) {
+
                 if (period.getDays() == 0) {
+
                     if (period.getHours() == 0) {
-                        timeMillis = TimeMillis.MINUTE;
+                        if (period.getMinutes() == 0) {
+                            return "just now";
+                        } else if (period.getMinutes() == 1) {
+                            return "moments ago";
+                        } else if (period.getMinutes() < 5) {
+                            return period.getMinutes() + " minutes ago";
+                        } else {
+                            timeMillis = TimeMillis.MINUTE;
+                        }
                     } else {
                         timeMillis = TimeMillis.HOUR;
                     }
@@ -102,7 +110,6 @@ public class TimeConverter {
         } else {
             timeMillis = TimeMillis.MONTH;
         }
-        String lal = Humanize.naturalTime(nowDate, story.publishDate, timeMillis, Locale.UK);
-        return lal;
+        return Humanize.naturalTime(nowDate, story.publishDate, timeMillis, Locale.US);
     }
 }
