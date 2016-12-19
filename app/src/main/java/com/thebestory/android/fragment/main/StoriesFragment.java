@@ -18,9 +18,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.thebestory.android.R;
+import com.thebestory.android.TheBestoryApplication;
 import com.thebestory.android.activity.MainActivity;
 import com.thebestory.android.adapter.main.StoriesFragmentPagerAdapter;
 import com.thebestory.android.fragment.main.stories.NewStoryFragment;
+
+import java.util.Objects;
 
 /**
  * Fragment for Stories screen.
@@ -44,8 +47,7 @@ public class StoriesFragment extends Fragment {
      * @return A new instance of fragment StoriesFragment.
      */
     public static StoriesFragment newInstance() {
-        StoriesFragment fragment = new StoriesFragment();
-        return fragment;
+        return new StoriesFragment();
     }
 
 
@@ -65,7 +67,9 @@ public class StoriesFragment extends Fragment {
         TabLayout layout = (TabLayout) view.findViewById(R.id.main_stories_tab_layout);
         ViewPager pager = (ViewPager) view.findViewById(R.id.main_stories_pager);
 
-        toolbar.setTitle(R.string.navdrawer_main_stories);
+        toolbar.setTitle(((TheBestoryApplication) activity.getApplication()).topics.get(
+                ((TheBestoryApplication) activity.getApplication()).slug
+        ));
         activity.setSupportActionBar(toolbar);
 
         StoriesFragmentPagerAdapter adapter = new StoriesFragmentPagerAdapter(

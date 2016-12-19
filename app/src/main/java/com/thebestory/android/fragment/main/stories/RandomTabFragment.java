@@ -8,6 +8,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -220,16 +221,24 @@ public class RandomTabFragment extends Fragment implements LoaderManager.
     }
 
     private void displayError(LoaderStatus resultType) {
-        progressView.setVisibility(View.GONE);
-        rv.setVisibility(View.GONE);
-        errorTextView.setVisibility(View.VISIBLE);
-        final int messageResId;
-        if (resultType == LoaderStatus.ERROR) { //TODO: Add in LoaderStatus NO_INTERNET
-            messageResId = R.string.no_internet;
+        if ((adapter != null ? adapter.getItemCount() : 0) == 0) {
+            progressView.setVisibility(View.GONE);
+            rv.setVisibility(View.GONE);
+            errorTextView.setVisibility(View.VISIBLE);
+            final int messageResId;
+            if (resultType == LoaderStatus.ERROR) { //TODO: Add in LoaderStatus NO_INTERNET
+                messageResId = R.string.no_internet;
+            } else {
+                messageResId = R.string.error;
+            }
+            errorTextView.setText(messageResId);
         } else {
-            messageResId = R.string.error;
+            Snackbar.make(
+                    getActivity().findViewById(R.id.main_stories_layout),
+                    R.string.no_internet,
+                    Snackbar.LENGTH_INDEFINITE
+            ).show();
         }
-        errorTextView.setText(messageResId);
     }
 
     @Override

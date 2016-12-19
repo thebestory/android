@@ -24,14 +24,12 @@ import static com.thebestory.android.util.TimeConverter.relativeTime;
 
 
 public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryViewHolder> {
-
     private final Context context;
     private List<Story> stories;
 
     public StoriesAdapter(Context context, ArrayList<Story> storiesList) {
         this.context = context;
         this.stories = storiesList;
-
     }
 
     @Override
@@ -47,8 +45,8 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
     }
 
     @Override
-    public void onBindViewHolder(StoryViewHolder storyViewHolder, int position) {
-        storyViewHolder.onBind(stories.get(position));
+    public void onBindViewHolder(StoryViewHolder vh, int position) {
+        vh.onBind(stories.get(position));
     }
 
     @Override

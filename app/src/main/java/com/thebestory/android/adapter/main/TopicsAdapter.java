@@ -23,14 +23,12 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.TopicViewH
 
     private Context context;
     private OnClickListener listener;
-    private final LayoutInflater layoutInflater;
     private List<Topic> topics;
 
     public TopicsAdapter(Context context, ArrayList<Topic> loadedTopic, OnClickListener listener) {
         this.context = context;
         this.listener = listener;
         this.topics = loadedTopic;
-        this.layoutInflater = LayoutInflater.from(context);
     }
 
 
@@ -52,12 +50,8 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.TopicViewH
     }
 
     @Override
-    public void onBindViewHolder(TopicViewHolder topicViewHolder, int i) {
-        topicViewHolder.title.setText(topics.get(i).title);
-        topicViewHolder.description.setText(topics.get(i).description);
-        topicViewHolder.storiesCount.setText(Integer.toString(topics.get(i).storiesCount));
-        topicViewHolder.imageTopic.setImageURI(topics.get(i).icon);
-        topicViewHolder.setOnClickListener(listener, topics.get(i));
+    public void onBindViewHolder(TopicViewHolder vh, int i) {
+        vh.onBind(topics.get(i), listener);
     }
 
     @Override
@@ -69,7 +63,6 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.TopicViewH
         CardView cv;
         TextView title;
         TextView description;
-        TextView storiesCount;
         SimpleDraweeView imageTopic;
         View addView;
 
@@ -78,7 +71,6 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.TopicViewH
             cv = (CardView) itemView.findViewById(R.id.card_topic);
             title = (TextView) itemView.findViewById(R.id.text_title);
             description = (TextView) itemView.findViewById(R.id.text_description);
-            storiesCount = (TextView) itemView.findViewById(R.id.text_stories_count);
             imageTopic = (SimpleDraweeView) itemView.findViewById(R.id.card_topic_icon);
             addView = itemView;
         }
@@ -91,10 +83,16 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.TopicViewH
                 }
             });
         }
+
+        void onBind(Topic topic, OnClickListener listener) {
+            title.setText(topic.title);
+            description.setText(topic.description);
+            imageTopic.setImageURI(topic.icon);
+            setOnClickListener(listener, topic);
+        }
     }
 
     public interface OnClickListener {
         void onClick(View view, Topic topic);
     }
-
 }

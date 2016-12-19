@@ -5,7 +5,6 @@
 package com.thebestory.android;
 
 import android.app.Application;
-import android.app.LoaderManager;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.thebestory.android.model.Story;
@@ -13,7 +12,6 @@ import com.thebestory.android.model.Topic;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import static java.util.Arrays.asList;
 
@@ -25,6 +23,7 @@ public class TheBestoryApplication extends Application {
     public HashMap<String, HashMap<String, ArrayList<Story>>> loadedStories;
     public ArrayList<Topic> currentLoadedTopics;
     public ArrayList<String> nameTopics;
+    public HashMap<String, String> topics = new HashMap<>();
 
     @Override
     public void onCreate() {
@@ -37,7 +36,7 @@ public class TheBestoryApplication extends Application {
                 "daydreams",
                 "dreams",
                 "funny",
-                "good-deeds",
+                "gooddeeds",
                 "happiness",
                 "intimate", //TODO: Hardcode
                 "lifehack",
@@ -46,6 +45,19 @@ public class TheBestoryApplication extends Application {
                 "scary",
                 "weird"
         ));
+
+        topics.put("all", "All stories");
+        topics.put("daydreams", "Daydreams");
+        topics.put("dreams", "Dreams");
+        topics.put("funny", "Funny");
+        topics.put("gooddeeds", "Good deeds");
+        topics.put("happiness", "Happiness");
+        topics.put("intimate", "Intimate");
+        topics.put("lifehack", "Lifehack");
+        topics.put("love", "Love");
+        topics.put("sad", "Sad");
+        topics.put("scary", "Scary");
+        topics.put("weird", "Weird");
 
         for (String i : nameTopics) {
             HashMap<String, ArrayList<Story>> item = new HashMap<>();

@@ -61,5 +61,7 @@
     <string name="main_settings_devtools_reset_cache_summary">Clear stories cache</string>
 
     <string name="main_settings_devtools_debug_title">Debug page</string>
+    <string name="error_while_data_loading">Error while data loading</string>
+    <string name="try_again">Try again</string>
 
 </resources>

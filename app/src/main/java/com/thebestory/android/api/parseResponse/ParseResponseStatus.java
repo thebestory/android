@@ -67,14 +67,14 @@ public final class ParseResponseStatus {
     }
 
     public static LoaderStatus parse(JsonReader response) throws IOException {
-        LoaderStatus status = LoaderStatus.OK;
+        LoaderStatus status = LoaderStatus.ERROR;
         response.beginObject();
+
         while (response.hasNext()) {
             String name = response.nextName();
 
             switch (name) {
                 case "status":
-
                     status = switchStatus(response.nextString());
                     break;
                 case "error":
