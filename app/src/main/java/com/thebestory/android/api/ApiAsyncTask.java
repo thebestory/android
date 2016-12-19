@@ -13,6 +13,7 @@ import android.util.Log;
 import com.thebestory.android.api.parseResponse.ParseResponse;
 import com.thebestory.android.api.parseResponse.ParseResponseStatus;
 import com.thebestory.android.api.parseUrlRequest.ParseUrl;
+import com.thebestory.android.api.urlCollection.TypeOfCollection;
 
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -24,6 +25,35 @@ class ApiAsyncTask<T> extends AsyncTaskLoader<LoaderResult<T>> {
     private final ParseResponse<T> parseResponse;
     private Bundle args;
     private LoaderResult<T> loaderResult;
+    private TypeOfCollection cashType = null;
+
+    public TypeOfCollection getRequestType() {
+        if (cashType != null) {
+            return cashType;
+        }
+
+        if (args == null) {
+            cashType = TypeOfCollection.NONE;
+            return cashType;
+        }
+
+        if (args.containsKey("after")) {
+            cashType = TypeOfCollection.AFTER;
+            return cashType;
+        }
+
+        if (args.containsKey("before")) {
+            cashType = TypeOfCollection.BEFORE;
+            return cashType;
+        }
+
+        if (args.containsKey("around")) {
+            cashType = TypeOfCollection.AROUND;
+            return cashType;
+        }
+        cashType = TypeOfCollection.NONE;
+        return cashType;
+    }
 
     public ApiAsyncTask(Context context, ParseUrl parseUrlRequest, ParseResponse<T> parseResponse) {
         this(context, parseUrlRequest, parseResponse, null);
