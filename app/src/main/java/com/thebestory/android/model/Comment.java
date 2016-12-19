@@ -3,6 +3,7 @@ package com.thebestory.android.model;
 import android.util.JsonReader;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +49,7 @@ public final class Comment {
      * @return {@link Comment} instance with parsed information
      * @throws IOException
      */
-    public static Comment parse(JsonReader jr) throws IOException {
+    public static Comment parse(JsonReader jr) throws IOException, ParseException {
         String id = null, submitDate = null, content = null,  editDate = null, parentId = null;
         Story story = null;
         Account account = null;

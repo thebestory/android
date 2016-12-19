@@ -5,6 +5,7 @@
 package com.thebestory.android;
 
 import android.app.Application;
+import android.app.LoaderManager;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.thebestory.android.model.Story;

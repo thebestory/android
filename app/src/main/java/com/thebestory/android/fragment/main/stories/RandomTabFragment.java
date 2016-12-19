@@ -35,7 +35,7 @@ import java.util.List;
 
 /**
  * Fragment for Random tab on Stories screen.
- * TODO: Nariman have to add Shuffle
+ * TODO: DON'T WORK CORRECTLY!Nariman have to add Shuffle
  * Use the {@link RandomTabFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
@@ -166,12 +166,15 @@ public class RandomTabFragment extends Fragment implements LoaderManager.
 
             case OK: {
                 Log.w("onFinished", "OK");
-                flagForLoader = result.data.isEmpty();
+                flagForLoader = false;
                 if (!result.data.isEmpty()) {
                     if (visitOnCreateLoader) {
+                        Log.w("onFinished", "Here!");
                         loadedRandomStories.addAll(result.data);
+                        displayNonEmptyData(result.data.size());
+                    } else {
+                        displayNonEmptyData();
                     }
-                    displayNonEmptyData();
                 }
                 break;
             }
@@ -180,7 +183,7 @@ public class RandomTabFragment extends Fragment implements LoaderManager.
                 break;
             }
             case WARNING: {
-                flagForLoader = result.data.isEmpty();
+                flagForLoader = false;
                 //TODO: Try to write this)))
                 break;
             }
@@ -201,10 +204,16 @@ public class RandomTabFragment extends Fragment implements LoaderManager.
         errorTextView.setText(R.string.stories_not_found);
     }
 
-    private void displayNonEmptyData() {
+    private void displayNonEmptyData(int size) {
         if (adapter != null) {
-                adapter.addStories();
+            adapter.addStories(size);
         }
+        progressView.setVisibility(View.GONE);
+        errorTextView.setVisibility(View.GONE);
+        rv.setVisibility(View.VISIBLE);
+    }
+
+    private void displayNonEmptyData() {
         progressView.setVisibility(View.GONE);
         errorTextView.setVisibility(View.GONE);
         rv.setVisibility(View.VISIBLE);

@@ -78,12 +78,14 @@ public class LatestTabFragment extends Fragment implements LoaderManager.
         String currentSlug =  ((TheBestoryApplication) getActivity().getApplication()).slug;
         loadedLatestStories = ((TheBestoryApplication) getActivity().getApplication()).
                 loadedStories.get(currentSlug).get("latest");
+        Log.w("Attach", "I am here");
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         adapter = new StoriesAdapter(getActivity(), loadedLatestStories);
+        Log.w("onCreate", "I am here");
     }
 
     @Override
@@ -143,7 +145,6 @@ public class LatestTabFragment extends Fragment implements LoaderManager.
         if (adapter != null) {
             adapter.clear();
         }
-        loadedLatestStories.clear();
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
@@ -175,13 +176,15 @@ public class LatestTabFragment extends Fragment implements LoaderManager.
         switch (result.status) {
             case OK: {
                 Log.w("onFinished", "OK");
-                flagForLoader = result.data.isEmpty();
+                flagForLoader = false;
                 if (!result.data.isEmpty()) {
                     if (visitOnCreateLoader) {
                         Log.w("onFinished", "Here!");
                         loadedLatestStories.addAll(result.data);
+                        displayNonEmptyData(result.data.size());
+                    } else {
+                        displayNonEmptyData();
                     }
-                    displayNonEmptyData();
                 }
                 break;
             }
@@ -190,7 +193,7 @@ public class LatestTabFragment extends Fragment implements LoaderManager.
                 break;
             }
             case WARNING: {
-                flagForLoader = result.data.isEmpty();
+                flagForLoader = false;
                 //TODO: Try to write this)))
                 break;
             }
@@ -211,10 +214,16 @@ public class LatestTabFragment extends Fragment implements LoaderManager.
         errorTextView.setText(R.string.stories_not_found);
     }
 
-    private void displayNonEmptyData() {
+    private void displayNonEmptyData(int size) {
         if (adapter != null) {
-            adapter.addStories();
+            adapter.addStories(size);
         }
+        progressView.setVisibility(View.GONE);
+        errorTextView.setVisibility(View.GONE);
+        rv.setVisibility(View.VISIBLE);
+    }
+
+    private void displayNonEmptyData() {
         progressView.setVisibility(View.GONE);
         errorTextView.setVisibility(View.GONE);
         rv.setVisibility(View.VISIBLE);

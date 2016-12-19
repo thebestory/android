@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.thebestory.android.R;
 import com.thebestory.android.model.*;
 
@@ -33,7 +34,7 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.TopicViewH
     }
 
 
-    public void addTopics() {
+    public void addTopics() { //TODO: rechange it
         final int pos = this.topics.size() + 1;
         notifyItemRangeInserted(pos, topics.size());
     }
@@ -51,10 +52,11 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.TopicViewH
     }
 
     @Override
-    public void onBindViewHolder(TopicViewHolder topicViewHolder, int i) { //TODO: When Alex changes API = Change this methods
+    public void onBindViewHolder(TopicViewHolder topicViewHolder, int i) {
         topicViewHolder.title.setText(topics.get(i).title);
         topicViewHolder.description.setText(topics.get(i).description);
         topicViewHolder.storiesCount.setText(Integer.toString(topics.get(i).storiesCount));
+        topicViewHolder.imageTopic.setImageURI(topics.get(i).icon);
         topicViewHolder.setOnClickListener(listener, topics.get(i));
     }
 
@@ -67,19 +69,17 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.TopicViewH
         CardView cv;
         TextView title;
         TextView description;
-        //ImageView icon;
         TextView storiesCount;
-        //ImageView imageTopic;
+        SimpleDraweeView imageTopic;
         View addView;
 
-        TopicViewHolder(View itemView) { //TODO: When Alex changes API = Change this methods
+        TopicViewHolder(View itemView) {
             super(itemView);
             cv = (CardView) itemView.findViewById(R.id.card_topic);
             title = (TextView) itemView.findViewById(R.id.text_title);
             description = (TextView) itemView.findViewById(R.id.text_description);
-            //icon = (TextView) itemView.findViewById(R.id.);
             storiesCount = (TextView) itemView.findViewById(R.id.text_stories_count);
-            //imageTopic = (ImageView) itemView.findViewById(R.id.image_topic);
+            imageTopic = (SimpleDraweeView) itemView.findViewById(R.id.card_topic_icon);
             addView = itemView;
         }
 

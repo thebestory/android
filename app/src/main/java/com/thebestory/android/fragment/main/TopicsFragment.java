@@ -7,7 +7,6 @@ package com.thebestory.android.fragment.main;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -32,8 +31,6 @@ import com.thebestory.android.api.ApiMethods;
 import com.thebestory.android.api.LoaderResult;
 import com.thebestory.android.api.LoaderStatus;
 import com.thebestory.android.fragment.main.stories.NewStoryFragment;
-import com.thebestory.android.data.main.TopicsData;
-import com.thebestory.android.model.Story;
 import com.thebestory.android.model.Topic;
 
 import java.util.ArrayList;
@@ -113,8 +110,6 @@ public class TopicsFragment extends Fragment
         view = inflater.inflate(R.layout.fragment_main_topics, container, false);
 
         toolbar = (Toolbar) view.findViewById(R.id.main_topics_toolbar);
-
-        FragmentManager fm = getFragmentManager();
 
         progressView = (ProgressBar) view.findViewById(R.id.progress);
         errorTextView = (TextView) view.findViewById(R.id.error_text);

@@ -5,6 +5,7 @@
 package com.thebestory.android.model;
 
 import android.util.JsonReader;
+import android.util.Log;
 
 import java.io.IOException;
 import java.text.DateFormat;

@@ -1,11 +1,14 @@
 package com.thebestory.android.util;
 
+import android.util.Log;
+
 import com.thebestory.android.model.Story;
 
 
 import org.joda.time.Period;
 
 import java.util.Date;
+import java.util.Locale;
 
 import humanize.Humanize;
 import humanize.time.TimeMillis;
@@ -17,11 +20,11 @@ import humanize.time.TimeMillis;
 public class TimeConverter {
 
     public static String absoluteTime (Story story) {
-        if (story == null || story.publishDate == null ) {
+        if (story == null || story.publishDate == null) {
             return "null";
         }
 
-        return Humanize.format("{0, joda.time, full.date.time}", story.publishDate);
+        return Humanize.format("{0, joda.time, full.date.time}", story.publishDate, Locale.UK);
     }
 
     public static String relativeTime(Story story, Date nowDate) {
@@ -81,23 +84,25 @@ public class TimeConverter {
 
         return Integer.toString(period.getYears()) + " years ago";*/
         TimeMillis timeMillis;
+        Log.w("period", period.toString());
         if (period.getMonths() == 0) {
             if (period.getWeeks() == 0) {
                 if (period.getDays() == 0) {
                     if (period.getHours() == 0) {
-                        timeMillis = TimeMillis.SECOND;
-                    } else {
                         timeMillis = TimeMillis.MINUTE;
+                    } else {
+                        timeMillis = TimeMillis.HOUR;
                     }
                 } else {
-                    timeMillis = TimeMillis.HOUR;
+                    timeMillis = TimeMillis.DAY;
                 }
             } else {
-                timeMillis = TimeMillis.DAY;
+                timeMillis = TimeMillis.WEEK;
             }
         } else {
-            timeMillis = TimeMillis.WEEK;
+            timeMillis = TimeMillis.MONTH;
         }
-        return Humanize.naturalTime(nowDate, story.publishDate, timeMillis);
+        String lal = Humanize.naturalTime(nowDate, story.publishDate, timeMillis, Locale.UK);
+        return lal;
     }
 }

@@ -17,11 +17,15 @@ import com.thebestory.android.R;
 import com.thebestory.android.model.Story;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryViewHolder> {
-    private final Context context;
+import static com.thebestory.android.util.TimeConverter.relativeTime;
 
+
+public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryViewHolder> {
+
+    private final Context context;
     private List<Story> stories;
 
     public StoriesAdapter(Context context, ArrayList<Story> storiesList) {
@@ -37,9 +41,9 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
                 R.layout.fragment_template_story, parent, false));
     }
 
-    public void addStories() {
-        final int pos = this.stories.size() + 1;
-        notifyItemRangeInserted(pos, stories.size());
+    public void addStories(int sizeStories) {
+        final int pos = this.stories.size() - sizeStories;
+        notifyItemRangeInserted(pos, sizeStories);
     }
 
     @Override
@@ -54,8 +58,8 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
 
     public void clear() {
         final int size = stories.size();
-        stories.clear();
         notifyItemRangeRemoved(0, size);
+        stories.clear();
     }
 
 
@@ -94,10 +98,11 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
         void onBind(Story story) {
             topicTitle.setText(story.topic.title);
             content.setText(story.content);
-            timestamp.setText(story.publishDate);
+            timestamp.setText(relativeTime(story, new Date()));
             likesCount.setText(Integer.toString(story.likesCount));
             commentsCount.setText(Integer.toString(story.commentsCount));
             id.setText(story.id);
+            topicIcon.setImageURI(story.topic.icon);
         }
     }
 }

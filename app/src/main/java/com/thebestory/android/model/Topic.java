@@ -5,6 +5,7 @@
 package com.thebestory.android.model;
 
 import android.util.JsonReader;
+import android.util.Log;
 
 import java.io.IOException;
 
@@ -60,7 +61,8 @@ public final class Topic {
                     description = jr.nextString();
                     break;
                 case "icon":
-                    icon = jr.nextString();
+                    icon = "https://thebestory.github.io/icons/128/" + jr.nextString() + ".png";
+                    Log.w("TOPIC", icon);
                     break;
                 case "stories_count":
                     storiesCount = jr.nextInt();
