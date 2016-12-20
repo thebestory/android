@@ -167,20 +167,20 @@ public class TopTabFragment extends Fragment implements LoaderManager.
             switch (args.getString("request")) {
                 case "before": {
                     String currentId = loadedTopStories.get(0).id;
-                    temp = ApiMethods.getInstance().getRandomStories(getActivity(),
+                    temp = ApiMethods.getInstance().getTopStories(getActivity(),
                             ((TheBestoryApplication) getActivity().getApplication()).slug,
                             TypeOfCollection.BEFORE, currentId, 10);
                     break;
                 }
                 case "none": {
-                    temp = ApiMethods.getInstance().getRandomStories(getActivity(),
+                    temp = ApiMethods.getInstance().getTopStories(getActivity(),
                             ((TheBestoryApplication) getActivity().getApplication()).slug,
                             TypeOfCollection.NONE, null, 10);
                     break;
                 }
                 case "after": {
                     String currentId = loadedTopStories.get(loadedTopStories.size() - 1).id;
-                    temp = ApiMethods.getInstance().getRandomStories(getActivity(),
+                    temp = ApiMethods.getInstance().getTopStories(getActivity(),
                             ((TheBestoryApplication) getActivity().getApplication()).slug,
                             TypeOfCollection.AFTER, currentId, 10);
                     break;

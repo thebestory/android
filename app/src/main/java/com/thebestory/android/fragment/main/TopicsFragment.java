@@ -5,11 +5,14 @@
 package com.thebestory.android.fragment.main;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -42,11 +45,13 @@ import java.util.List;
  * Use the {@link TopicsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TopicsFragment extends Fragment
-        implements LoaderManager.LoaderCallbacks<LoaderResult<List<Topic>>> {
+public class TopicsFragment extends Fragment implements LoaderManager.
+        LoaderCallbacks<LoaderResult<List<Topic>>>, SwipeRefreshLayout.OnRefreshListener {
 
     private View view;
     private MainActivity activity;
+    public final TopicsFragment thisFragment = this;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     TopicsAdapter adapter;
 
@@ -121,6 +126,11 @@ public class TopicsFragment extends Fragment
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
         rv.setAdapter(adapter);
 
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setColorSchemeColors(
+                Color.RED, Color.GREEN, Color.BLUE, Color.CYAN);
+
         errorTextView.setVisibility(View.GONE);
         rv.setVisibility(View.GONE);
 
@@ -131,20 +141,28 @@ public class TopicsFragment extends Fragment
             if (loadedTopic.isEmpty()) {
                 getLoaderManager().restartLoader(0, null, this);
             } else {
-                displayNonEmptyData();
+                displayNonEmptyData(true);
             }
         }
 
         return view;
     }
 
+    @Override
+    public void onRefresh() {
+        if (!loadedTopic.isEmpty()) {
+           displayNonEmptyData(true);
+        } else {
+            getLoaderManager().restartLoader(0, null, thisFragment);
+        }
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
 
     @Override
     public Loader<LoaderResult<List<Topic>>> onCreateLoader(int id, Bundle args) {
         Log.w("onCreateLoader", "Loading...");
         Loader<LoaderResult<List<Topic>>> temp;
         temp = ApiMethods.getInstance().getTopicsList(getActivity());
-        //temp.startLoading();
         visitOnCreateLoader = true;
         return temp;
     }
@@ -157,8 +175,10 @@ public class TopicsFragment extends Fragment
                 if (!result.data.isEmpty()) {
                     if (visitOnCreateLoader) {
                         loadedTopic.addAll(result.data);
+                        displayNonEmptyData();
+                    } else {
+                        displayNonEmptyData(true);
                     }
-                    displayNonEmptyData();
                 }
                 break;
             }
@@ -187,6 +207,12 @@ public class TopicsFragment extends Fragment
         errorTextView.setText(R.string.topics_not_found);
     }
 
+    private void displayNonEmptyData(boolean flag) {
+        progressView.setVisibility(View.GONE);
+        errorTextView.setVisibility(View.GONE);
+        rv.setVisibility(View.VISIBLE);
+    }
+
     private void displayNonEmptyData() {
         if (adapter != null) {
                 adapter.addTopics();
@@ -197,16 +223,24 @@ public class TopicsFragment extends Fragment
     }
 
     private void displayError(LoaderStatus resultType) {
-        progressView.setVisibility(View.GONE);
-        rv.setVisibility(View.GONE);
-        errorTextView.setVisibility(View.VISIBLE);
-        final int messageResId;
-        if (resultType == LoaderStatus.ERROR) { //TODO: Add in LoaderStatus NO_INTERNET
-            messageResId = R.string.no_internet;
+        if ((adapter != null ? adapter.getItemCount() : 0) == 0) {
+            progressView.setVisibility(View.GONE);
+            rv.setVisibility(View.GONE);
+            errorTextView.setVisibility(View.VISIBLE);
+            final int messageResId;
+            if (resultType == LoaderStatus.ERROR) { //TODO: Add in LoaderStatus NO_INTERNET
+                messageResId = R.string.no_internet;
+            } else {
+                messageResId = R.string.error;
+            }
+            errorTextView.setText(messageResId);
         } else {
-            messageResId = R.string.error;
+            Snackbar.make(
+                    getActivity().findViewById(R.id.main_stories_layout),
+                    R.string.no_internet,
+                    Snackbar.LENGTH_LONG
+            ).show();
         }
-        errorTextView.setText(messageResId);
     }
 
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

@@ -33,8 +33,7 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.TopicViewH
 
 
     public void addTopics() { //TODO: rechange it
-        final int pos = this.topics.size() + 1;
-        notifyItemRangeInserted(pos, topics.size());
+        notifyItemRangeInserted(0, topics.size());
     }
 
     @Override
