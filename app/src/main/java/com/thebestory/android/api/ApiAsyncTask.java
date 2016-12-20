@@ -19,7 +19,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 
 
-class ApiAsyncTask<T> extends AsyncTaskLoader<LoaderResult<T>> {
+public class ApiAsyncTask<T> extends AsyncTaskLoader<LoaderResult<T>> {
 
     private final ParseUrl parseUrlRequest;
     private final ParseResponse<T> parseResponse;

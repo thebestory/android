@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.thebestory.android.R;
 import com.thebestory.android.TheBestoryApplication;
 import com.thebestory.android.adapter.main.StoriesAdapter;
+import com.thebestory.android.api.ApiAsyncTask;
 import com.thebestory.android.api.ApiMethods;
 import com.thebestory.android.api.LoaderResult;
 import com.thebestory.android.api.LoaderStatus;
@@ -115,7 +116,9 @@ public class HotTabFragment extends Fragment implements LoaderManager.
             displayNonEmptyData();
         } else {
             if (loadedHotStories.isEmpty()) {
-                getLoaderManager().restartLoader(2, null, this);
+                Bundle bundle = new Bundle();
+                bundle.putString("request", "none");
+                getLoaderManager().restartLoader(2, bundle, this);
             } else {
                 displayNonEmptyData();
             }
@@ -127,12 +130,19 @@ public class HotTabFragment extends Fragment implements LoaderManager.
                 if (flagForLoader) {
                     return;
                 }
+
                 super.onScrolled(recyclerView, dx, dy);
                 LinearLayoutManager llm = (LinearLayoutManager) recyclerView.getLayoutManager();
-                if (adapter != null &&
-                        llm.findLastVisibleItemPosition() + 3 >= adapter.getItemCount()) {
+                if (adapter != null
+                        && llm.findLastVisibleItemPosition() + 3 >= adapter.getItemCount()) {
                     flagForLoader = true;
-                    getLoaderManager().restartLoader(2, null, thisFragment);
+                    Bundle bundle = new Bundle();
+                    if (loadedHotStories.isEmpty()) {
+                        bundle.putString("request", "none");
+                    } else {
+                        bundle.putString("request", "after");
+                    }
+                    getLoaderManager().restartLoader(2, bundle, thisFragment);
                 }
             }
         });
@@ -142,43 +152,84 @@ public class HotTabFragment extends Fragment implements LoaderManager.
 
     @Override
     public void onRefresh() {
-        if (adapter != null) {
-            adapter.clear();
+        Bundle bundle = new Bundle();
+        if (!loadedHotStories.isEmpty()) {
+            bundle.putString("request", "before");
+            getLoaderManager().restartLoader(2, bundle, thisFragment);
+        } else {
+            bundle.putString("request", "none");
+            getLoaderManager().restartLoader(2, bundle, thisFragment);
         }
-        loadedHotStories.clear();
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
     public Loader<LoaderResult<List<Story>>> onCreateLoader(int id, Bundle args) {
-        Loader<LoaderResult<List<Story>>> temp;
-        if (loadedHotStories.isEmpty()) {
-            temp = ApiMethods.getInstance().getHotStories(getActivity(),
-                    ((TheBestoryApplication) getActivity().getApplication()).slug,
-                    TypeOfCollection.NONE, null, 10);
-        } else {
-            String currentId = loadedHotStories.get(loadedHotStories.size() - 1).id;
-            temp = ApiMethods.getInstance().getHotStories(getActivity(),
-                    ((TheBestoryApplication) getActivity().getApplication()).slug,
-                    TypeOfCollection.AFTER, currentId, 10);
+        Loader<LoaderResult<List<Story>>> temp = null;
+        if (args != null && args.containsKey("request")) {
+            switch (args.getString("request")) {
+                case "before": {
+                    String currentId = loadedHotStories.get(0).id;
+                    temp = ApiMethods.getInstance().getLatestStories(getActivity(),
+                            ((TheBestoryApplication) getActivity().getApplication()).slug,
+                            TypeOfCollection.BEFORE, currentId, 10);
+                    break;
+                }
+                case "none": {
+                    temp = ApiMethods.getInstance().getLatestStories(getActivity(),
+                            ((TheBestoryApplication) getActivity().getApplication()).slug,
+                            TypeOfCollection.NONE, null, 10);
+                    break;
+                }
+                case "after": {
+                    String currentId = loadedHotStories.get(loadedHotStories.size() - 1).id;
+                    temp = ApiMethods.getInstance().getLatestStories(getActivity(),
+                            ((TheBestoryApplication) getActivity().getApplication()).slug,
+                            TypeOfCollection.AFTER, currentId, 10);
+                    break;
+                }
+            }
         }
-        //temp.startLoading();
         visitOnCreateLoader = true;
         return temp;
     }
 
     @Override
     public void onLoadFinished(Loader<LoaderResult<List<Story>>> loader, LoaderResult<List<Story>> result) {
-
+        Log.e("TAG", result.status.toString());
         switch (result.status) {
             case OK: {
                 Log.w("onFinished", "OK");
                 flagForLoader = false;
                 if (!result.data.isEmpty()) {
                     if (visitOnCreateLoader) {
-                        Log.w("onFinished", "Here!");
-                        loadedHotStories.addAll(result.data);
-                        displayNonEmptyData(result.data.size());
+                        TypeOfCollection typeOfCollection = ((ApiAsyncTask) loader).getRequestType();
+                        switch (typeOfCollection) {
+                            case BEFORE: {
+                                if (result.data.size() < 10) {
+                                    for (int i = 0; i < result.data.size(); i++) {
+                                        loadedHotStories.add(0, result.data.get(i));
+                                    }
+                                } else {
+                                    if (adapter != null) {
+                                        adapter.clear();
+                                    }
+                                    loadedHotStories.addAll(result.data);
+                                }
+                                displayNonEmptyData(result.data.size(), typeOfCollection);
+                                break;
+                            }
+                            case NONE: {
+                                loadedHotStories.addAll(result.data);
+                                displayNonEmptyData(result.data.size(), typeOfCollection);
+                                break;
+                            }
+                            case AFTER: {
+                                loadedHotStories.addAll(result.data);
+                                displayNonEmptyData(result.data.size(), typeOfCollection);
+                                break;
+                            }
+                        }
                     } else {
                         displayNonEmptyData();
                     }
@@ -210,9 +261,13 @@ public class HotTabFragment extends Fragment implements LoaderManager.
         errorTextView.setText(R.string.stories_not_found);
     }
 
-    private void displayNonEmptyData(int size) {
+    private void displayNonEmptyData(int size, TypeOfCollection typeOfCollection) {
         if (adapter != null) {
-            adapter.addStories(size);
+            if (TypeOfCollection.BEFORE == typeOfCollection) {
+                adapter.addFirstStories(size);
+            } else {
+                adapter.addLastStories(size);
+            }
         }
         progressView.setVisibility(View.GONE);
         errorTextView.setVisibility(View.GONE);
@@ -241,7 +296,7 @@ public class HotTabFragment extends Fragment implements LoaderManager.
             Snackbar.make(
                     getActivity().findViewById(R.id.main_stories_layout),
                     R.string.no_internet,
-                    Snackbar.LENGTH_INDEFINITE
+                    Snackbar.LENGTH_LONG
             ).show();
         }
     }

@@ -39,8 +39,9 @@
 
     <string name="topics_not_found">Topics not found</string>
     <string name="stories_not_found">Stories not found</string>
-    <string name="no_internet">No internet</string>
-    <string name="error">Unexpected error</string>
+    <string name="no_internet">Unable to load data.
+        Please check your Internet connection and refresh the page.</string>
+    <string name="error">Unexpected error. Close and open app again.</string>
 
     <!-- Main Activity - Settings Fragment -->
 

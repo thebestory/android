@@ -39,9 +39,13 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
                 R.layout.fragment_template_story, parent, false));
     }
 
-    public void addStories(int sizeStories) {
+    public void addLastStories(int sizeStories) {
         final int pos = this.stories.size() - sizeStories;
         notifyItemRangeInserted(pos, sizeStories);
+    }
+
+    public void addFirstStories(int sizeStories) {
+        notifyItemRangeInserted(0, sizeStories);
     }
 
     @Override
