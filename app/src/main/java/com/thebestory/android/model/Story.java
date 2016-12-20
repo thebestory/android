@@ -5,15 +5,11 @@
 package com.thebestory.android.model;
 
 import android.util.JsonReader;
-import android.util.Log;
 
 import org.joda.time.DateTime;
-import org.joda.time.format.ISODateTimeFormat;
 
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public final class Story {
@@ -35,8 +31,8 @@ public final class Story {
     public final Date submitDate;
     public final Date publishDate;
 
-    public final boolean isLiked;
-
+    private final boolean isLiked;
+    private boolean isLikedLocal;
 
     public Story(String id,
                  Topic topic,
@@ -54,16 +50,28 @@ public final class Story {
         this.submitDate = submitDate;
         this.publishDate = publishDate;
         this.isLiked = isLiked;
+
+        this.isLikedLocal = isLiked;
     }
 
-    public boolean isPublished() {
-        // TODO: Check, that publish date present and <= now.
-        return publishDate != null;
+    public int getLikesCount() {
+        return isLiked
+                ? isLikedLocal ? this.likesCount : this.likesCount - 1
+                : isLikedLocal ? this.likesCount + 1 : this.likesCount;
     }
 
-    public boolean isScheduled() {
-        // TODO: Check, that publish date present and > now.
-        return publishDate != null;
+    public int like() {
+        isLikedLocal = true;
+        return getLikesCount();
+    }
+
+    public int unlike() {
+        isLikedLocal = false;
+        return getLikesCount();
+    }
+
+    public boolean isLiked() {
+        return isLikedLocal;
     }
 
     /**

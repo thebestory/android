@@ -81,8 +81,6 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
         TextView commentsCount;
         ImageView commentsView;
 
-        boolean isLiked;
-
         StoryViewHolder(View itemView) {
             super(itemView);
 
@@ -99,13 +97,12 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
             likesView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (isLiked) {
+                    if (story.isLiked()) {
                         ApiMethods.getInstance().postStoryUnlike(story.id, new AsyncLoader.OnAsyncLoaderListener() {
                             @Override
                             public void onComplete(ByteArrayOutputStream result) {
                                 likesView.setImageResource(R.drawable.ic_not_liked);
-                                likesCount.setText("" + (Integer.valueOf((String) likesCount.getText()) - 1));
-                                isLiked = false;
+                                likesCount.setText("" + story.unlike());
                             }
 
                             @Override
@@ -123,8 +120,7 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
                             @Override
                             public void onComplete(ByteArrayOutputStream result) {
                                 likesView.setImageResource(R.drawable.ic_liked);
-                                likesCount.setText("" + (Integer.valueOf((String) likesCount.getText()) + 1));
-                                isLiked = true;
+                                likesCount.setText("" + story.like());
                             }
 
                             @Override
@@ -152,9 +148,8 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
             likesCount.setText(Integer.toString(story.likesCount));
             commentsCount.setText(Integer.toString(story.commentsCount));
             topicIcon.setImageURI(story.topic.icon);
-            isLiked = story.isLiked;
 
-            if (story.isLiked) {
+            if (story.isLiked()) {
                 likesView.setImageResource(R.drawable.ic_liked);
             } else {
                 likesView.setImageResource(R.drawable.ic_not_liked);
