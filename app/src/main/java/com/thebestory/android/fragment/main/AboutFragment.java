@@ -6,6 +6,7 @@ package com.thebestory.android.fragment.main;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +49,11 @@ public class AboutFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_main_about, container, false);
         activity = (MainActivity) getActivity();
+
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.main_about_toolbar);
+
+        toolbar.setTitle(R.string.navdrawer_main_about);
+        activity.setSupportActionBar(toolbar);
 
         return view;
     }

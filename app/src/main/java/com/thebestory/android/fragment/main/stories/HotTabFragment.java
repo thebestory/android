@@ -170,20 +170,20 @@ public class HotTabFragment extends Fragment implements LoaderManager.
             switch (args.getString("request")) {
                 case "before": {
                     String currentId = loadedHotStories.get(0).id;
-                    temp = ApiMethods.getInstance().getLatestStories(getActivity(),
+                    temp = ApiMethods.getInstance().getHotStories(getActivity(),
                             ((TheBestoryApplication) getActivity().getApplication()).slug,
                             TypeOfCollection.BEFORE, currentId, 10);
                     break;
                 }
                 case "none": {
-                    temp = ApiMethods.getInstance().getLatestStories(getActivity(),
+                    temp = ApiMethods.getInstance().getHotStories(getActivity(),
                             ((TheBestoryApplication) getActivity().getApplication()).slug,
                             TypeOfCollection.NONE, null, 10);
                     break;
                 }
                 case "after": {
                     String currentId = loadedHotStories.get(loadedHotStories.size() - 1).id;
-                    temp = ApiMethods.getInstance().getLatestStories(getActivity(),
+                    temp = ApiMethods.getInstance().getHotStories(getActivity(),
                             ((TheBestoryApplication) getActivity().getApplication()).slug,
                             TypeOfCollection.AFTER, currentId, 10);
                     break;

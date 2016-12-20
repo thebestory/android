@@ -45,7 +45,7 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
     }
 
     public void addFirstStories(int sizeStories) {
-        notifyItemRangeInserted(0, sizeStories);
+        notifyDataSetChanged();
     }
 
     @Override

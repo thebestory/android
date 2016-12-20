@@ -10,14 +10,12 @@
             android:id="@+id/navdrawer_main_topics"
             android:icon="@drawable/ic_navdrawer_main_topics"
             android:title="@string/navdrawer_main_topics" />
-    </group>
 
-    <group
-        android:id="@+id/navdrawer_main_group_secondary">
         <item
             android:id="@+id/navdrawer_main_settings"
             android:icon="@drawable/ic_navdrawer_main_settings"
-            android:title="@string/navdrawer_main_settings" />
+            android:title="@string/navdrawer_main_settings"
+            android:visible="false"/>
         <item
             android:id="@+id/navdrawer_main_about"
             android:icon="@drawable/ic_navdrawer_main_about"
