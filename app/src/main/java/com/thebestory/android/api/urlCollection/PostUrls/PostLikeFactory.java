@@ -25,7 +25,11 @@ final class PostLikeFactory {
         HttpURLConnection connection = (HttpURLConnection) (new URL(url)).openConnection();
         String postArgs = "";
         connection.setRequestMethod(isLike ? "POST" : "DELETE");
-        PostInit.init(connection, postArgs);
+        if (isLike) {
+            PostInit.init(connection, postArgs);
+        } else {
+            DeleteInit.init(connection);
+        }
         return connection;
     }
 }
