@@ -86,7 +86,13 @@ public final class Story {
                     id = jr.nextString();
                     break;
                 case "topic":
-                    topic = Topic.parse(jr);
+                    try {
+                        topic = Topic.parse(jr);
+                    } catch (IllegalStateException e) {
+                        topic = null;
+                        jr.skipValue();
+                    }
+
                     break;
                 case "content":
                     content = jr.nextString();
@@ -101,7 +107,13 @@ public final class Story {
                     submitDate = new DateTime(jr.nextString()).toDate();
                     break;
                 case "published_date":
-                    publishDate = new DateTime(jr.nextString()).toDate();
+                    try {
+                        publishDate = new DateTime(jr.nextString()).toDate();
+                    } catch (IllegalStateException e) {
+                        publishDate = null;
+                        jr.skipValue();
+                    }
+
                     break;
                 default:
                     jr.skipValue();

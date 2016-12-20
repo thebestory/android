@@ -4,11 +4,14 @@
 
 package com.thebestory.android.fragment.main.stories;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -25,8 +28,6 @@ import com.thebestory.android.activity.MainActivity;
 import com.thebestory.android.api.ApiMethods;
 import com.thebestory.android.api.LoaderResult;
 import com.thebestory.android.model.Story;
-
-import java.util.List;
 
 /**
  * Fragment for New story screen.
@@ -90,15 +91,15 @@ public class NewStoryFragment extends Fragment implements LoaderManager.
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
-
         switch (item.getItemId()) {
             case R.id.main_stories_new_toolbar_action_send: {
-                String textStory = editStory.getText().toString();
-                Bundle tempBundle = new Bundle();
-                tempBundle.putString("text_story", textStory);
-                getLoaderManager().restartLoader(5, tempBundle, this);
-                editStory.setText("");
+                editStory.setEnabled(false);
+
+                Bundle bundle = new Bundle();
+                bundle.putString("text_story", editStory.getText().toString());
+
+                getLoaderManager().restartLoader(5, bundle, this);
+
                 break;
             }
 //            case R.id.main_stories_toolbar_action_search:
@@ -119,14 +120,32 @@ public class NewStoryFragment extends Fragment implements LoaderManager.
         switch (data.status) {
             case OK: {
                 Log.w("NewStory", "Done!");
+                Snackbar.make(
+                        activity.findViewById(R.id.main_drawer_layout),
+                        "Story successfully sent",
+                        Snackbar.LENGTH_LONG
+                ).show();
+
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        activity.onBackPressed();
+                    }
+                });
+
                 break;
             }
+            case WARNING:
             case ERROR: {
                 Log.w("NewStory", "Error!");
-                break;
-            }
-            case WARNING: {
-                //TODO: Try to write this)))
+
+                Snackbar.make(
+                        activity.findViewById(R.id.main_drawer_layout),
+                        "Error while sending story. Please, try again.",
+                        Snackbar.LENGTH_LONG
+                ).show();
+                editStory.setEnabled(true);
+
                 break;
             }
         }

@@ -64,5 +64,8 @@
     <string name="main_settings_devtools_debug_title">Debug page</string>
     <string name="error_while_data_loading">Error while data loading</string>
     <string name="try_again">Try again</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="yes">Yes</string>
+    <string name="cancel">Cancel</string>
 
 </resources>

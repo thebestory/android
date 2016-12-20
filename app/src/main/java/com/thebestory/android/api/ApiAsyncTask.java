@@ -84,6 +84,7 @@ public class ApiAsyncTask<T> extends AsyncTaskLoader<LoaderResult<T>> {
             urlConnection.setReadTimeout(5000);
 
             Log.d("Api async Task", urlConnection.getURL().toString());
+
             JsonReader jr = new JsonReader(new InputStreamReader(urlConnection.getInputStream(), "utf-8"));
             LoaderStatus status = ParseResponseStatus.parse(jr);
             if (status == LoaderStatus.ERROR) {
@@ -96,6 +97,7 @@ public class ApiAsyncTask<T> extends AsyncTaskLoader<LoaderResult<T>> {
             return loaderResult;
 
         } catch (Exception error) {
+            error.printStackTrace();
             Log.e("Api async Task", error.toString());
         }
         loaderResult = new LoaderResult<>(LoaderStatus.ERROR);
