@@ -212,16 +212,16 @@ public class LatestTabFragment extends Fragment implements LoaderManager.
                         TypeOfCollection typeOfCollection = ((ApiAsyncTask) loader).getRequestType();
                         switch (typeOfCollection) {
                             case BEFORE: {
-                                if (result.data.size() < 10) {
-                                    for (int i = 0; i < result.data.size(); i++) {
-                                        loadedLatestStories.add(0, result.data.get(i));
-                                    }
-                                } else {
+//                                if (result.data.size() < 10) {
+//                                    for (int i = 0; i < result.data.size(); i++) {
+//                                        loadedLatestStories.add(0, result.data.get(i));
+//                                    }
+//                                } else {
                                     if (adapter != null) {
                                         adapter.clear();
                                     }
                                     loadedLatestStories.addAll(result.data);
-                                }
+//                                }
                                 displayNonEmptyData(result.data.size(), typeOfCollection);
                                 break;
                             }

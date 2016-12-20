@@ -35,6 +35,8 @@ public final class Story {
     public final Date submitDate;
     public final Date publishDate;
 
+    public final boolean isLiked;
+
 
     public Story(String id,
                  Topic topic,
@@ -42,7 +44,8 @@ public final class Story {
                  int likesCount,
                  int commentsCount,
                  Date submitDate,
-                 Date publishDate) {
+                 Date publishDate,
+                 boolean isLiked) {
         this.id = id;
         this.topic = topic;
         this.content = content;
@@ -50,6 +53,7 @@ public final class Story {
         this.commentsCount = commentsCount;
         this.submitDate = submitDate;
         this.publishDate = publishDate;
+        this.isLiked = isLiked;
     }
 
     public boolean isPublished() {
@@ -77,6 +81,7 @@ public final class Story {
         String content = null;
         Date publishDate = null;
         Date submitDate = null;
+        boolean isLiked = false;
 
         jr.beginObject();
 
@@ -115,6 +120,9 @@ public final class Story {
                     }
 
                     break;
+                case "is_liked":
+                    isLiked = jr.nextBoolean();
+                    break;
                 default:
                     jr.skipValue();
                     break;
@@ -130,7 +138,8 @@ public final class Story {
                 likesCount,
                 commentsCount,
                 submitDate,
-                publishDate
+                publishDate,
+                isLiked
         );
     }
 }

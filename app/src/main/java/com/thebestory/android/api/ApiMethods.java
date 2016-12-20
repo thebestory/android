@@ -5,6 +5,7 @@
 package com.thebestory.android.api;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.thebestory.android.api.parseResponse.ParseComment;
@@ -31,10 +32,13 @@ import com.thebestory.android.api.urlCollection.Topics.GetDetailsTopic;
 import com.thebestory.android.api.urlCollection.Topics.GetTopicStories;
 import com.thebestory.android.api.urlCollection.Topics.GetTopicsList;
 import com.thebestory.android.api.urlCollection.TypeOfCollection;
+import com.thebestory.android.loader.AsyncLoader;
+import com.thebestory.android.loader.AsyncLoader.OnAsyncLoaderListener;
 import com.thebestory.android.model.Comment;
 import com.thebestory.android.model.Story;
 import com.thebestory.android.model.Topic;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -126,20 +130,26 @@ public class ApiMethods {
     }
 
 
-    public ApiAsyncTask<Story> postStoryLike(Context context, String id) {
+    public void postStoryLike(String id, OnAsyncLoaderListener listener) {
         Bundle requestBundle = new Bundle();
         requestBundle.putString("id", id);
-        //TODO: Add more information
-        ApiAsyncTask task = new ApiAsyncTask(context, new PostStoryLike(), new ParseStory(), requestBundle);
-        return task;
+
+//        //TODO: Add more information
+//        ApiAsyncTask task = new ApiAsyncTask(context, new PostStoryLike(), new ParseStory(), requestBundle);
+//        return task;
+
+        AsyncLoader.load(new PostStoryLike(), requestBundle, listener);
     }
 
-    public ApiAsyncTask<Story> postStoryUnlike(Context context, String id) {
+    public void postStoryUnlike(String id, OnAsyncLoaderListener listener) {
         Bundle requestBundle = new Bundle();
         requestBundle.putString("id", id);
-        //TODO: Add more information
-        ApiAsyncTask task = new ApiAsyncTask(context, new PostStoryUnlike(), new ParseStory(), requestBundle);
-        return task;
+
+//        //TODO: Add more information
+//        ApiAsyncTask task = new ApiAsyncTask(context, new PostStoryUnlike(), new ParseStory(), requestBundle);
+//        return task;
+
+        AsyncLoader.load(new PostStoryUnlike(), requestBundle, listener);
     }
 
     public ApiAsyncTask<Comment> postCommentLike(Context context, String id) {

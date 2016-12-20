@@ -15,6 +15,6 @@ import java.net.HttpURLConnection;
 public class PostCommentLike implements ParseUrl {
     @Override
     public HttpURLConnection parse(Bundle args) throws IOException {
-        return PostLikeFactory.getLikeConnection(UrlBox.commentWay, "like", true, args);
+        return PostLikeFactory.getLikeConnection(UrlBox.commentWay, true, args);
     }
 }

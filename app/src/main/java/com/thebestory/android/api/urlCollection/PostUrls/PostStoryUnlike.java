@@ -15,7 +15,7 @@ import java.net.HttpURLConnection;
 public class PostStoryUnlike implements ParseUrl {
     @Override
     public HttpURLConnection parse(Bundle args) throws IOException {
-        return PostLikeFactory.getLikeConnection(UrlBox.storyWay, "unlike", false, args);
+        return PostLikeFactory.getLikeConnection(UrlBox.storyWay, false, args);
     }
 
 

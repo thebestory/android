@@ -14,8 +14,11 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.thebestory.android.R;
+import com.thebestory.android.api.ApiMethods;
+import com.thebestory.android.loader.AsyncLoader;
 import com.thebestory.android.model.Story;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -66,6 +69,8 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
 
 
     static class StoryViewHolder extends RecyclerView.ViewHolder {
+        Story story;
+
         SimpleDraweeView topicIcon;
         TextView topicTitle;
         TextView content;
@@ -76,9 +81,12 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
         TextView commentsCount;
         ImageView commentsView;
 
+        boolean isLiked;
+
         StoryViewHolder(View itemView) {
             super(itemView);
 
+            id = (TextView) itemView.findViewById(R.id.card_story_id);
             topicIcon = (SimpleDraweeView) itemView.findViewById(R.id.card_story_topic_icon);
             topicTitle = (TextView) itemView.findViewById(R.id.card_story_topic_title);
             content = (TextView) itemView.findViewById(R.id.card_story_content);
@@ -87,24 +95,70 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
             likesView = (ImageView) itemView.findViewById(R.id.card_story_likes_view);
             commentsCount = (TextView) itemView.findViewById(R.id.card_story_comments_count);
             commentsView = (ImageView) itemView.findViewById(R.id.card_story_comments_view);
-            id = (TextView) itemView.findViewById(R.id.card_story_id);
 
             likesView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    likesView.setImageResource(R.drawable.ic_liked);
+                    if (isLiked) {
+                        ApiMethods.getInstance().postStoryUnlike(story.id, new AsyncLoader.OnAsyncLoaderListener() {
+                            @Override
+                            public void onComplete(ByteArrayOutputStream result) {
+                                likesView.setImageResource(R.drawable.ic_not_liked);
+                                likesCount.setText("" + (Integer.valueOf((String) likesCount.getText()) - 1));
+                                isLiked = false;
+                            }
+
+                            @Override
+                            public void onProgressChange(int percent) {
+                                return;
+                            }
+
+                            @Override
+                            public void onError() {
+                                return;
+                            }
+                        });
+                    } else {
+                        ApiMethods.getInstance().postStoryLike(story.id, new AsyncLoader.OnAsyncLoaderListener() {
+                            @Override
+                            public void onComplete(ByteArrayOutputStream result) {
+                                likesView.setImageResource(R.drawable.ic_liked);
+                                likesCount.setText("" + (Integer.valueOf((String) likesCount.getText()) + 1));
+                                isLiked = true;
+                            }
+
+                            @Override
+                            public void onProgressChange(int percent) {
+                                return;
+                            }
+
+                            @Override
+                            public void onError() {
+                                return;
+                            }
+                        });
+                    }
                 }
             });
         }
 
         void onBind(Story story) {
+            this.story = story;
+
+            id.setText(story.id);
             topicTitle.setText(story.topic.title);
             content.setText(story.content);
             timestamp.setText(relativeTime(story, new Date()));
             likesCount.setText(Integer.toString(story.likesCount));
             commentsCount.setText(Integer.toString(story.commentsCount));
-            id.setText(story.id);
             topicIcon.setImageURI(story.topic.icon);
+            isLiked = story.isLiked;
+
+            if (story.isLiked) {
+                likesView.setImageResource(R.drawable.ic_liked);
+            } else {
+                likesView.setImageResource(R.drawable.ic_not_liked);
+            }
         }
     }
 }

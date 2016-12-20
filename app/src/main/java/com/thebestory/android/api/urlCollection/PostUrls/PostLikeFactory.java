@@ -19,9 +19,9 @@ final class PostLikeFactory {
         throw new AssertionError();
     }
 
-    public static HttpURLConnection getLikeConnection(String way, String likeString, boolean isLike, Bundle args) throws IOException {
+    public static HttpURLConnection getLikeConnection(String way, boolean isLike, Bundle args) throws IOException {
         //TODO: Add more information
-        String url = Uri.parse(UrlBox.baseUrl).buildUpon().appendPath(way).appendPath(args.getString("id", "")).appendPath(likeString).toString();
+        String url = Uri.parse(UrlBox.baseUrl).buildUpon().appendPath(way).appendPath(args.getString("id", "")).appendPath(UrlBox.like).toString();
         HttpURLConnection connection = (HttpURLConnection) (new URL(url)).openConnection();
         String postArgs = "";
         connection.setRequestMethod(isLike ? "POST" : "DELETE");

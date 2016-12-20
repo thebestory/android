@@ -14,5 +14,6 @@ public final class UrlBox {
     public static String topicWay = "topics";
     public static String commentWay = "comments";
     public static String imagesWay = "images";
+    public static String like = "like";
 
 }
