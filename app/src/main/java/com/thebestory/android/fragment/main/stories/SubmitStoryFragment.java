@@ -4,14 +4,12 @@
 
 package com.thebestory.android.fragment.main.stories;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -32,16 +30,17 @@ import com.thebestory.android.model.Story;
 /**
  * Fragment for New story screen.
  * TODO: Maybe work... It is need to decorate this fragment
- * Use the {@link NewStoryFragment#newInstance} factory method to
+ * Use the {@link SubmitStoryFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NewStoryFragment extends Fragment implements LoaderManager.
+public class SubmitStoryFragment extends Fragment implements LoaderManager.
         LoaderCallbacks<LoaderResult<Story>> {
     private View view;
-    private TextView editStory;
     private AppCompatActivity activity;
 
-    public NewStoryFragment() {
+    private TextView content;
+
+    public SubmitStoryFragment() {
         // Required empty public constructor
     }
 
@@ -49,10 +48,10 @@ public class NewStoryFragment extends Fragment implements LoaderManager.
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @return A new instance of fragment NewStoryFragment.
+     * @return A new instance of fragment SubmitStoryFragment.
      */
-    public static NewStoryFragment newInstance() {
-        return new NewStoryFragment();
+    public static SubmitStoryFragment newInstance() {
+        return new SubmitStoryFragment();
     }
 
     @Override
@@ -64,11 +63,11 @@ public class NewStoryFragment extends Fragment implements LoaderManager.
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_main_stories_new, container, false);
+        view = inflater.inflate(R.layout.fragment_main_stories_submit, container, false);
         activity = (MainActivity) getActivity();
 
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.main_stories_new_toolbar);
-        editStory = (TextView) view.findViewById(R.id.editText);
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.main_stories_submit_toolbar);
+        content = (TextView) view.findViewById(R.id.main_stories_submit_content);
 
         toolbar.setTitle(R.string.main_stories_new_toolbar_title);
         activity.setSupportActionBar(toolbar);
@@ -93,10 +92,10 @@ public class NewStoryFragment extends Fragment implements LoaderManager.
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.main_stories_new_toolbar_action_send: {
-                editStory.setEnabled(false);
+                content.setEnabled(false);
 
                 Bundle bundle = new Bundle();
-                bundle.putString("text_story", editStory.getText().toString());
+                bundle.putString("text_story", content.getText().toString());
 
                 getLoaderManager().restartLoader(5, bundle, this);
 
@@ -144,7 +143,7 @@ public class NewStoryFragment extends Fragment implements LoaderManager.
                         "Error while sending story. Please, try again.",
                         Snackbar.LENGTH_LONG
                 ).show();
-                editStory.setEnabled(true);
+                content.setEnabled(true);
 
                 break;
             }

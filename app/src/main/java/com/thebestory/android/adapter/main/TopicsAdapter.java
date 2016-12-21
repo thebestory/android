@@ -37,15 +37,10 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.TopicViewH
     }
 
     @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-    }
-
-    @Override
     public TopicViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         return new TopicViewHolder(inflater.inflate(
-                R.layout.fragment_template_topic, parent, false));
+                R.layout.card_topic, parent, false));
     }
 
     @Override
@@ -59,35 +54,34 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.TopicViewH
     }
 
     static class TopicViewHolder extends RecyclerView.ViewHolder {
+        View view;
         CardView cv;
+
         TextView title;
         TextView description;
-        SimpleDraweeView imageTopic;
-        View addView;
+        SimpleDraweeView icon;
 
         TopicViewHolder(View itemView) {
             super(itemView);
+            view = itemView;
             cv = (CardView) itemView.findViewById(R.id.card_topic);
-            title = (TextView) itemView.findViewById(R.id.text_title);
-            description = (TextView) itemView.findViewById(R.id.text_description);
-            imageTopic = (SimpleDraweeView) itemView.findViewById(R.id.card_topic_icon);
-            addView = itemView;
+
+            title = (TextView) itemView.findViewById(R.id.card_topic_title);
+            description = (TextView) itemView.findViewById(R.id.card_topic_description);
+            icon = (SimpleDraweeView) itemView.findViewById(R.id.card_topic_icon);
         }
 
-        void setOnClickListener(final OnClickListener listener, final Topic topic) {
-            addView.setOnClickListener(new View.OnClickListener() {
+        void onBind(final Topic topic, final OnClickListener listener) {
+            title.setText(topic.title);
+            description.setText(topic.description);
+            icon.setImageURI(topic.icon);
+
+            view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     listener.onClick(view, topic);
                 }
             });
-        }
-
-        void onBind(Topic topic, OnClickListener listener) {
-            title.setText(topic.title);
-            description.setText(topic.description);
-            imageTopic.setImageURI(topic.icon);
-            setOnClickListener(listener, topic);
         }
     }
 

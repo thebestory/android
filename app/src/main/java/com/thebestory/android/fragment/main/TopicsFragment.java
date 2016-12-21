@@ -33,7 +33,7 @@ import com.thebestory.android.adapter.main.TopicsAdapter;
 import com.thebestory.android.api.ApiMethods;
 import com.thebestory.android.api.LoaderResult;
 import com.thebestory.android.api.LoaderStatus;
-import com.thebestory.android.fragment.main.stories.NewStoryFragment;
+import com.thebestory.android.fragment.main.stories.SubmitStoryFragment;
 import com.thebestory.android.model.Topic;
 
 import java.util.ArrayList;
@@ -47,9 +47,9 @@ import java.util.List;
  */
 public class TopicsFragment extends Fragment implements LoaderManager.
         LoaderCallbacks<LoaderResult<List<Topic>>>, SwipeRefreshLayout.OnRefreshListener {
-
     private View view;
     private MainActivity activity;
+
     public final TopicsFragment thisFragment = this;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -62,7 +62,6 @@ public class TopicsFragment extends Fragment implements LoaderManager.
     private RecyclerView rv;
 
     private boolean visitOnCreateLoader;
-
 
     private TextView errorTextView;
     private ProgressBar progressView;
@@ -93,10 +92,32 @@ public class TopicsFragment extends Fragment implements LoaderManager.
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.fragment_main_topics, container, false);
         activity = (MainActivity) getActivity();
+
+        toolbar = (Toolbar) view.findViewById(R.id.main_topics_toolbar);
+
+        toolbar.setTitle(R.string.navdrawer_main_topics);
+        activity.setSupportActionBar(toolbar);
+
+        progressView = (ProgressBar) view.findViewById(R.id.progress);
+        errorTextView = (TextView) view.findViewById(R.id.error_text);
+
         adapter = new TopicsAdapter(activity, loadedTopic, new TopicsAdapter.OnClickListener() {
             public void onClick(View v, Topic topic) {
                 FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
+                transaction.setCustomAnimations(
+                        R.anim.enter_from_right,
+                        R.anim.exit_to_left,
+                        R.anim.enter_from_left,
+                        R.anim.exit_to_right
+                );
+
                 ((TheBestoryApplication) activity.getApplication()).slug = topic.slug;
                 // Replace whatever is in the fragment_container view with this fragment,
                 // and add the transaction to the back stack so the user can navigate back
@@ -106,21 +127,6 @@ public class TopicsFragment extends Fragment implements LoaderManager.
                 transaction.commit();
             }
         });
-
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_main_topics, container, false);
-
-        toolbar = (Toolbar) view.findViewById(R.id.main_topics_toolbar);
-
-        progressView = (ProgressBar) view.findViewById(R.id.progress);
-        errorTextView = (TextView) view.findViewById(R.id.error_text);
-
-        toolbar.setTitle(R.string.navdrawer_main_topics);
-        activity.setSupportActionBar(toolbar);
 
         rv = (RecyclerView) view.findViewById(R.id.rv_topics);
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -252,7 +258,7 @@ public class TopicsFragment extends Fragment implements LoaderManager.
 
         switch (item.getItemId()) {
             case R.id.main_stories_toolbar_action_new:
-                transaction.replace(R.id.main_frame_layout, NewStoryFragment.newInstance());
+                transaction.replace(R.id.main_frame_layout, SubmitStoryFragment.newInstance());
                 break;
         }
 

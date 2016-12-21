@@ -21,9 +21,7 @@ import com.thebestory.android.R;
 import com.thebestory.android.TheBestoryApplication;
 import com.thebestory.android.activity.MainActivity;
 import com.thebestory.android.adapter.main.StoriesFragmentPagerAdapter;
-import com.thebestory.android.fragment.main.stories.NewStoryFragment;
-
-import java.util.Objects;
+import com.thebestory.android.fragment.main.stories.SubmitStoryFragment;
 
 /**
  * Fragment for Stories screen.
@@ -91,7 +89,7 @@ public class StoriesFragment extends Fragment {
 
         switch (item.getItemId()) {
             case R.id.main_stories_toolbar_action_new:
-                transaction.replace(R.id.main_frame_layout, NewStoryFragment.newInstance());
+                transaction.replace(R.id.main_frame_layout, SubmitStoryFragment.newInstance());
                 break;
 //            case R.id.main_stories_toolbar_action_search:
 //                // TODO: Stories search

@@ -17,9 +17,10 @@
     <string name="navdrawer_main_send_feedback">Send feedback</string>
     <string name="navdrawer_main_debug">Debug</string>
 
-    <!-- Main Activity - New Story Fragment -->
+    <!-- Main Activity - Submit Story Fragment -->
 
-    <string name="main_stories_new_toolbar_title">New story</string>
+    <string name="main_stories_new_toolbar_title">Submit story</string>
+    <string name="write_your_story_here">Write your story here!</string>
     <string name="main_stories_new_toolbar_action_cancel">Cancel</string>
     <string name="main_stories_new_toolbar_action_send">Send story</string>
 
@@ -42,6 +43,8 @@
     <string name="no_internet">Unable to load data.
         Please check your Internet connection and refresh the page.</string>
     <string name="error">Unexpected error. Close and open app again.</string>
+    <string name="error_while_data_loading">Error while data loading</string>
+    <string name="try_again">Try again</string>
 
     <!-- Main Activity - Settings Fragment -->
 
@@ -62,10 +65,5 @@
     <string name="main_settings_devtools_reset_cache_summary">Clear stories cache</string>
 
     <string name="main_settings_devtools_debug_title">Debug page</string>
-    <string name="error_while_data_loading">Error while data loading</string>
-    <string name="try_again">Try again</string>
-    <string name="are_you_sure">Are you sure?</string>
-    <string name="yes">Yes</string>
-    <string name="cancel">Cancel</string>
 
 </resources>

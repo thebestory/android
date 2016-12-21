@@ -93,12 +93,12 @@ public class HotTabFragment extends Fragment implements LoaderManager.
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_main_stories_hot_tab, container, false);
+        view = inflater.inflate(R.layout.fragment_main_stories_tab, container, false);
 
         progressView = (ProgressBar) view.findViewById(R.id.progress);
         errorTextView = (TextView) view.findViewById(R.id.error_text);
 
-        rv = (RecyclerView) view.findViewById(R.id.rv_stories_hot_tab);
+        rv = (RecyclerView) view.findViewById(R.id.rv_stories_tab);
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
         rv.setAdapter(adapter);
 
