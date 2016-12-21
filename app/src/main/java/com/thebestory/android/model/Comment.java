@@ -1,3 +1,7 @@
+/*
+ * The Bestory Project
+ */
+
 package com.thebestory.android.model;
 
 import android.util.JsonReader;

@@ -20,7 +20,6 @@ import com.thebestory.android.model.Story;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static com.thebestory.android.util.TimeConverter.relative;

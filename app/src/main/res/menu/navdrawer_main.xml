@@ -1,7 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group
-        android:id="@+id/navdrawer_main_group_primary">
+    <group android:id="@+id/navdrawer_main_group_primary">
         <item
             android:id="@+id/navdrawer_main_stories"
             android:icon="@drawable/ic_navdrawer_main_stories"
@@ -15,7 +14,7 @@
             android:id="@+id/navdrawer_main_settings"
             android:icon="@drawable/ic_navdrawer_main_settings"
             android:title="@string/navdrawer_main_settings"
-            android:visible="false"/>
+            android:visible="false" />
         <item
             android:id="@+id/navdrawer_main_about"
             android:icon="@drawable/ic_navdrawer_main_about"
@@ -24,7 +23,7 @@
             android:id="@+id/navdrawer_main_send_feedback"
             android:icon="@drawable/ic_navdrawer_main_send_feedback"
             android:title="@string/navdrawer_main_send_feedback"
-            android:visible="false"/>
+            android:visible="false" />
     </group>
 
     <group

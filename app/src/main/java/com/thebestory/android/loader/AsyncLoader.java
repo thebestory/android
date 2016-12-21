@@ -12,7 +12,6 @@ import com.thebestory.android.api.parseUrlRequest.ParseUrl;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.net.HttpURLConnection;
 
 /**
