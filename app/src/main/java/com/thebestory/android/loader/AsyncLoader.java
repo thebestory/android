@@ -12,6 +12,7 @@ import com.thebestory.android.api.parseUrlRequest.ParseUrl;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.net.HttpURLConnection;
 
 /**
@@ -115,9 +116,9 @@ public class AsyncLoader {
 //                                + ", " + connection.getResponseMessage());
 //                    }
 
-//                    if (length <= 0) {
-//                        throw new FileNotFoundException("Invalid content length: " + length);
-//                    }
+                    if (length < 0) {
+                        throw new FileNotFoundException("Invalid content length: " + length);
+                    }
 
                     is = new BufferedInputStream(connection.getInputStream(), bufferLength);
                     os = new ByteArrayOutputStream();

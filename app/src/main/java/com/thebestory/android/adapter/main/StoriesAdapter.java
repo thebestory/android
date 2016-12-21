@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -72,26 +73,30 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
 
         SimpleDraweeView topicIcon;
         TextView topicTitle;
+        TextView id;
         TextView content;
         TextView timestamp;
+        LinearLayout likesView;
         TextView likesCount;
-        TextView id;
-        ImageView likesView;
+        ImageView likesIcon;
+        LinearLayout commentsView;
         TextView commentsCount;
-        ImageView commentsView;
+        ImageView commentsIcon;
 
         StoryViewHolder(View itemView) {
             super(itemView);
 
-            id = (TextView) itemView.findViewById(R.id.card_story_id);
             topicIcon = (SimpleDraweeView) itemView.findViewById(R.id.card_story_topic_icon);
             topicTitle = (TextView) itemView.findViewById(R.id.card_story_topic_title);
+            id = (TextView) itemView.findViewById(R.id.card_story_id);
             content = (TextView) itemView.findViewById(R.id.card_story_content);
             timestamp = (TextView) itemView.findViewById(R.id.card_story_timestamp);
+            likesView = (LinearLayout) itemView.findViewById(R.id.card_story_likes_view);
             likesCount = (TextView) itemView.findViewById(R.id.card_story_likes_count);
-            likesView = (ImageView) itemView.findViewById(R.id.card_story_likes_view);
+            likesIcon = (ImageView) itemView.findViewById(R.id.card_story_likes_icon);
+            commentsView = (LinearLayout) itemView.findViewById(R.id.card_story_comments_view);
             commentsCount = (TextView) itemView.findViewById(R.id.card_story_comments_count);
-            commentsView = (ImageView) itemView.findViewById(R.id.card_story_comments_view);
+            commentsIcon = (ImageView) itemView.findViewById(R.id.card_story_comments_icon);
 
             likesView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -100,36 +105,32 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
                         ApiMethods.getInstance().postStoryUnlike(story.id, new AsyncLoader.OnAsyncLoaderListener() {
                             @Override
                             public void onComplete(ByteArrayOutputStream result) {
-                                likesView.setImageResource(R.drawable.ic_not_liked);
+                                likesIcon.setImageResource(R.drawable.ic_not_liked);
                                 likesCount.setText("" + story.unlike());
                             }
 
                             @Override
                             public void onProgressChange(int percent) {
-                                return;
                             }
 
                             @Override
                             public void onError() {
-                                return;
                             }
                         });
                     } else {
                         ApiMethods.getInstance().postStoryLike(story.id, new AsyncLoader.OnAsyncLoaderListener() {
                             @Override
                             public void onComplete(ByteArrayOutputStream result) {
-                                likesView.setImageResource(R.drawable.ic_liked);
+                                likesIcon.setImageResource(R.drawable.ic_liked);
                                 likesCount.setText("" + story.like());
                             }
 
                             @Override
                             public void onProgressChange(int percent) {
-                                return;
                             }
 
                             @Override
                             public void onError() {
-                                return;
                             }
                         });
                     }
@@ -140,18 +141,18 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
         void onBind(Story story) {
             this.story = story;
 
-            id.setText(story.id);
+            topicIcon.setImageURI(story.topic.icon);
             topicTitle.setText(story.topic.title);
+            id.setText("#" + story.id);
             content.setText(story.content);
             timestamp.setText(relative(story.publishDate));
             likesCount.setText(Integer.toString(story.likesCount));
             commentsCount.setText(Integer.toString(story.commentsCount));
-            topicIcon.setImageURI(story.topic.icon);
 
             if (story.isLiked()) {
-                likesView.setImageResource(R.drawable.ic_liked);
+                likesIcon.setImageResource(R.drawable.ic_liked);
             } else {
-                likesView.setImageResource(R.drawable.ic_not_liked);
+                likesIcon.setImageResource(R.drawable.ic_not_liked);
             }
         }
     }
