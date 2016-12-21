@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.thebestory.android.util.TimeConverter.relativeTime;
+import static com.thebestory.android.util.TimeConverter.relative;
 
 
 public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryViewHolder> {
@@ -144,7 +144,7 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
             id.setText(story.id);
             topicTitle.setText(story.topic.title);
             content.setText(story.content);
-            timestamp.setText(relativeTime(story, new Date()));
+            timestamp.setText(relative(story.publishDate));
             likesCount.setText(Integer.toString(story.likesCount));
             commentsCount.setText(Integer.toString(story.commentsCount));
             topicIcon.setImageURI(story.topic.icon);

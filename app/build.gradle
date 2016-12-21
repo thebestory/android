@@ -30,6 +30,7 @@ dependencies {
 
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.google.code.findbugs'
     })
 
     compile 'com.android.support:appcompat-v7:25.0.1'
@@ -42,10 +43,6 @@ dependencies {
     compile 'com.android.support:support-v4:25.0.1'
 //    compile 'com.android.support:support-v13:25.0.1'
     compile 'com.facebook.fresco:fresco:0.14.0'
-
-    // Is below need?
-    compile 'com.facebook.stetho:stetho:1.4.1'
-    compile 'com.facebook.stetho:stetho-urlconnection:1.4.1'
 
     testCompile 'junit:junit:4.12'
 }

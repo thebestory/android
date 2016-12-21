@@ -7,9 +7,7 @@ package com.thebestory.android.util;
 import android.content.Context;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 
 /**
  * Class provides a methods for file system management.
