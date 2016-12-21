@@ -38,7 +38,7 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
     public StoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         return new StoryViewHolder(inflater.inflate(
-                R.layout.fragment_template_story, parent, false));
+                R.layout.card_story, parent, false));
     }
 
     public void addLastStories(int sizeStories) {

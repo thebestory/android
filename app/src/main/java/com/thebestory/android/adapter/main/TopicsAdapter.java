@@ -45,7 +45,7 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.TopicViewH
     public TopicViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         return new TopicViewHolder(inflater.inflate(
-                R.layout.fragment_template_topic, parent, false));
+                R.layout.card_topic, parent, false));
     }
 
     @Override
