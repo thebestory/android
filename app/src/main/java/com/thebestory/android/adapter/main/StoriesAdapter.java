@@ -62,8 +62,7 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
     }
 
     public void clear() {
-        final int size = stories.size();
-        notifyItemRangeRemoved(0, size);
+        notifyItemRangeRemoved(0, stories.size());
         stories.clear();
     }
 

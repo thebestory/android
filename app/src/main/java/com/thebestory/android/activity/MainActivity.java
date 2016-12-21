@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
     }
 
-    // TODO: next two methods close keyboard from NewStoryFragment
+    // TODO: next two methods close keyboard from SubmitStoryFragment
     // XXX: It's a crutch, we need to change it
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
