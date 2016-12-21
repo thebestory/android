@@ -230,6 +230,10 @@ public class TopTabFragment extends Fragment implements LoaderManager.
                     } else {
                         displayNonEmptyData();
                     }
+                } else {
+                    if (loadedTopStories.size() == 0) {
+                        displayEmptyData();
+                    }
                 }
                 break;
             }

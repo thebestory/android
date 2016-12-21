@@ -233,16 +233,16 @@ public class HotTabFragment extends Fragment implements LoaderManager.
                     } else {
                         displayNonEmptyData();
                     }
+                } else {
+                    if (loadedHotStories.size() == 0) {
+                        displayEmptyData();
+                    }
                 }
                 break;
             }
+            case WARNING:
             case ERROR: {
                 displayError(result.status);
-                break;
-            }
-            case WARNING: {
-                flagForLoader = false;
-                //TODO: Try to write this)))
                 break;
             }
         }

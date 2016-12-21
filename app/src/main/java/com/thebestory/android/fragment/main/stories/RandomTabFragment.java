@@ -233,6 +233,10 @@ public class RandomTabFragment extends Fragment implements LoaderManager.
                     } else {
                         displayNonEmptyData();
                     }
+                } else {
+                    if (loadedRandomStories.size() == 0) {
+                        displayEmptyData();
+                    }
                 }
                 break;
             }

@@ -66,4 +66,16 @@
 
     <string name="main_settings_devtools_debug_title">Debug page</string>
 
+    <string name="main_about">Welcome to The Bestory! \nIt is the place where you can share your secret with others and don’t afraid to be judge. Place where people know each other and don’t know at the same moment. Place that you can call the book written by hundreds authors. Here you can relax, dream about future, reflect on life or make others do so with your personal story. The world around us is constantly changing and so are we. But one thing is for sure here you will find story that you will love.</string>
+
+    <string name="main_about_authors_list">
+        Developers:\n- Oktai Tatanov\n- Nariman Safiulin\n- Alex Anisimov\n
+        \nModerators:\n- Alexander Afonin\n- Ivan Kudryavtsev\n
+        \nArts:\n- Valeria Sigonina
+    </string>
+
+    <string name="main_about_credits">
+        Credits:\n- Topic icons provided free by EmojiOne
+    </string>
+
 </resources>

@@ -239,6 +239,10 @@ public class LatestTabFragment extends Fragment implements LoaderManager.
                     } else {
                         displayNonEmptyData();
                     }
+                } else {
+                    if (loadedLatestStories.size() == 0) {
+                        displayEmptyData();
+                    }
                 }
                 break;
             }
