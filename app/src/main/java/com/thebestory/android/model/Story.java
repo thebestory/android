@@ -7,6 +7,8 @@ package com.thebestory.android.model;
 import android.util.JsonReader;
 
 import org.joda.time.DateTime;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -117,7 +119,12 @@ public final class Story {
                     commentsCount = jr.nextInt();
                     break;
                 case "submitted_date":
-                    submitDate = new DateTime(jr.nextString()).toDate();
+                    try {
+                        submitDate = new DateTime(jr.nextString()).toDate();
+                    } catch (IllegalStateException e) {
+                        submitDate = null;
+                        jr.skipValue();
+                    }
                     break;
                 case "published_date":
                     try {
@@ -129,6 +136,7 @@ public final class Story {
 
                     break;
                 case "is_liked":
+
                     isLiked = jr.nextBoolean();
                     break;
                 default:
@@ -150,4 +158,65 @@ public final class Story {
                 isLiked
         );
     }
+
+
+    public static Story parseJSONObject(JSONObject jsonObject) {
+        if (jsonObject == null) {
+            return null;
+        }
+
+        String id = null;
+        Topic topic = null;
+        int likesCount = 0;
+        int commentsCount = 0;
+        String content = null;
+        Date publishDate = null;
+        Date submitDate = null;
+        boolean isLiked = false;
+
+        id = jsonObject.optString("id");
+        topic = Topic.parseJSONObject(jsonObject.optJSONObject("topic"));
+        content = jsonObject.optString("content");
+        likesCount = jsonObject.optInt("likes_count");
+        commentsCount = jsonObject.optInt("comments_count");
+        String temp = jsonObject.optString("submitted_date");
+        if (temp != null) {
+            submitDate = new DateTime(temp).toDate();
+        }
+        temp = jsonObject.optString("published_date");
+        if (temp != null) {
+            publishDate = new DateTime(jsonObject.optString("published_date")).toDate();
+        }
+        isLiked = jsonObject.optBoolean("is_liked");
+
+        return new Story(
+                id,
+                topic,
+                content,
+                likesCount,
+                commentsCount,
+                submitDate,
+                publishDate,
+                isLiked
+        );
+    }
+
+    public JSONObject toJSONObject () {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("id", id == null ? JSONObject.NULL : id);
+            jsonObject.put("topic", topic == null ? JSONObject.NULL : topic.toJSONObject());
+            jsonObject.put("content", content == null ? JSONObject.NULL : content);
+            jsonObject.put("likes_count", likesCount);
+            jsonObject.put("comments_count", commentsCount);
+            jsonObject.put("submitted_date", submitDate == null ? JSONObject.NULL : submitDate);
+            jsonObject.put("published_date", publishDate == null ? JSONObject.NULL : publishDate);
+            jsonObject.put("is_liked", isLiked);
+            return jsonObject;
+        } catch (JSONException error) {
+            return new JSONObject();
+        }
+    }
+
+
 }

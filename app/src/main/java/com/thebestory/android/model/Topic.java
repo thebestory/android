@@ -7,7 +7,12 @@ package com.thebestory.android.model;
 import android.util.JsonReader;
 import android.util.Log;
 
+import org.joda.time.DateTime;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.util.Date;
 
 public final class Topic {
     /**
@@ -82,5 +87,45 @@ public final class Topic {
                 icon,
                 storiesCount
         );
+    }
+
+    public static Topic parseJSONObject(JSONObject jsonObject) {
+        if (jsonObject == null) {
+            return null;
+        }
+        String title = null;
+        String slug = null;
+        String description = null;
+        String icon = null;
+        int storiesCount = 0;
+
+        title = jsonObject.optString("title");
+        slug = jsonObject.optString("slug");
+        description = jsonObject.optString("description");
+        icon = jsonObject.optString("icon");
+        storiesCount = jsonObject.optInt("stories_count");
+
+        return new Topic(
+                title,
+                slug,
+                description,
+                icon,
+                storiesCount
+        );
+    }
+
+    public JSONObject toJSONObject () {
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("title", title == null ? JSONObject.NULL : title);
+            jsonObject.put("slug", slug == null ? JSONObject.NULL : slug);
+            jsonObject.put("description", description == null ? JSONObject.NULL : description);
+            jsonObject.put("icon", icon == null ? JSONObject.NULL : icon);
+            jsonObject.put("stories_count", storiesCount);
+            return jsonObject;
+        } catch (JSONException error) {
+            return new JSONObject();
+        }
     }
 }
