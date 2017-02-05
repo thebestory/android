@@ -77,5 +77,6 @@
     <string name="main_about_credits">
         Credits:\n- Topic icons provided free by EmojiOne
     </string>
+    <string name="navdrawer_main_bookmarks">Bookmarks</string>
 
 </resources>

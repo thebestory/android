@@ -1,14 +1,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
-    android:gravity="center"
+    android:gravity="bottom"
     android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin">
 
-    <ImageView
+    <!--<ImageView
         android:layout_marginTop="16dp"
         android:id="@+id/navdrawer_logo"
         android:layout_width="128dp"
@@ -21,36 +21,57 @@
         android:layout_height="wrap_content"
         android:text="The Bestory"
         android:textSize="24sp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title" />-->
+
+    <!--<ImageView
+        android:id="@+id/navdrawer_account_avatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/nav_header_vertical_spacing"
+        android:visibility="gone"
+        app:srcCompat="@android:drawable/sym_def_app_icon" />
+
+    <TextView
+        android:id="@+id/navdrawer_account_username"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="@dimen/nav_header_vertical_spacing"
+        android:text="The Bestory"
         android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
-    <!--<ImageView-->
-        <!--android:id="@+id/navdrawer_account_avatar"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:paddingTop="@dimen/nav_header_vertical_spacing"-->
-        <!--android:visibility="gone"-->
-        <!--app:srcCompat="@android:drawable/sym_def_app_icon" />-->
+    <Button
+        android:id="@+id/navdrawer_action_auth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="myClick"
+        android:text="@string/navdrawer_main_action_auth"
+        android:visibility="gone" />
 
-    <!--<TextView-->
-        <!--android:id="@+id/navdrawer_account_username"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:paddingTop="@dimen/nav_header_vertical_spacing"-->
-        <!--android:text="The Bestory"-->
-        <!--android:textAppearance="@style/TextAppearance.AppCompat.Title" />-->
+    <TextView
+    android:id="@+id/textView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="\@anonymous" />-->
 
-    <!--<Button-->
-        <!--android:id="@+id/navdrawer_action_auth"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:onClick="myClick"-->
-        <!--android:text="@string/navdrawer_main_action_auth"-->
-        <!--android:visibility="gone" />-->
 
-    <!--<TextView-->
-    <!--android:id="@+id/textView"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="\@anonymous" />-->
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/nav_header_vertical_spacing"
+        android:src="@android:drawable/sym_def_app_icon"
+        android:id="@+id/imageView"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/nav_header_vertical_spacing"
+        android:text="Android Studio"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="android.studio@android.com"
+        android:id="@+id/textView"/>
 
 </LinearLayout>

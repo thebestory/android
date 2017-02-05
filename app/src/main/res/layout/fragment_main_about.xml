@@ -40,7 +40,7 @@
                     android:layout_height="100dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginBottom="@dimen/card_content_margin"
-                    android:src="@mipmap/ic_launcher" />
+                    android:src="@mipmap/ic_logo_tbs" />
 
                 <TextView
                     android:layout_width="match_parent"
