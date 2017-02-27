@@ -31,6 +31,9 @@ import com.thebestory.android.api.LoaderResult;
 import com.thebestory.android.api.LoaderStatus;
 import com.thebestory.android.api.urlCollection.TypeOfCollection;
 import com.thebestory.android.model.Story;
+import com.thebestory.android.util.BankStoriesLocation;
+import com.thebestory.android.util.StoriesArray;
+import com.thebestory.android.util.StoriesType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +59,7 @@ public class HotTabFragment extends Fragment implements LoaderManager.
     private boolean visitOnCreateLoader;
     private boolean flagForLoader;
 
-    private ArrayList<Story> loadedHotStories;
+    private StoriesArray loadedHotStories;
 
     @Nullable
     private StoriesAdapter adapter;
@@ -80,8 +83,7 @@ public class HotTabFragment extends Fragment implements LoaderManager.
     public void onAttach(Context context) {
         super.onAttach(context);
         String currentSlug =  ((TheBestoryApplication) getActivity().getApplication()).slug;
-        loadedHotStories = ((TheBestoryApplication) getActivity().getApplication()).
-                loadedStories.get(currentSlug).get("hot");
+        loadedHotStories = BankStoriesLocation.getInstance().getStoriesArray(StoriesType.HOT, currentSlug);
     }
 
     @Override
@@ -169,10 +171,10 @@ public class HotTabFragment extends Fragment implements LoaderManager.
         if (args != null && args.containsKey("request")) {
             switch (args.getString("request")) {
                 case "before": {
-                    String currentId = loadedHotStories.get(0).id;
+                    String currentId = loadedHotStories.getStoryAt(0).id;
                     temp = ApiMethods.getInstance().getHotStories(getActivity(),
                             ((TheBestoryApplication) getActivity().getApplication()).slug,
-                            TypeOfCollection.BEFORE, currentId, 10);
+                            TypeOfCollection.BEFORE, currentId, 25);
                     break;
                 }
                 case "none": {
@@ -182,7 +184,7 @@ public class HotTabFragment extends Fragment implements LoaderManager.
                     break;
                 }
                 case "after": {
-                    String currentId = loadedHotStories.get(loadedHotStories.size() - 1).id;
+                    String currentId = loadedHotStories.getStoryAt(loadedHotStories.size() - 1).id;
                     temp = ApiMethods.getInstance().getHotStories(getActivity(),
                             ((TheBestoryApplication) getActivity().getApplication()).slug,
                             TypeOfCollection.AFTER, currentId, 10);
@@ -206,26 +208,24 @@ public class HotTabFragment extends Fragment implements LoaderManager.
                         TypeOfCollection typeOfCollection = ((ApiAsyncTask) loader).getRequestType();
                         switch (typeOfCollection) {
                             case BEFORE: {
-//                                if (result.data.size() < 10) {
-//                                    for (int i = 0; i < result.data.size(); i++) {
-//                                        loadedHotStories.add(0, result.data.get(i));
-//                                    }
-//                                } else {
+                                if (result.data.size() < 15) {
+                                    loadedHotStories.addAllStoryAtHead(result.data);
+                                } else {
                                     if (adapter != null) {
                                         adapter.clear();
                                     }
-                                    loadedHotStories.addAll(result.data);
-//                                }
+                                    loadedHotStories.addAllStoryAtTail(result.data);
+                                }
                                 displayNonEmptyData(result.data.size(), typeOfCollection);
                                 break;
                             }
                             case NONE: {
-                                loadedHotStories.addAll(result.data);
+                                loadedHotStories.addAllStoryAtTail(result.data);
                                 displayNonEmptyData(result.data.size(), typeOfCollection);
                                 break;
                             }
                             case AFTER: {
-                                loadedHotStories.addAll(result.data);
+                                loadedHotStories.addAllStoryAtTail(result.data);
                                 displayNonEmptyData(result.data.size(), typeOfCollection);
                                 break;
                             }

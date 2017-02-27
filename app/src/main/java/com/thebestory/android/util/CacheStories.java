@@ -5,6 +5,8 @@
 
 package com.thebestory.android.util;
 
+import android.content.Context;
+
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.thebestory.android.model.Story;
@@ -13,8 +15,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 public class CacheStories {
 
+    private static final String CACHE_STORIES_FILE_NAME  = "Stories";
     private CacheStories() {
         stories = CacheBuilder.newBuilder().maximumSize(1000).build();
     }
@@ -23,6 +30,24 @@ public class CacheStories {
 
     public static CacheStories getInstance() {
         return ourInstance;
+    }
+
+    public void loadCache(Context context) {
+        try (InputStream fileRead = context.openFileInput(CACHE_STORIES_FILE_NAME)) {
+            byte[] buffer = new byte[fileRead.available()];
+            fileRead.read(buffer);
+            JSONObject jObect = new JSONObject(new String (buffer, "UTF-8"));
+            setStoriesFromJSONObject(jObect);
+        } catch (IOException | JSONException ignored) {
+        }
+    }
+
+    public void saveCache(Context context) {
+            try (OutputStream fileWrite = context.openFileOutput(CACHE_STORIES_FILE_NAME, Context.MODE_PRIVATE)) {
+                fileWrite.write(getJSONObject().toString().getBytes());
+            } catch (IOException ignored) {
+            }
+
     }
 
     private Cache<String, Story> stories;
@@ -44,7 +69,7 @@ public class CacheStories {
             jsonStoriesArray.put(i.toJSONObject());
         }
         try {
-            jsonObject.put("stories", jsonStoriesArray);
+            jsonObject.putOpt("stories", jsonStoriesArray);
         } catch (JSONException error) {
             jsonObject = new JSONObject();
         }
@@ -52,17 +77,18 @@ public class CacheStories {
         return jsonObject;
     }
 
-    public boolean setStoriesFromJSONObject(JSONObject jsonObject) {
+    public void setStoriesFromJSONObject(JSONObject jsonObject) {
         try {
             JSONArray storiesArray = jsonObject.getJSONArray("stories");
             int len = storiesArray.length();
             for (int i = 0; i < len; ++i) {
+                if (storiesArray.isNull(i)) {
+                    continue;
+                }
                 updateStory(Story.parseJSONObject(storiesArray.optJSONObject(i)));
             }
-            return true;
         } catch (JSONException error) {
             stories.invalidateAll();
-            return false;
         }
     }
 }

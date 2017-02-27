@@ -1,9 +1,25 @@
 package com.thebestory.android.util;
 
+import android.app.Application;
+import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.provider.Settings;
+import android.util.Log;
+import android.util.Xml;
+
+import com.thebestory.android.activity.MainActivity;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,6 +28,7 @@ import java.util.Map;
  */
 
 public class BankStoriesLocation{
+    private static final String BANK_STORIES_FILE_NAME = "Bank_of_stories";
 
     private class UnionStoryInfo {
         private final String slug;
@@ -48,6 +65,24 @@ public class BankStoriesLocation{
     }
     private BankStoriesLocation() {
         bank = new HashMap<UnionStoryInfo, StoriesArray>();
+    }
+
+    public void loadBank(Context context) {
+        try (InputStream fileRead = context.openFileInput(BANK_STORIES_FILE_NAME)) {
+            byte[] buffer = new byte[fileRead.available()];
+            fileRead.read(buffer);
+            JSONObject jObect = new JSONObject(new String (buffer, "UTF-8"));
+            deserialize(jObect);
+        } catch (IOException | JSONException ignored) {
+        }
+    }
+
+    public void saveBank(Context context) {
+        try (OutputStream fileWrite = context.openFileOutput(BANK_STORIES_FILE_NAME, Context.MODE_PRIVATE)) {
+            fileWrite.write(serialize().toString().getBytes());
+        } catch (IOException ignored) {
+        }
+
     }
 
     private static BankStoriesLocation ourInstance = new BankStoriesLocation();
@@ -99,6 +134,7 @@ public class BankStoriesLocation{
     }
 
     public void deserialize(JSONObject jsonObject) {
+
         try {
             JSONArray temp = jsonObject.getJSONArray("bank");
             if (temp == null) {

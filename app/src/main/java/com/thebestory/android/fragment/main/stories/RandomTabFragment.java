@@ -31,6 +31,9 @@ import com.thebestory.android.api.LoaderResult;
 import com.thebestory.android.api.LoaderStatus;
 import com.thebestory.android.api.urlCollection.TypeOfCollection;
 import com.thebestory.android.model.Story;
+import com.thebestory.android.util.BankStoriesLocation;
+import com.thebestory.android.util.StoriesArray;
+import com.thebestory.android.util.StoriesType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +59,7 @@ public class RandomTabFragment extends Fragment implements LoaderManager.
     private boolean visitOnCreateLoader;
     private boolean flagForLoader;
 
-    private ArrayList<Story> loadedRandomStories;
+    private StoriesArray loadedRandomStories;
 
     @Nullable
     private StoriesAdapter adapter;
@@ -79,8 +82,7 @@ public class RandomTabFragment extends Fragment implements LoaderManager.
     public void onAttach(Context context) {
         super.onAttach(context);
         String currentSlug = ((TheBestoryApplication) getActivity().getApplication()).slug;
-        loadedRandomStories = ((TheBestoryApplication) getActivity().getApplication()).
-                loadedStories.get(currentSlug).get("random");
+        loadedRandomStories = BankStoriesLocation.getInstance().getStoriesArray(StoriesType.RANDOM, currentSlug);
 
     }
 
@@ -169,10 +171,10 @@ public class RandomTabFragment extends Fragment implements LoaderManager.
         if (args != null && args.containsKey("request")) {
             switch (args.getString("request")) {
                 case "before": {
-                    String currentId = loadedRandomStories.get(0).id;
+                    String currentId = loadedRandomStories.getStoryAt(0).id;
                     temp = ApiMethods.getInstance().getRandomStories(getActivity(),
                             ((TheBestoryApplication) getActivity().getApplication()).slug,
-                            TypeOfCollection.BEFORE, currentId, 10);
+                            TypeOfCollection.BEFORE, currentId, 25);
                     break;
                 }
                 case "none": {
@@ -182,7 +184,7 @@ public class RandomTabFragment extends Fragment implements LoaderManager.
                     break;
                 }
                 case "after": {
-                    String currentId = loadedRandomStories.get(loadedRandomStories.size() - 1).id;
+                    String currentId = loadedRandomStories.getStoryAt(loadedRandomStories.size() - 1).id;
                     temp = ApiMethods.getInstance().getRandomStories(getActivity(),
                             ((TheBestoryApplication) getActivity().getApplication()).slug,
                             TypeOfCollection.AFTER, currentId, 10);
@@ -206,26 +208,24 @@ public class RandomTabFragment extends Fragment implements LoaderManager.
                         TypeOfCollection typeOfCollection = ((ApiAsyncTask) loader).getRequestType();
                         switch (typeOfCollection) {
                             case BEFORE: {
-//                                if (result.data.size() < 10) {
-//                                    for (int i = 0; i < result.data.size(); i++) {
-//                                        loadedRandomStories.add(0, result.data.get(i));
-//                                    }
-//                                } else {
+                                if (result.data.size() < 15) {
+                                    loadedRandomStories.addAllStoryAtHead(result.data);
+                                } else {
                                     if (adapter != null) {
                                         adapter.clear();
                                     }
-                                    loadedRandomStories.addAll(result.data);
-//                                }
+                                    loadedRandomStories.addAllStoryAtTail(result.data);
+                                }
                                 displayNonEmptyData(result.data.size(), typeOfCollection);
                                 break;
                             }
                             case NONE: {
-                                loadedRandomStories.addAll(result.data);
+                                loadedRandomStories.addAllStoryAtTail(result.data);
                                 displayNonEmptyData(result.data.size(), typeOfCollection);
                                 break;
                             }
                             case AFTER: {
-                                loadedRandomStories.addAll(result.data);
+                                loadedRandomStories.addAllStoryAtTail(result.data);
                                 displayNonEmptyData(result.data.size(), typeOfCollection);
                                 break;
                             }

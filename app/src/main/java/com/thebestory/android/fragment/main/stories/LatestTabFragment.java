@@ -31,6 +31,9 @@ import com.thebestory.android.api.LoaderResult;
 import com.thebestory.android.api.LoaderStatus;
 import com.thebestory.android.api.urlCollection.TypeOfCollection;
 import com.thebestory.android.model.Story;
+import com.thebestory.android.util.BankStoriesLocation;
+import com.thebestory.android.util.StoriesArray;
+import com.thebestory.android.util.StoriesType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +57,7 @@ public class LatestTabFragment extends Fragment implements LoaderManager.
     private boolean visitOnCreateLoader;
     private boolean flagForLoader;
 
-    private ArrayList<Story> loadedLatestStories;
+    private StoriesArray loadedLatestStories;
 
     @Nullable
     private StoriesAdapter adapter;
@@ -78,16 +81,13 @@ public class LatestTabFragment extends Fragment implements LoaderManager.
     public void onAttach(Context context) {
         super.onAttach(context);
         String currentSlug = ((TheBestoryApplication) getActivity().getApplication()).slug;
-        loadedLatestStories = ((TheBestoryApplication) getActivity().getApplication()).
-                loadedStories.get(currentSlug).get("latest");
-        Log.w("Attach", "I am here");
+        loadedLatestStories = BankStoriesLocation.getInstance().getStoriesArray(StoriesType.LATEST, currentSlug);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         adapter = new StoriesAdapter(getActivity(), loadedLatestStories);
-        Log.w("onCreate", "I am here");
     }
 
     @Override
@@ -175,10 +175,10 @@ public class LatestTabFragment extends Fragment implements LoaderManager.
         if (args != null && args.containsKey("request")) {
             switch (args.getString("request")) {
                 case "before": {
-                    String currentId =  loadedLatestStories.get(0).id;
+                    String currentId =  loadedLatestStories.getStoryAt(0).id;
                     temp = ApiMethods.getInstance().getLatestStories(getActivity(),
                             ((TheBestoryApplication) getActivity().getApplication()).slug,
-                            TypeOfCollection.BEFORE, currentId, 10);
+                            TypeOfCollection.BEFORE, currentId, 25);
                     break;
                 }
                 case "none": {
@@ -188,7 +188,7 @@ public class LatestTabFragment extends Fragment implements LoaderManager.
                     break;
                 }
                 case "after": {
-                    String currentId = loadedLatestStories.get(loadedLatestStories.size() - 1).id;
+                    String currentId = loadedLatestStories.getStoryAt(loadedLatestStories.size() - 1).id;
                     temp = ApiMethods.getInstance().getLatestStories(getActivity(),
                             ((TheBestoryApplication) getActivity().getApplication()).slug,
                             TypeOfCollection.AFTER, currentId, 10);
@@ -205,33 +205,30 @@ public class LatestTabFragment extends Fragment implements LoaderManager.
         Log.e("TAG", result.status.toString());
         switch (result.status) {
             case OK: {
-                Log.w("onFinished", "OK");
                 flagForLoader = false;
                 if (!result.data.isEmpty()) {
                     if (visitOnCreateLoader) {
                         TypeOfCollection typeOfCollection = ((ApiAsyncTask) loader).getRequestType();
                         switch (typeOfCollection) {
                             case BEFORE: {
-//                                if (result.data.size() < 10) {
-//                                    for (int i = 0; i < result.data.size(); i++) {
-//                                        loadedLatestStories.add(0, result.data.get(i));
-//                                    }
-//                                } else {
+                                if (result.data.size() < 15) {
+                                    loadedLatestStories.addAllStoryAtHead(result.data);
+                                } else {
                                     if (adapter != null) {
                                         adapter.clear();
                                     }
-                                    loadedLatestStories.addAll(result.data);
-//                                }
+                                    loadedLatestStories.addAllStoryAtTail(result.data);
+                                }
                                 displayNonEmptyData(result.data.size(), typeOfCollection);
                                 break;
                             }
                             case NONE: {
-                                loadedLatestStories.addAll(result.data);
+                                loadedLatestStories.addAllStoryAtTail(result.data);
                                 displayNonEmptyData(result.data.size(), typeOfCollection);
                                 break;
                             }
                             case AFTER: {
-                                loadedLatestStories.addAll(result.data);
+                                loadedLatestStories.addAllStoryAtTail(result.data);
                                 displayNonEmptyData(result.data.size(), typeOfCollection);
                                 break;
                             }

@@ -18,6 +18,7 @@ import com.thebestory.android.R;
 import com.thebestory.android.api.ApiMethods;
 import com.thebestory.android.loader.AsyncLoader;
 import com.thebestory.android.model.Story;
+import com.thebestory.android.util.StoriesArray;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -28,9 +29,9 @@ import static com.thebestory.android.util.TimeConverter.relative;
 
 public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryViewHolder> {
     private final Context context;
-    private List<Story> stories;
+    private StoriesArray stories;
 
-    public StoriesAdapter(Context context, ArrayList<Story> storiesList) {
+    public StoriesAdapter(Context context, StoriesArray storiesList) {
         this.context = context;
         this.stories = storiesList;
     }
@@ -53,7 +54,7 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
 
     @Override
     public void onBindViewHolder(StoryViewHolder vh, int position) {
-        vh.onBind(stories.get(position));
+        vh.onBind(stories.getStoryAt(position));
     }
 
     @Override
@@ -105,7 +106,7 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
                             @Override
                             public void onComplete(ByteArrayOutputStream result) {
                                 likesIcon.setImageResource(R.drawable.ic_not_liked);
-                                likesCount.setText("" + story.unlike());
+                                likesCount.setText(Integer.toString(story.unlike()));
                             }
 
                             @Override
@@ -121,7 +122,7 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
                             @Override
                             public void onComplete(ByteArrayOutputStream result) {
                                 likesIcon.setImageResource(R.drawable.ic_liked);
-                                likesCount.setText("" + story.like());
+                                likesCount.setText(Integer.toString(story.like()));
                             }
 
                             @Override
@@ -145,7 +146,7 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
             id.setText("#" + story.id);
             content.setText(story.content);
             timestamp.setText(relative(story.publishDate));
-            likesCount.setText(Integer.toString(story.likesCount));
+            likesCount.setText(Integer.toString(story.getLikesCount()));
             commentsCount.setText(Integer.toString(story.commentsCount));
 
             if (story.isLiked()) {

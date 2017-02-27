@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by Alex on 26.02.2017.
@@ -28,8 +29,28 @@ public class StoriesArray {
         addStoryAt(story, storiesId.size());
     }
 
+    public void addAllStoryAtTail(Iterable<Story> stories) {
+        for (Story i: stories) {
+            addStoryAtTail(i);
+        }
+    }
+
+    public void addAllStoryAtHead(Iterable<Story> stories) {
+        for (Story i: stories) {
+            addStoryAtHead(i);
+        }
+    }
+
     public void addStoryAtHead(Story story) {
         addStoryAt(story, 0);
+    }
+
+    public void clear() {
+        storiesId.clear();
+    }
+
+    public boolean isEmpty() {
+        return storiesId.isEmpty();
     }
 
     public void addStoryAt(Story story, int position) {

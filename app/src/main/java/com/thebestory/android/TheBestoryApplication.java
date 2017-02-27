@@ -9,6 +9,8 @@ import android.app.Application;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.thebestory.android.model.Story;
 import com.thebestory.android.model.Topic;
+import com.thebestory.android.util.BankStoriesLocation;
+import com.thebestory.android.util.CacheStories;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +22,7 @@ import static java.util.Arrays.asList;
  */
 public class TheBestoryApplication extends Application {
     public String slug = "all";
-    public HashMap<String, HashMap<String, ArrayList<Story>>> loadedStories;
+
     public ArrayList<Topic> currentLoadedTopics;
     public ArrayList<String> nameTopics;
     public HashMap<String, String> topics = new HashMap<>();
@@ -29,7 +31,9 @@ public class TheBestoryApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        loadedStories = new HashMap<>();
+        BankStoriesLocation.getInstance().loadBank(getApplicationContext());
+        CacheStories.getInstance().loadCache(getApplicationContext());
+
         currentLoadedTopics = new ArrayList<>();
         nameTopics = new ArrayList<>(asList(
                 "all",
@@ -59,16 +63,8 @@ public class TheBestoryApplication extends Application {
         topics.put("scary", "Scary");
         topics.put("weird", "Weird");
 
-        for (String i : nameTopics) {
-            HashMap<String, ArrayList<Story>> item = new HashMap<>();
-            item.put("latest", new ArrayList<Story>());
-            item.put("hot", new ArrayList<Story>());
-            item.put("top", new ArrayList<Story>());
-            item.put("random", new ArrayList<Story>());
-
-            loadedStories.put(i, item);
-        }
 
         Fresco.initialize(this);
     }
+
 }

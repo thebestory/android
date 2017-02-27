@@ -22,6 +22,8 @@ import android.view.inputmethod.InputMethodManager;
 import com.thebestory.android.R;
 import com.thebestory.android.TheBestoryApplication;
 import com.thebestory.android.fragment.main.*;
+import com.thebestory.android.util.BankStoriesLocation;
+import com.thebestory.android.util.CacheStories;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -75,6 +77,13 @@ public class MainActivity extends AppCompatActivity
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.main_frame_layout, StoriesFragment.newInstance()).commit();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        CacheStories.getInstance().saveCache(getApplicationContext());
+        BankStoriesLocation.getInstance().saveBank(getApplicationContext());
     }
 
     @Override

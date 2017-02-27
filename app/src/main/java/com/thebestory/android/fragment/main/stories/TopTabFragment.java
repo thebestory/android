@@ -31,6 +31,9 @@ import com.thebestory.android.api.LoaderResult;
 import com.thebestory.android.api.LoaderStatus;
 import com.thebestory.android.api.urlCollection.TypeOfCollection;
 import com.thebestory.android.model.Story;
+import com.thebestory.android.util.BankStoriesLocation;
+import com.thebestory.android.util.StoriesArray;
+import com.thebestory.android.util.StoriesType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +58,7 @@ public class TopTabFragment extends Fragment implements LoaderManager.
     private boolean visitOnCreateLoader;
     private boolean flagForLoader;
 
-    private ArrayList<Story> loadedTopStories;
+    private StoriesArray loadedTopStories;
 
     @Nullable
     private StoriesAdapter adapter;
@@ -78,8 +81,7 @@ public class TopTabFragment extends Fragment implements LoaderManager.
     public void onAttach(Context context) {
         super.onAttach(context);
         String currentSlug =  ((TheBestoryApplication) getActivity().getApplication()).slug;
-        loadedTopStories = ((TheBestoryApplication) getActivity().getApplication()).
-                loadedStories.get(currentSlug).get("top");
+        loadedTopStories = BankStoriesLocation.getInstance().getStoriesArray(StoriesType.TOP, currentSlug);
     }
 
     @Override
@@ -166,10 +168,10 @@ public class TopTabFragment extends Fragment implements LoaderManager.
         if (args != null && args.containsKey("request")) {
             switch (args.getString("request")) {
                 case "before": {
-                    String currentId = loadedTopStories.get(0).id;
+                    String currentId = loadedTopStories.getStoryAt(0).id;
                     temp = ApiMethods.getInstance().getTopStories(getActivity(),
                             ((TheBestoryApplication) getActivity().getApplication()).slug,
-                            TypeOfCollection.BEFORE, currentId, 10);
+                            TypeOfCollection.BEFORE, currentId, 25);
                     break;
                 }
                 case "none": {
@@ -179,7 +181,7 @@ public class TopTabFragment extends Fragment implements LoaderManager.
                     break;
                 }
                 case "after": {
-                    String currentId = loadedTopStories.get(loadedTopStories.size() - 1).id;
+                    String currentId = loadedTopStories.getStoryAt(loadedTopStories.size() - 1).id;
                     temp = ApiMethods.getInstance().getTopStories(getActivity(),
                             ((TheBestoryApplication) getActivity().getApplication()).slug,
                             TypeOfCollection.AFTER, currentId, 10);
@@ -203,26 +205,24 @@ public class TopTabFragment extends Fragment implements LoaderManager.
                         TypeOfCollection typeOfCollection = ((ApiAsyncTask) loader).getRequestType();
                         switch (typeOfCollection) {
                             case BEFORE: {
-//                                if (result.data.size() < 10) {
-//                                    for (int i = 0; i < result.data.size(); i++) {
-//                                        loadedTopStories.add(0, result.data.get(i));
-//                                    }
-//                                } else {
+                                if (result.data.size() < 15) {
+                                    loadedTopStories.addAllStoryAtHead(result.data);
+                                } else {
                                     if (adapter != null) {
                                         adapter.clear();
                                     }
-                                    loadedTopStories.addAll(result.data);
-//                                }
+                                    loadedTopStories.addAllStoryAtTail(result.data);
+                                }
                                 displayNonEmptyData(result.data.size(), typeOfCollection);
                                 break;
                             }
                             case NONE: {
-                                loadedTopStories.addAll(result.data);
+                                loadedTopStories.addAllStoryAtTail(result.data);
                                 displayNonEmptyData(result.data.size(), typeOfCollection);
                                 break;
                             }
                             case AFTER: {
-                                loadedTopStories.addAll(result.data);
+                                loadedTopStories.addAllStoryAtTail(result.data);
                                 displayNonEmptyData(result.data.size(), typeOfCollection);
                                 break;
                             }
