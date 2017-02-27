@@ -16,7 +16,7 @@ import org.json.JSONObject;
 public class CacheStories {
 
     private CacheStories() {
-        stories = CacheBuilder.newBuilder().maximumSize(500).build();
+        stories = CacheBuilder.newBuilder().maximumSize(1000).build();
     }
 
     private static CacheStories ourInstance = new CacheStories();
