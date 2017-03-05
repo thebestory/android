@@ -8,6 +8,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import com.facebook.imagepipeline.memory.BasePool;
 import com.thebestory.android.api.parseResponse.ParseComment;
 import com.thebestory.android.api.parseResponse.ParseCommentArray;
 import com.thebestory.android.api.parseResponse.ParseStoriesArray;
@@ -37,9 +38,12 @@ import com.thebestory.android.loader.AsyncLoader.OnAsyncLoaderListener;
 import com.thebestory.android.model.Comment;
 import com.thebestory.android.model.Story;
 import com.thebestory.android.model.Topic;
+import com.thebestory.android.util.StoriesArray;
+import com.thebestory.android.util.StoriesType;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.InvalidPropertiesFormatException;
 import java.util.List;
 
 public class ApiMethods {
@@ -98,6 +102,21 @@ public class ApiMethods {
 
     public ApiAsyncTask<List<Story>> getTopStories(Context context, String slug, TypeOfCollection typeOf, String id, int limit) {
         return getTeamplateStories(context, slug, typeOf, id, limit, new GetTopStories());
+    }
+
+    public ApiAsyncTask<List<Story>> getStories(StoriesType type, Context context, String slug, TypeOfCollection typeOf, String id, int limit) {
+        switch (type) {
+            case LATEST:
+            return getLatestStories(context, slug, typeOf, id, limit);
+            case HOT:
+                return getHotStories(context, slug, typeOf, id, limit);
+            case RANDOM:
+                return getRandomStories(context, slug, typeOf, id, limit);
+            case TOP:
+                return getTopStories(context, slug, typeOf, id, limit);
+            default:
+                throw new BasePool.InvalidValueException("Invalid type");
+        }
     }
 
 
