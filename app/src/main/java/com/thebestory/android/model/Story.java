@@ -12,6 +12,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public final class Story {
@@ -179,13 +180,19 @@ public final class Story {
         content = jsonObject.optString("content");
         likesCount = jsonObject.optInt("likes_count");
         commentsCount = jsonObject.optInt("comments_count");
-        String temp = jsonObject.optString("submitted_date");
-        if (temp != null) {
-            submitDate = new DateTime(temp).toDate();
-        }
-        temp = jsonObject.optString("published_date");
-        if (temp != null) {
-            publishDate = new DateTime(jsonObject.optString("published_date")).toDate();
+        try {
+            String temp = jsonObject.optString("submitted_date");
+            if (temp != null) {
+
+                submitDate = new DateTime(SimpleDateFormat.getInstance().parse(temp)).toDate();
+
+            }
+            temp = jsonObject.optString("published_date");
+            if (temp != null) {
+                publishDate = new DateTime(SimpleDateFormat.getInstance().parse(temp)).toDate();
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
         isLiked = jsonObject.optBoolean("is_liked");
 
@@ -204,14 +211,14 @@ public final class Story {
     public JSONObject toJSONObject () {
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("id", id == null ? JSONObject.NULL : id);
-            jsonObject.put("topic", topic == null ? JSONObject.NULL : topic.toJSONObject());
-            jsonObject.put("content", content == null ? JSONObject.NULL : content);
-            jsonObject.put("likes_count", likesCount);
-            jsonObject.put("comments_count", commentsCount);
-            jsonObject.put("submitted_date", submitDate == null ? JSONObject.NULL : submitDate);
-            jsonObject.put("published_date", publishDate == null ? JSONObject.NULL : publishDate);
-            jsonObject.put("is_liked", isLiked);
+            jsonObject.putOpt("id", id);
+            jsonObject.putOpt("topic", topic.toJSONObject());
+            jsonObject.putOpt("content", content);
+            jsonObject.putOpt("likes_count", likesCount);
+            jsonObject.putOpt("comments_count", commentsCount);
+            jsonObject.putOpt("submitted_date", SimpleDateFormat.getInstance().format(submitDate));
+            jsonObject.putOpt("published_date", SimpleDateFormat.getInstance().format(publishDate));
+            jsonObject.putOpt("is_liked", isLiked);
             return jsonObject;
         } catch (JSONException error) {
             return new JSONObject();

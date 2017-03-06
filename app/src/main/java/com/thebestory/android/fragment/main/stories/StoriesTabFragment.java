@@ -56,11 +56,16 @@ public final class StoriesTabFragment extends Fragment implements LoaderManager.
     @Nullable
     private StoriesAdapter adapter;
 
-    private final StoriesType type;
+    private StoriesType type;
 
 
+    public StoriesTabFragment() {
+        super();
+        this.type = StoriesType.LATEST;
+    }
 
-    public StoriesTabFragment(StoriesType type) {
+
+    public void setType(StoriesType type) {
         this.type = type;
     }
 
@@ -68,16 +73,18 @@ public final class StoriesTabFragment extends Fragment implements LoaderManager.
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @return A new instance of fragment HotTabFragment.
+     * @return A new instance of fragment StoriesTabFragment.
      */
     public static StoriesTabFragment newInstance(StoriesType type) {
-        return new StoriesTabFragment(type);
+        StoriesTabFragment temp = new StoriesTabFragment();
+        temp.setType(type);
+        return temp;
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        String currentSlug =  ((TheBestoryApplication) getActivity().getApplication()).slug;
+        String currentSlug = ((TheBestoryApplication) getActivity().getApplication()).currentTopic.slug;
         loadedStories = BankStoriesLocation.getInstance().getStoriesArray(type, currentSlug);
     }
 
@@ -168,20 +175,20 @@ public final class StoriesTabFragment extends Fragment implements LoaderManager.
                 case "before": {
                     String currentId = loadedStories.getStoryAt(0).id;
                     temp = ApiMethods.getInstance().getStories(type, getActivity(),
-                            ((TheBestoryApplication) getActivity().getApplication()).slug,
+                            ((TheBestoryApplication) getActivity().getApplication()).currentTopic.slug,
                             TypeOfCollection.BEFORE, currentId, 25);
                     break;
                 }
                 case "none": {
                     temp = ApiMethods.getInstance().getStories(type, getActivity(),
-                            ((TheBestoryApplication) getActivity().getApplication()).slug,
+                            ((TheBestoryApplication) getActivity().getApplication()).currentTopic.slug,
                             TypeOfCollection.NONE, null, 10);
                     break;
                 }
                 case "after": {
                     String currentId = loadedStories.getStoryAt(loadedStories.size() - 1).id;
                     temp = ApiMethods.getInstance().getStories(type, getActivity(),
-                            ((TheBestoryApplication) getActivity().getApplication()).slug,
+                            ((TheBestoryApplication) getActivity().getApplication()).currentTopic.slug,
                             TypeOfCollection.AFTER, currentId, 10);
                     break;
                 }

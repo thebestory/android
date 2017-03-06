@@ -75,7 +75,7 @@ public class ApiMethods {
     public ApiAsyncTask<Story> getDetailsStory(Context context, String id) {
         Bundle requestBundle = new Bundle();
         requestBundle.putString("id", id);
-        ApiAsyncTask task = new ApiAsyncTask(context, new GetDetailsStory(), new ParseStory(), requestBundle);
+        ApiAsyncTask task = new ApiAsyncTask<>(context, new GetDetailsStory(), new ParseStory(), requestBundle);
         return task;
     }
 
@@ -84,7 +84,7 @@ public class ApiMethods {
         addTypeOfCollection(requestBundle, typeOf, id);
         requestBundle.putInt("limit", limit);
         requestBundle.putString("slug", slug);
-        ApiAsyncTask task = new ApiAsyncTask(context, parserUrl, new ParseStoriesArray(), requestBundle);
+        ApiAsyncTask task = new ApiAsyncTask<>(context, parserUrl, new ParseStoriesArray(), requestBundle);
         return task;
     }
 
@@ -128,7 +128,7 @@ public class ApiMethods {
     }
 
     public ApiAsyncTask<List<Topic>> getTopicsList(Context context) {
-        ApiAsyncTask task = new ApiAsyncTask(context, new GetTopicsList(), new ParseTopicsArray(), null);
+        ApiAsyncTask<List<Topic>> task = new ApiAsyncTask<>(context, new GetTopicsList(), new ParseTopicsArray(), null);
         return task;
     }
 

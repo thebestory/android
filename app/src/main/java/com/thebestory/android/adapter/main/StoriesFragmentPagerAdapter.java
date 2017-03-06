@@ -32,7 +32,7 @@ public class StoriesFragmentPagerAdapter extends FragmentPagerAdapter {
             main_stories_random_tab
     };
 
-    public StoriesFragmentPagerAdapter(FragmentManager fm, Context context, String slug) {
+    public StoriesFragmentPagerAdapter(FragmentManager fm, Context context) {
         super(fm);
         this.context = context;
     }

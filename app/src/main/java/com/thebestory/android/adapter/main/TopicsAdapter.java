@@ -32,7 +32,10 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.TopicViewH
     }
 
 
-    public void addTopics() { //TODO: rechange it
+    public void addTopics(ArrayList<Topic> newTopics) {
+        //TODO: rechange it
+        notifyItemRangeRemoved(0, topics.size());
+        this.topics = newTopics;
         notifyItemRangeInserted(0, topics.size());
     }
 

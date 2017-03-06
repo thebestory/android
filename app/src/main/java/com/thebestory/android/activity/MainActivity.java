@@ -22,7 +22,9 @@ import android.view.inputmethod.InputMethodManager;
 import com.thebestory.android.R;
 import com.thebestory.android.TheBestoryApplication;
 import com.thebestory.android.fragment.main.*;
+import com.thebestory.android.model.Topic;
 import com.thebestory.android.util.BankStoriesLocation;
+import com.thebestory.android.util.BankTopics;
 import com.thebestory.android.util.CacheStories;
 
 public class MainActivity extends AppCompatActivity
@@ -84,6 +86,7 @@ public class MainActivity extends AppCompatActivity
         super.onStop();
         CacheStories.getInstance().saveCache(getApplicationContext());
         BankStoriesLocation.getInstance().saveBank(getApplicationContext());
+        BankTopics.getInstance().saveBank(getApplicationContext());
     }
 
     @Override
@@ -101,7 +104,7 @@ public class MainActivity extends AppCompatActivity
 
         switch (item.getItemId()) {
             case R.id.navdrawer_main_stories:
-                ((TheBestoryApplication)getApplication()).slug = "all";
+                ((TheBestoryApplication)getApplication()).currentTopic = BankTopics.getInstance().getAllTopic();
                 transaction.replace(R.id.main_frame_layout, StoriesFragment.newInstance());
                 break;
             case R.id.navdrawer_main_topics:

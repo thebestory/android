@@ -12,11 +12,12 @@ import com.thebestory.android.model.Story;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.List;
 
-public class ParseStoriesArray implements ParseResponse<ArrayList<Story>> {
+public class ParseStoriesArray implements ParseResponse<List<Story>> {
     @Override
-    public ArrayList<Story> parse(JsonReader response) throws IOException, ParseException {
-        ArrayList<Story> stories = new ArrayList();
+    public List<Story> parse(JsonReader response) throws IOException, ParseException {
+        ArrayList<Story> stories = new ArrayList<Story>();
 
         response.beginArray();
         while (response.hasNext()) {

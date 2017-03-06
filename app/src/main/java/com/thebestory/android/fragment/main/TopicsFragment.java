@@ -35,9 +35,12 @@ import com.thebestory.android.api.LoaderResult;
 import com.thebestory.android.api.LoaderStatus;
 import com.thebestory.android.fragment.main.stories.SubmitStoryFragment;
 import com.thebestory.android.model.Topic;
+import com.thebestory.android.util.BankTopics;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.Arrays.asList;
 
 
 /**
@@ -54,8 +57,6 @@ public class TopicsFragment extends Fragment implements LoaderManager.
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     TopicsAdapter adapter;
-
-    private ArrayList<Topic> loadedTopic;
 
     Toolbar toolbar;
 
@@ -84,8 +85,6 @@ public class TopicsFragment extends Fragment implements LoaderManager.
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        loadedTopic = ((TheBestoryApplication) getActivity().getApplication()).
-                currentLoadedTopics;
     }
 
     @Override
@@ -108,7 +107,7 @@ public class TopicsFragment extends Fragment implements LoaderManager.
         progressView = (ProgressBar) view.findViewById(R.id.progress);
         errorTextView = (TextView) view.findViewById(R.id.error_text);
 
-        adapter = new TopicsAdapter(activity, loadedTopic, new TopicsAdapter.OnClickListener() {
+        adapter = new TopicsAdapter(activity, BankTopics.getInstance().getList(), new TopicsAdapter.OnClickListener() {
             public void onClick(View v, Topic topic) {
                 FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
                 transaction.setCustomAnimations(
@@ -118,7 +117,7 @@ public class TopicsFragment extends Fragment implements LoaderManager.
                         R.anim.exit_to_right
                 );
 
-                ((TheBestoryApplication) activity.getApplication()).slug = topic.slug;
+                ((TheBestoryApplication) activity.getApplication()).currentTopic = topic;
                 // Replace whatever is in the fragment_container view with this fragment,
                 // and add the transaction to the back stack so the user can navigate back
                 transaction.replace(R.id.main_frame_layout, StoriesFragment.newInstance());
@@ -144,7 +143,7 @@ public class TopicsFragment extends Fragment implements LoaderManager.
             visitOnCreateLoader = savedInstanceState.getBoolean("visit");
             displayNonEmptyData();
         } else {
-            if (loadedTopic.isEmpty()) {
+            if (BankTopics.getInstance().getCount() == 0) {
                 getLoaderManager().restartLoader(0, null, this);
             } else {
                 displayNonEmptyData(true);
@@ -156,7 +155,7 @@ public class TopicsFragment extends Fragment implements LoaderManager.
 
     @Override
     public void onRefresh() {
-        if (!loadedTopic.isEmpty()) {
+        if (BankTopics.getInstance().getCount() != 0) {
            displayNonEmptyData(true);
         } else {
             getLoaderManager().restartLoader(0, null, thisFragment);
@@ -180,7 +179,7 @@ public class TopicsFragment extends Fragment implements LoaderManager.
                 Log.w("onFinished", "OK");
                 if (!result.data.isEmpty()) {
                     if (visitOnCreateLoader) {
-                        loadedTopic.addAll(result.data);
+                        BankTopics.getInstance().loadAndUpdateTopics(result.data);
                         displayNonEmptyData();
                     } else {
                         displayNonEmptyData(true);
@@ -221,7 +220,7 @@ public class TopicsFragment extends Fragment implements LoaderManager.
 
     private void displayNonEmptyData() {
         if (adapter != null) {
-                adapter.addTopics();
+            adapter.addTopics(BankTopics.getInstance().getList());
         }
         progressView.setVisibility(View.GONE);
         errorTextView.setVisibility(View.GONE);

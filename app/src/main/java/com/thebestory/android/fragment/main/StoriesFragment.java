@@ -4,6 +4,8 @@
 
 package com.thebestory.android.fragment.main;
 
+import com.thebestory.android.util.BankTopics;
+
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -16,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
 
 import com.thebestory.android.R;
 import com.thebestory.android.TheBestoryApplication;
@@ -31,7 +34,6 @@ import com.thebestory.android.fragment.main.stories.SubmitStoryFragment;
 public class StoriesFragment extends Fragment {
     private View view;
     private MainActivity activity;
-    public String slug;
 
     public StoriesFragment() {
         // Required empty public constructor
@@ -65,13 +67,11 @@ public class StoriesFragment extends Fragment {
         TabLayout layout = (TabLayout) view.findViewById(R.id.main_stories_tab_layout);
         ViewPager pager = (ViewPager) view.findViewById(R.id.main_stories_pager);
 
-        toolbar.setTitle(((TheBestoryApplication) activity.getApplication()).topics.get(
-                ((TheBestoryApplication) activity.getApplication()).slug
-        ));
+        toolbar.setTitle(((TheBestoryApplication) activity.getApplication()).currentTopic.title);
         activity.setSupportActionBar(toolbar);
 
         StoriesFragmentPagerAdapter adapter = new StoriesFragmentPagerAdapter(
-                getChildFragmentManager(), activity, slug);
+                getChildFragmentManager(), activity);
         pager.setAdapter(adapter);
         layout.setupWithViewPager(pager);
 

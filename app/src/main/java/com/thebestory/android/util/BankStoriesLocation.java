@@ -159,10 +159,4 @@ public class BankStoriesLocation{
             bank.clear();
         }
     }
-
-
-
-
-
-
 }

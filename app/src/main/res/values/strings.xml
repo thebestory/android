@@ -8,8 +8,6 @@
 
     <!-- Navigation Drawer - Main Activity -->
 
-    <string name="navdrawer_main_action_auth">Authorization</string>
-
     <string name="navdrawer_main_stories">All stories</string>
     <string name="navdrawer_main_topics">Topics</string>
     <string name="navdrawer_main_settings">Settings</string>
@@ -21,13 +19,11 @@
 
     <string name="main_stories_new_toolbar_title">Submit story</string>
     <string name="write_your_story_here">Write your story here!</string>
-    <string name="main_stories_new_toolbar_action_cancel">Cancel</string>
     <string name="main_stories_new_toolbar_action_send">Send story</string>
 
     <!-- Main Activity - Stories Fragment - Toolbar -->
 
     <string name="main_stories_toolbar_action_new">New story</string>
-    <string name="main_stories_toolbar_action_search">Search stories</string>
 
     <!-- Main Activity - Stories Fragment - Tabs -->
 
@@ -43,8 +39,6 @@
     <string name="no_internet">Unable to load data.
         Please check your Internet connection and refresh the page.</string>
     <string name="error">Unexpected error. Close and open app again.</string>
-    <string name="error_while_data_loading">Error while data loading</string>
-    <string name="try_again">Try again</string>
 
     <!-- Main Activity - Settings Fragment -->
 

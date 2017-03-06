@@ -118,11 +118,11 @@ public final class Topic {
 
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("title", title == null ? JSONObject.NULL : title);
-            jsonObject.put("slug", slug == null ? JSONObject.NULL : slug);
-            jsonObject.put("description", description == null ? JSONObject.NULL : description);
-            jsonObject.put("icon", icon == null ? JSONObject.NULL : icon);
-            jsonObject.put("stories_count", storiesCount);
+            jsonObject.putOpt("title", title);
+            jsonObject.putOpt("slug", slug);
+            jsonObject.putOpt("description", description);
+            jsonObject.putOpt("icon", icon);
+            jsonObject.putOpt("stories_count", storiesCount);
             return jsonObject;
         } catch (JSONException error) {
             return new JSONObject();
