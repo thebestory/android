@@ -2,6 +2,7 @@ package com.thebestory.android.util;
 
 import android.content.Context;
 
+import com.thebestory.android.files.FilesSystem;
 import com.thebestory.android.model.Topic;
 
 import org.json.JSONArray;
@@ -21,7 +22,7 @@ import java.util.Map;
  * Created by Alex on 06.03.2017.
  */
 
-public class BankTopics implements Iterable<Topic> {
+public class BankTopics implements Iterable<Topic>, FilesSystem.FileCache {
 
     private static final String BANK_TOPICS_FILE_NAME = "Bank_of_topics";
     private List<Topic> topics;
@@ -89,26 +90,18 @@ public class BankTopics implements Iterable<Topic> {
     }
 
     public void deserialize(JSONObject jsonObject) {
-
-        List<Topic> topics = new ArrayList<>();
-        try {
-            JSONArray temp = jsonObject.getJSONArray("topics");
-            if (temp == null) {
-                return;
-            }
-            int len = temp.length();
-            for (int i = 0; i < len; ++i) {
-                JSONObject entryObject = temp.optJSONObject(i);
-                if (entryObject == null) {
-                    continue;
-                }
-                topics.add(Topic.parseJSONObject(entryObject));
-            }
-        } catch (JSONException e) {
+        JSONArray temp = jsonObject.optJSONArray("topics");
+        if (temp == null) {
             return;
         }
-
-        this.topics = topics;
+        int len = temp.length();
+        for (int i = 0; i < len; ++i) {
+            JSONObject entryObject = temp.optJSONObject(i);
+            if (entryObject == null) {
+                continue;
+            }
+            topics.add(Topic.parseJSONObject(entryObject));
+        }
     }
 
     @Override
@@ -122,5 +115,27 @@ public class BankTopics implements Iterable<Topic> {
 
     public ArrayList<Topic> getList() {
         return new ArrayList<>(topics);
+    }
+
+    @Override
+    public void onOpenApp(Context context) {
+        loadBank(context);
+    }
+
+    @Override
+    public void onExitApp(Context context) {
+        saveBank(context);
+    }
+
+    @Override
+    public void onDeleteCashe(Context context) {
+        topics.clear();
+        context.deleteFile(BANK_TOPICS_FILE_NAME);
+    }
+
+    @Override
+    public long sizeFile(Context context) {
+        saveBank(context);
+        return context.getFileStreamPath(BANK_TOPICS_FILE_NAME).length();
     }
 }

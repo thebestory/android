@@ -6,6 +6,9 @@
 
     <color name="colorText">#646464</color>
     <color name="colorTextLight">#64646464</color>
+    
+    <color name="colorIdNotBookmarked">#646464</color>
+    <color name="colorIdBookmarked">#FFB74D</color>
 
     <color name="colorBackground">#f0f0f0</color>
     <color name="colorContentBackground">#fff</color>

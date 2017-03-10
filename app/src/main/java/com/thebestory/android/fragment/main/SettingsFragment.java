@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 
 import com.thebestory.android.R;
 import com.thebestory.android.activity.MainActivity;
+import com.thebestory.android.files.FilesSystem;
 
 /**
  * Fragment for Settings screen.
@@ -99,6 +100,17 @@ public class SettingsFragment extends Fragment {
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             addPreferencesFromResource(R.xml.settings);
             bindPreferenceSummaryToValue(findPreference("theme"));
+            findPreference("reset_cache").setSummary(String.format("%.2f Mb", FilesSystem.getInstance().getCasheSize(getContext())));
+            (findPreference("reset_cache")).setOnPreferenceClickListener(
+                    new Preference.OnPreferenceClickListener() {
+                        @Override
+                        public boolean onPreferenceClick(Preference preference) {
+                            FilesSystem.getInstance().onDeleteCashe(getContext());
+                            findPreference("reset_cache").setSummary(Double.toString(FilesSystem.getInstance().getCasheSize(getContext())) + " Mb");
+                            return true;
+                        }
+                    }
+            );
         }
 
         /**

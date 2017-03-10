@@ -16,13 +16,19 @@ import java.util.Iterator;
 public class StoriesArray {
 
     private final ArrayList<String> storiesId;
+    private final boolean bookmarked;
+
+    public StoriesArray(boolean bookmarked) {
+        storiesId = new ArrayList<String>();
+        this.bookmarked = bookmarked;
+    }
 
     public StoriesArray() {
-        storiesId = new ArrayList<String>();
+        this(false);
     }
 
     public Story getStoryAt(int position) {
-        return CacheStories.getInstance().getStory(storiesId.get(position));
+        return this.bookmarked ? CacheStories.getInstance().getBookmarkedStory(storiesId.get(position)) : CacheStories.getInstance().getStory(storiesId.get(position));
     }
 
     public void addStoryAtTail(Story story) {
@@ -53,12 +59,33 @@ public class StoriesArray {
         return storiesId.isEmpty();
     }
 
+    public String removeStoryAt(int pos) {
+        String id = storiesId.remove(pos);
+        if (id != null) {
+            CacheStories.getInstance().removeBookmarked(id);
+        }
+        return id;
+    }
+
+    public boolean removeStory(String id) {
+        boolean temp = storiesId.remove(id);
+        if (temp) {
+            CacheStories.getInstance().removeBookmarked(id);
+        }
+
+        return temp;
+    }
+
     public void addStoryAt(Story story, int position) {
         if (story == null || story.id == null) {
             return;
         }
         storiesId.add(position, story.id);
-        CacheStories.getInstance().updateStory(story);
+        bookmarked : CacheStories.getInstance().setBookmarked(story); CacheStories.getInstance().updateStory(story);
+    }
+
+    public boolean isEntry(String id) {
+        return storiesId.contains(id);
     }
 
     public int size() {
@@ -80,8 +107,8 @@ public class StoriesArray {
         return jsonObject;
     }
 
-    public StoriesArray(JSONObject object) {
-
+    public StoriesArray(JSONObject object, boolean bookmarked) {
+        this.bookmarked = bookmarked;
         storiesId = new ArrayList<>();
         if (object == null) {
             return;
@@ -99,6 +126,10 @@ public class StoriesArray {
                 storiesId.add(temp);
             }
         }
+    }
+
+    public StoriesArray(JSONObject object) {
+        this(object, false);
     }
 
 }

@@ -8,6 +8,7 @@ import android.util.Log;
 import android.util.Xml;
 
 import com.thebestory.android.activity.MainActivity;
+import com.thebestory.android.files.FilesSystem;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,8 +28,30 @@ import java.util.Map;
  * Created by Alex on 26.02.2017.
  */
 
-public class BankStoriesLocation{
+public class BankStoriesLocation implements FilesSystem.FileCache {
     private static final String BANK_STORIES_FILE_NAME = "Bank_of_stories";
+
+    @Override
+    public void onOpenApp(Context context) {
+        loadBank(context);
+    }
+
+    @Override
+    public void onExitApp(Context context) {
+        saveBank(context);
+    }
+
+    @Override
+    public void onDeleteCashe(Context context) {
+        bank.clear();
+        context.deleteFile(BANK_STORIES_FILE_NAME);
+    }
+
+    @Override
+    public long sizeFile(Context context) {
+        saveBank(context);
+        return context.getFileStreamPath(BANK_STORIES_FILE_NAME).length();
+    }
 
     private class UnionStoryInfo {
         private final String slug;
@@ -65,6 +88,7 @@ public class BankStoriesLocation{
     }
     private BankStoriesLocation() {
         bank = new HashMap<UnionStoryInfo, StoriesArray>();
+        bookmarkedStories = new StoriesArray(true);
     }
 
     public void loadBank(Context context) {
@@ -92,6 +116,11 @@ public class BankStoriesLocation{
     }
 
     private final Map<UnionStoryInfo, StoriesArray> bank;
+    private StoriesArray bookmarkedStories;
+
+    public StoriesArray getBookmarkedStoriesArray() {
+        return bookmarkedStories;
+    }
 
 
     public StoriesArray getStoriesArray(StoriesType type, String slug) {
@@ -126,6 +155,7 @@ public class BankStoriesLocation{
         }
         try {
             jsonObject.putOpt("bank", jsonArray);
+            jsonObject.putOpt("bookmarked", bookmarkedStories.serialize());
         } catch (JSONException error) {
             return null;
         }
@@ -135,28 +165,28 @@ public class BankStoriesLocation{
 
     public void deserialize(JSONObject jsonObject) {
 
-        try {
-            JSONArray temp = jsonObject.getJSONArray("bank");
-            if (temp == null) {
-                return;
-            }
-            int len = temp.length();
-            for (int i = 0; i < len; ++i) {
-                JSONObject entryObject = temp.optJSONObject(i);
-                if (entryObject == null) {
-                    continue;
-                }
-                String tempType = entryObject.optString("type", null), tempSlug = entryObject.optString("slug", null);
 
-                if (tempType == null || tempSlug == null) {
-                    continue;
-                }
-
-                StoriesArray storiesTemp = new StoriesArray(entryObject.optJSONObject("stories"));
-                bank.put(new UnionStoryInfo(StoriesType.valueOf(tempType), tempSlug), storiesTemp);
-            }
-        } catch (JSONException e) {
-            bank.clear();
+        JSONArray temp = jsonObject.optJSONArray("bank");
+        if (temp == null) {
+            return;
         }
+        int len = temp.length();
+        for (int i = 0; i < len; ++i) {
+            JSONObject entryObject = temp.optJSONObject(i);
+            if (entryObject == null) {
+                continue;
+            }
+            String tempType = entryObject.optString("type", null), tempSlug = entryObject.optString("slug", null);
+
+            if (tempType == null || tempSlug == null) {
+                continue;
+            }
+
+            StoriesArray storiesTemp = new StoriesArray(entryObject.optJSONObject("stories"));
+            bank.put(new UnionStoryInfo(StoriesType.valueOf(tempType), tempSlug), storiesTemp);
+        }
+
+        bookmarkedStories = new StoriesArray(jsonObject.optJSONObject("bookmarked"));
+
     }
 }

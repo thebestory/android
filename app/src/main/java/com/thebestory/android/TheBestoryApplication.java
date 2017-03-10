@@ -15,6 +15,7 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.thebestory.android.api.ApiMethods;
 import com.thebestory.android.api.LoaderResult;
 import com.thebestory.android.api.LoaderStatus;
+import com.thebestory.android.files.FilesSystem;
 import com.thebestory.android.model.Topic;
 import com.thebestory.android.util.BankStoriesLocation;
 import com.thebestory.android.util.BankTopics;
@@ -36,9 +37,7 @@ public class TheBestoryApplication extends Application implements LoaderManager.
     public void onCreate() {
         super.onCreate();
 
-        BankStoriesLocation.getInstance().loadBank(getApplicationContext());
-        CacheStories.getInstance().loadCache(getApplicationContext());
-        BankTopics.getInstance().loadBank(getApplicationContext());
+        FilesSystem.getInstance().onOpenApp(getApplicationContext());
         currentTopic = BankTopics.getInstance().getAllTopic();
         Fresco.initialize(this);
     }
@@ -59,6 +58,8 @@ public class TheBestoryApplication extends Application implements LoaderManager.
 
         }
     }
+
+
 
     @Override
     public void onLoaderReset(Loader<LoaderResult<List<Topic>>> loader) {

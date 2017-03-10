@@ -5,6 +5,9 @@
 package com.thebestory.android.adapter.main;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.content.res.Resources;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +21,8 @@ import com.thebestory.android.R;
 import com.thebestory.android.api.ApiMethods;
 import com.thebestory.android.loader.AsyncLoader;
 import com.thebestory.android.model.Story;
+import com.thebestory.android.util.BankStoriesLocation;
+import com.thebestory.android.util.CacheStories;
 import com.thebestory.android.util.StoriesArray;
 
 import java.io.ByteArrayOutputStream;
@@ -83,6 +88,8 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
         TextView commentsCount;
         ImageView commentsIcon;
 
+        boolean isBookmarked;
+
         StoryViewHolder(View itemView) {
             super(itemView);
 
@@ -136,6 +143,19 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
                     }
                 }
             });
+
+            id.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (CacheStories.getInstance().isBookmarked(story.id)) {
+                        BankStoriesLocation.getInstance().getBookmarkedStoriesArray().removeStory(story.id);
+                        id.setTextColor(ContextCompat.getColor(id.getContext(), R.color.colorIdNotBookmarked));
+                    } else {
+                        BankStoriesLocation.getInstance().getBookmarkedStoriesArray().addStoryAtHead(story);
+                        id.setTextColor(ContextCompat.getColor(id.getContext(), R.color.colorIdBookmarked));
+                    }
+                }
+            });
         }
 
         void onBind(Story story) {
@@ -153,6 +173,12 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
                 likesIcon.setImageResource(R.drawable.ic_liked);
             } else {
                 likesIcon.setImageResource(R.drawable.ic_not_liked);
+            }
+
+            if (CacheStories.getInstance().isBookmarked(story.id)) {
+                id.setTextColor(ContextCompat.getColor(id.getContext(), R.color.colorIdBookmarked));
+            } else {
+                id.setTextColor(ContextCompat.getColor(id.getContext(), R.color.colorIdNotBookmarked));
             }
         }
     }

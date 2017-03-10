@@ -21,7 +21,9 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.thebestory.android.R;
 import com.thebestory.android.TheBestoryApplication;
+import com.thebestory.android.files.FilesSystem;
 import com.thebestory.android.fragment.main.*;
+import com.thebestory.android.fragment.main.stories.BookmarkedStoriesFragment;
 import com.thebestory.android.model.Topic;
 import com.thebestory.android.util.BankStoriesLocation;
 import com.thebestory.android.util.BankTopics;
@@ -38,7 +40,8 @@ public class MainActivity extends AppCompatActivity
             R.id.navdrawer_main_settings,
             R.id.navdrawer_main_about,
             R.id.navdrawer_main_send_feedback,
-            R.id.navdrawer_main_debug
+            R.id.navdrawer_main_debug,
+            R.id.navdrawer_main_bookmarks
     };
 
     /**
@@ -50,7 +53,8 @@ public class MainActivity extends AppCompatActivity
             R.string.navdrawer_main_settings,
             R.string.navdrawer_main_about,
             R.string.navdrawer_main_send_feedback,
-            R.string.navdrawer_main_debug
+            R.string.navdrawer_main_debug,
+            R.string.navdrawer_main_bookmarks
     };
 
     /**
@@ -62,7 +66,8 @@ public class MainActivity extends AppCompatActivity
             R.drawable.ic_navdrawer_main_settings,
             R.drawable.ic_navdrawer_main_about,
             R.drawable.ic_navdrawer_main_send_feedback,
-            R.drawable.ic_navdrawer_main_debug
+            R.drawable.ic_navdrawer_main_debug,
+            R.drawable.ic_navdrawer_main_bookmarks
     };
 
     private DrawerLayout drawerLayout;
@@ -84,9 +89,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStop() {
         super.onStop();
-        CacheStories.getInstance().saveCache(getApplicationContext());
-        BankStoriesLocation.getInstance().saveBank(getApplicationContext());
-        BankTopics.getInstance().saveBank(getApplicationContext());
+        FilesSystem.getInstance().onExitApp(getApplicationContext());
     }
 
     @Override
@@ -119,8 +122,13 @@ public class MainActivity extends AppCompatActivity
             case R.id.navdrawer_main_send_feedback:
                 // TODO: Send feedback (switch to Play Market)
                 break;
+            case R.id.navdrawer_main_bookmarks:
+                transaction.replace(R.id.main_frame_layout, BookmarkedStoriesFragment.newInstance());
+                break;
             case R.id.navdrawer_main_debug:
                 transaction.replace(R.id.main_frame_layout, DebugFragment.newInstance());
+                break;
+            default:
                 break;
         }
 
