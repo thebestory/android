@@ -1,0 +1,30 @@
+<android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <android.support.v7.preference.PreferenceCategory android:title="@string/main_settings_general_category">
+
+        <android.support.v7.preference.ListPreference
+            android:defaultValue="light"
+            android:entries="@array/main_settings_general_theme_titles"
+            android:entryValues="@array/main_settings_general_theme_values"
+            android:key="theme"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:title="@string/main_settings_general_theme_title" />
+
+    </android.support.v7.preference.PreferenceCategory>
+
+    <android.support.v7.preference.PreferenceCategory android:title="@string/main_settings_devtools_category">
+
+        <android.support.v7.preference.Preference
+            android:key="reset_cache"
+            android:summary="@string/main_settings_devtools_reset_cache_summary"
+            android:title="@string/main_settings_devtools_reset_cache_title" />
+
+        <android.support.v7.preference.SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="debug_page"
+            android:title="@string/main_settings_devtools_debug_title" />
+
+    </android.support.v7.preference.PreferenceCategory>
+
+</android.support.v7.preference.PreferenceScreen>
