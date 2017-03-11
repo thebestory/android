@@ -61,7 +61,7 @@ public class StoriesArray {
 
     public String removeStoryAt(int pos) {
         String id = storiesId.remove(pos);
-        if (id != null) {
+        if (bookmarked && id != null) {
             CacheStories.getInstance().removeBookmarked(id);
         }
         return id;
@@ -69,7 +69,7 @@ public class StoriesArray {
 
     public boolean removeStory(String id) {
         boolean temp = storiesId.remove(id);
-        if (temp) {
+        if (temp && bookmarked) {
             CacheStories.getInstance().removeBookmarked(id);
         }
 
@@ -81,7 +81,11 @@ public class StoriesArray {
             return;
         }
         storiesId.add(position, story.id);
-        bookmarked : CacheStories.getInstance().setBookmarked(story); CacheStories.getInstance().updateStory(story);
+        if (bookmarked) {
+            CacheStories.getInstance().setBookmarked(story);
+        } else {
+            CacheStories.getInstance().updateStory(story);
+        }
     }
 
     public boolean isEntry(String id) {

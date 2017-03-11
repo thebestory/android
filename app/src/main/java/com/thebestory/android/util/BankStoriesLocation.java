@@ -44,6 +44,7 @@ public class BankStoriesLocation implements FilesSystem.FileCache {
     @Override
     public void onDeleteCashe(Context context) {
         bank.clear();
+        bookmarkedStories.clear();
         context.deleteFile(BANK_STORIES_FILE_NAME);
     }
 
@@ -186,7 +187,7 @@ public class BankStoriesLocation implements FilesSystem.FileCache {
             bank.put(new UnionStoryInfo(StoriesType.valueOf(tempType), tempSlug), storiesTemp);
         }
 
-        bookmarkedStories = new StoriesArray(jsonObject.optJSONObject("bookmarked"));
+        bookmarkedStories = new StoriesArray(jsonObject.optJSONObject("bookmarked"), true);
 
     }
 }

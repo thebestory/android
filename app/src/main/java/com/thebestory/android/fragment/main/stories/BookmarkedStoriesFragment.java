@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -14,6 +15,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -68,6 +72,8 @@ public class BookmarkedStoriesFragment extends Fragment {
         return temp;
     }
 
+
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -78,6 +84,7 @@ public class BookmarkedStoriesFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         adapter = new StoriesAdapter(getActivity(), loadedStories);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -119,6 +126,28 @@ public class BookmarkedStoriesFragment extends Fragment {
     private void displayNonEmptyData() {
         errorTextView.setVisibility(View.GONE);
         rv.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.main_stories, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+
+        switch (item.getItemId()) {
+            case R.id.main_stories_toolbar_action_new:
+                transaction.replace(R.id.main_frame_layout, SubmitStoryFragment.newInstance());
+                break;
+//            case R.id.main_stories_toolbar_action_search:
+//                // TODO: Stories search
+//                break;
+        }
+
+        transaction.addToBackStack(null).commit();
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

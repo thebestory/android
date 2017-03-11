@@ -156,6 +156,8 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
                     }
                 }
             });
+
+
         }
 
         void onBind(Story story) {
@@ -164,6 +166,9 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
             topicIcon.setImageURI(story.topic.icon);
             topicTitle.setText(story.topic.title);
             id.setText("#" + story.id);
+            id.setTextColor(CacheStories.getInstance().isBookmarked(story.id) ?
+                    ContextCompat.getColor(id.getContext(), R.color.colorIdBookmarked)
+                    : ContextCompat.getColor(id.getContext(), R.color.colorIdNotBookmarked));
             content.setText(story.content);
             timestamp.setText(relative(story.publishDate));
             likesCount.setText(Integer.toString(story.getLikesCount()));
@@ -175,11 +180,6 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
                 likesIcon.setImageResource(R.drawable.ic_not_liked);
             }
 
-            if (CacheStories.getInstance().isBookmarked(story.id)) {
-                id.setTextColor(ContextCompat.getColor(id.getContext(), R.color.colorIdBookmarked));
-            } else {
-                id.setTextColor(ContextCompat.getColor(id.getContext(), R.color.colorIdNotBookmarked));
-            }
         }
     }
 }
