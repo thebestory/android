@@ -29,6 +29,7 @@ import android.widget.TextView;
 import com.thebestory.android.R;
 import com.thebestory.android.TheBestoryApplication;
 import com.thebestory.android.activity.MainActivity;
+import com.thebestory.android.adapter.main.OldTopicsAdapter;
 import com.thebestory.android.adapter.main.TopicsAdapter;
 import com.thebestory.android.api.ApiMethods;
 import com.thebestory.android.api.LoaderResult;
@@ -52,7 +53,7 @@ public class TopicsFragment extends Fragment implements LoaderManager.
     public final TopicsFragment thisFragment = this;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
-    TopicsAdapter adapter;
+    OldTopicsAdapter adapter;
 
     Toolbar toolbar;
 
@@ -103,7 +104,7 @@ public class TopicsFragment extends Fragment implements LoaderManager.
         progressView = (ProgressBar) view.findViewById(R.id.progress);
         errorTextView = (TextView) view.findViewById(R.id.error_text);
 
-        adapter = new TopicsAdapter(activity, BankTopics.getInstance().getList(), new TopicsAdapter.OnOldClickListener() {
+        adapter = new OldTopicsAdapter(activity, BankTopics.getInstance().getList(), new OldTopicsAdapter.OnClickListener() {
             public void onClick(View v, Topic topic) {
                 FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
                 transaction.setCustomAnimations(

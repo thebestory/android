@@ -5,8 +5,6 @@
 package com.thebestory.android.adapter.main;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
-import android.content.res.Resources;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -26,8 +24,6 @@ import com.thebestory.android.util.CacheStories;
 import com.thebestory.android.util.StoriesArray;
 
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.thebestory.android.util.TimeConverter.relative;
 
