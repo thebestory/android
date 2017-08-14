@@ -19,10 +19,13 @@ import java.net.URL;
 public class GetTopicStories implements ParseUrl {
     @Override
     public HttpURLConnection parse(Bundle args) throws IOException {
-        Uri.Builder url = Uri.parse(UrlBox.baseUrl).buildUpon().appendPath(UrlBox.topicWay).appendPath(Integer.toString(args.getInt("topicId", 0))).appendEncodedPath("stories");
+        Uri.Builder url = Uri.parse(UrlBox.baseUrl)
+                .buildUpon()
+                .appendPath(UrlBox.topicWay)
+                .appendPath(Integer.toString(args.getInt("topicId", 0)))
+                .appendEncodedPath("stories");
         UtilsParameters.addParametersToStoryRequest(url, args);
-        HttpURLConnection connection = (HttpURLConnection) (new URL(url.toString())).openConnection();
-        return connection;
+        return (HttpURLConnection) (new URL(url.toString())).openConnection();
     }
 
 

@@ -162,7 +162,6 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
 
         void onBind(Story story) {
             this.story = story;
-
             topicIcon.setImageURI(story.topic.icon);
             topicTitle.setText(story.topic.title);
             id.setText("#" + story.id);

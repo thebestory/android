@@ -37,11 +37,7 @@ import com.thebestory.android.fragment.main.stories.SubmitStoryFragment;
 import com.thebestory.android.model.Topic;
 import com.thebestory.android.util.BankTopics;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import static java.util.Arrays.asList;
-
 
 /**
  * Fragment for Topics screen.
@@ -107,7 +103,7 @@ public class TopicsFragment extends Fragment implements LoaderManager.
         progressView = (ProgressBar) view.findViewById(R.id.progress);
         errorTextView = (TextView) view.findViewById(R.id.error_text);
 
-        adapter = new TopicsAdapter(activity, BankTopics.getInstance().getList(), new TopicsAdapter.OnClickListener() {
+        adapter = new TopicsAdapter(activity, BankTopics.getInstance().getList(), new TopicsAdapter.OnOldClickListener() {
             public void onClick(View v, Topic topic) {
                 FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
                 transaction.setCustomAnimations(
@@ -156,7 +152,7 @@ public class TopicsFragment extends Fragment implements LoaderManager.
     @Override
     public void onRefresh() {
         if (BankTopics.getInstance().getCount() != 0) {
-           displayNonEmptyData(true);
+            displayNonEmptyData(true);
         } else {
             getLoaderManager().restartLoader(0, null, thisFragment);
         }

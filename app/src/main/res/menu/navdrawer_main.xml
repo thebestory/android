@@ -15,6 +15,11 @@
             android:title="@string/navdrawer_main_bookmarks"
             android:visible="true" />
         <item
+            android:id="@+id/navdrawer_main_profile"
+            android:icon="@drawable/ic_navdrawer_main_profile"
+            android:title="@string/navdrawer_main_profile"
+            android:visible="true" />
+        <item
             android:id="@+id/navdrawer_main_settings"
             android:icon="@drawable/ic_navdrawer_main_settings"
             android:title="@string/navdrawer_main_settings"

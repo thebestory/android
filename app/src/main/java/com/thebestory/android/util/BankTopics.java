@@ -26,7 +26,8 @@ public class BankTopics implements Iterable<Topic>, FilesSystem.FileCache {
 
     private static final String BANK_TOPICS_FILE_NAME = "Bank_of_topics";
     private List<Topic> topics;
-    private static final Topic allTopic = new Topic("All stories", "all", "All stories", "null", 0);
+    private static final Topic allTopic = new Topic(String.valueOf(0), "all", "All Stories",
+            "All stories", "null", 0, true);
 
 
     private BankTopics() {
@@ -71,8 +72,6 @@ public class BankTopics implements Iterable<Topic>, FilesSystem.FileCache {
     public static BankTopics getInstance() {
         return ourInstance;
     }
-
-
 
     public JSONObject serialize() {
         JSONObject jsonObject = new JSONObject();

@@ -6,6 +6,8 @@ package com.thebestory.android.model;
 
 import android.util.JsonReader;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.IOException;
 
 public final class Account {
@@ -13,19 +15,23 @@ public final class Account {
      * Account unique ID
      */
     public final int id;
-
     public final String username;
+    //public final String email;
 
-    public final int likesCount;
+    @SerializedName("stories_count")
     public final int storiesCount;
+
+    @SerializedName("story_likes_count")
+    public final int storyLikesCount;
+    //public final int commentsCount;
 
     public Account(int id,
                    String username,
-                   int likesCount,
+                   int storyLikesCount,
                    int storiesCount) {
         this.id = id;
         this.username = username;
-        this.likesCount = likesCount;
+        this.storyLikesCount = storyLikesCount;
         this.storiesCount = storiesCount;
     }
 

@@ -55,11 +55,11 @@ public class BankStoriesLocation implements FilesSystem.FileCache {
     }
 
     private class UnionStoryInfo {
-        private final String slug;
+        private final String id;
         private final StoriesType type;
 
-        UnionStoryInfo(StoriesType type, String slug) {
-            this.slug = slug;
+        UnionStoryInfo(StoriesType type, String id) {
+            this.id = id;
             this.type = type;
         }
 
@@ -70,23 +70,24 @@ public class BankStoriesLocation implements FilesSystem.FileCache {
             }
 
             if (o == null) {
-                return  false;
+                return false;
             }
 
-            if (! (o instanceof UnionStoryInfo)) {
+            if (!(o instanceof UnionStoryInfo)) {
                 return false;
             }
 
             UnionStoryInfo temp = (UnionStoryInfo) o;
 
-            return (slug.compareTo(temp.slug) == 0 && type.compareTo(temp.type) == 0);
+            return (id.compareTo(temp.id) == 0 && type.compareTo(temp.type) == 0);
         }
 
         @Override
         public int hashCode() {
-            return slug.hashCode()*13 + type.hashCode();
+            return id.hashCode() * 13 + type.hashCode();
         }
     }
+
     private BankStoriesLocation() {
         bank = new HashMap<UnionStoryInfo, StoriesArray>();
         bookmarkedStories = new StoriesArray(true);
@@ -96,7 +97,7 @@ public class BankStoriesLocation implements FilesSystem.FileCache {
         try (InputStream fileRead = context.openFileInput(BANK_STORIES_FILE_NAME)) {
             byte[] buffer = new byte[fileRead.available()];
             fileRead.read(buffer);
-            JSONObject jObect = new JSONObject(new String (buffer, "UTF-8"));
+            JSONObject jObect = new JSONObject(new String(buffer, "UTF-8"));
             deserialize(jObect);
         } catch (IOException | JSONException ignored) {
         }
@@ -124,12 +125,12 @@ public class BankStoriesLocation implements FilesSystem.FileCache {
     }
 
 
-    public StoriesArray getStoriesArray(StoriesType type, String slug) {
-        if (type == null || slug == null) {
+    public StoriesArray getStoriesArray(StoriesType type, String id) {
+        if (type == null || id == null) {
             return null;
         }
 
-        UnionStoryInfo temp = new UnionStoryInfo(type, slug);
+        UnionStoryInfo temp = new UnionStoryInfo(type, id);
         StoriesArray result = bank.get(temp);
         if (result == null) {
             result = new StoriesArray();
@@ -147,7 +148,7 @@ public class BankStoriesLocation implements FilesSystem.FileCache {
             JSONObject entryObject = new JSONObject();
             try {
                 entryObject.putOpt("type", i.getKey().type);
-                entryObject.putOpt("slug", i.getKey().slug);
+                entryObject.putOpt("id", i.getKey().id);
                 entryObject.putOpt("stories", i.getValue().serialize());
             } catch (JSONException e) {
                 continue;
@@ -177,14 +178,15 @@ public class BankStoriesLocation implements FilesSystem.FileCache {
             if (entryObject == null) {
                 continue;
             }
-            String tempType = entryObject.optString("type", null), tempSlug = entryObject.optString("slug", null);
+            String tempType = entryObject.optString("type", null),
+                    tempId = entryObject.optString("id", null);
 
-            if (tempType == null || tempSlug == null) {
+            if (tempType == null || tempId == null) {
                 continue;
             }
 
             StoriesArray storiesTemp = new StoriesArray(entryObject.optJSONObject("stories"));
-            bank.put(new UnionStoryInfo(StoriesType.valueOf(tempType), tempSlug), storiesTemp);
+            bank.put(new UnionStoryInfo(StoriesType.valueOf(tempType), tempId), storiesTemp);
         }
 
         bookmarkedStories = new StoriesArray(jsonObject.optJSONObject("bookmarked"), true);

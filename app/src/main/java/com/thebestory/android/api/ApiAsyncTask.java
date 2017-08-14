@@ -47,10 +47,6 @@ public class ApiAsyncTask<T> extends AsyncTaskLoader<LoaderResult<T>> {
             return cashType;
         }
 
-        if (args.containsKey("around")) {
-            cashType = TypeOfCollection.AROUND;
-            return cashType;
-        }
         cashType = TypeOfCollection.NONE;
         return cashType;
     }

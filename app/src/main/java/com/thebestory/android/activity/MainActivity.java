@@ -24,10 +24,7 @@ import com.thebestory.android.TheBestoryApplication;
 import com.thebestory.android.files.FilesSystem;
 import com.thebestory.android.fragment.main.*;
 import com.thebestory.android.fragment.main.stories.BookmarkedStoriesFragment;
-import com.thebestory.android.model.Topic;
-import com.thebestory.android.util.BankStoriesLocation;
 import com.thebestory.android.util.BankTopics;
-import com.thebestory.android.util.CacheStories;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -37,11 +34,12 @@ public class MainActivity extends AppCompatActivity
     private static final int[] NAVDRAWER_MENU_RES_ID = new int[]{
             R.id.navdrawer_main_stories,
             R.id.navdrawer_main_topics,
+            R.id.navdrawer_main_bookmarks,
+            R.id.navdrawer_main_profile,
             R.id.navdrawer_main_settings,
             R.id.navdrawer_main_about,
             R.id.navdrawer_main_send_feedback,
             R.id.navdrawer_main_debug,
-            R.id.navdrawer_main_bookmarks
     };
 
     /**
@@ -50,11 +48,12 @@ public class MainActivity extends AppCompatActivity
     private static final int[] NAVDRAWER_TITLE_RES_ID = new int[]{
             R.string.navdrawer_main_stories,
             R.string.navdrawer_main_topics,
+            R.string.navdrawer_main_bookmarks,
+            R.string.navdrawer_main_profile,
             R.string.navdrawer_main_settings,
             R.string.navdrawer_main_about,
             R.string.navdrawer_main_send_feedback,
             R.string.navdrawer_main_debug,
-            R.string.navdrawer_main_bookmarks
     };
 
     /**
@@ -63,11 +62,12 @@ public class MainActivity extends AppCompatActivity
     private static final int[] NAVDRAWER_ICON_RES_ID = new int[]{
             R.drawable.ic_navdrawer_main_stories,
             R.drawable.ic_navdrawer_main_topics,
+            R.drawable.ic_navdrawer_main_bookmarks,
+            R.drawable.ic_navdrawer_main_profile,
             R.drawable.ic_navdrawer_main_settings,
             R.drawable.ic_navdrawer_main_about,
             R.drawable.ic_navdrawer_main_send_feedback,
-            R.drawable.ic_navdrawer_main_debug,
-            R.drawable.ic_navdrawer_main_bookmarks
+            R.drawable.ic_navdrawer_main_debug
     };
 
     private DrawerLayout drawerLayout;
@@ -113,6 +113,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.navdrawer_main_topics:
                 transaction.replace(R.id.main_frame_layout, TopicsFragment.newInstance());
                 break;
+            case R.id.navdrawer_main_profile:
+                transaction.replace(R.id.main_frame_layout, ProfileFragment.Companion.newInstance());
+                break;
             case R.id.navdrawer_main_settings:
                 transaction.replace(R.id.main_frame_layout, SettingsFragment.newInstance());
                 break;
@@ -151,7 +154,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     // TODO: next two methods close keyboard from SubmitStoryFragment
-    // XXX: It's a crutch, we need to change it
+    // XXX: It's a crutch, we have to change it
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) hideKeyboard();

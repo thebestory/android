@@ -15,8 +15,6 @@ public class UtilsParameters {
             url.appendQueryParameter("after", args.getString("after", ""));
         } else if (args.containsKey("before")) {
             url.appendQueryParameter("before", args.getString("before", ""));
-        } else if (args.containsKey("around")) {
-            url.appendQueryParameter("around", args.getString("around", ""));
         }
         url.appendQueryParameter("limit", Integer.toString(args.getInt("limit", 0)));
     }

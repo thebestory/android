@@ -16,23 +16,41 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.thebestory.android.R;
 import com.thebestory.android.model.*;
 
+import com.thebestory.android.apollo.TopicsQuery;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
 
 public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.TopicViewHolder> {
 
     private Context context;
     private OnClickListener listener;
-    private List<Topic> topics;
+    private OnOldClickListener oldListener;
+    private List<TopicsQuery.Topic> topics;
 
-    public TopicsAdapter(Context context, ArrayList<Topic> loadedTopic, OnClickListener listener) {
+    public TopicsAdapter(Context context, ArrayList<Topic> loadedTopic, OnOldClickListener listener) {
+        this.context = context;
+        this.oldListener = listener;
+        //this.topics = loadedTopic;
+    }
+
+    public TopicsAdapter(Context context, OnClickListener listener) {
         this.context = context;
         this.listener = listener;
-        this.topics = loadedTopic;
+        this.topics = Collections.emptyList();
     }
 
 
     public void addTopics(ArrayList<Topic> newTopics) {
+        //TODO: rechange it
+        notifyItemRangeRemoved(0, topics.size());
+        //this.topics = newTopics;
+        notifyItemRangeInserted(0, topics.size());
+    }
+
+    public void addNewTopics(ArrayList<TopicsQuery.Topic> newTopics) {
         //TODO: rechange it
         notifyItemRangeRemoved(0, topics.size());
         this.topics = newTopics;
@@ -79,6 +97,19 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.TopicViewH
             description.setText(topic.description);
             icon.setImageURI(topic.icon);
 
+            /*view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.onClick(view, topic);
+                }
+            });*/
+        }
+
+        void onBind(final TopicsQuery.Topic topic, final OnClickListener listener) {
+            title.setText(topic.fragments().topicFragment().title());
+            description.setText(topic.fragments().topicFragment().description());
+            //icon.setImageURI(topic.fragments().topicFragment().);
+
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -86,9 +117,14 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.TopicViewH
                 }
             });
         }
+
     }
 
     public interface OnClickListener {
+        void onClick(View view, TopicsQuery.Topic topic);
+    }
+
+    public interface OnOldClickListener {
         void onClick(View view, Topic topic);
     }
 }

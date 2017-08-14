@@ -1,0 +1,14 @@
+query TopicsQuery($limit : Int, $before : Snowflake, $after : Snowflake) {
+  topics(limit : $limit, before :$before, after :$after) {
+    ...TopicFragment
+  }
+}
+
+fragment TopicFragment on Topic {
+  id
+  storiesCount
+  title
+  slug
+  description
+  isActive
+}

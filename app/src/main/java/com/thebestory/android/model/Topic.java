@@ -18,24 +18,30 @@ public final class Topic {
     /**
      * Topic unique ID
      */
+
+    public final String id;
     public final String slug;
     public final String title;
     public final String description;
     public final String icon;
-
     public final int storiesCount;
+    public final boolean isActive;
 
     public Topic(
-                 String title,
+                 String id,
                  String slug,
+                 String title,
                  String description,
                  String icon,
-                 int storiesCount) {
+                 int storiesCount,
+                 boolean isActive) {
+        this.id = id;
         this.slug = slug;
         this.title = title;
         this.description = description;
         this.icon = icon;
         this.storiesCount = storiesCount;
+        this.isActive = isActive;
     }
 
     /**
@@ -46,31 +52,38 @@ public final class Topic {
      * @throws IOException
      */
     public static Topic parse(JsonReader jr) throws IOException {
-        String title = null;
+        String id = null;
         String slug = null;
+        String title = null;
         String description = null;
         String icon = null;
         int storiesCount = 0;
+        boolean isActive = false;
 
         jr.beginObject();
 
         while (jr.hasNext()) {
             switch (jr.nextName()) {
-                case "title":
-                    title = jr.nextString();
+                case "id":
+                    id = jr.nextString();
                     break;
                 case "slug":
                     slug = jr.nextString();
+                    break;
+                case "title":
+                    title = jr.nextString();
                     break;
                 case "description":
                     description = jr.nextString();
                     break;
                 case "icon":
                     icon = "https://thebestory.github.io/icons/128/" + jr.nextString() + ".png";
-                    Log.w("TOPIC", icon);
                     break;
                 case "stories_count":
                     storiesCount = jr.nextInt();
+                    break;
+                case "is_active":
+                    isActive = jr.nextBoolean();
                     break;
                 default:
                     jr.skipValue();
@@ -81,11 +94,13 @@ public final class Topic {
         jr.endObject();
 
         return new Topic(
-                title,
+                id,
                 slug,
+                title,
                 description,
                 icon,
-                storiesCount
+                storiesCount,
+                isActive
         );
     }
 
@@ -93,24 +108,31 @@ public final class Topic {
         if (jsonObject == null) {
             return null;
         }
-        String title = null;
+
+        String id = null;
         String slug = null;
+        String title = null;
         String description = null;
         String icon = null;
         int storiesCount = 0;
+        boolean isActive = false;
 
-        title = jsonObject.optString("title");
+        id = jsonObject.optString("id");
         slug = jsonObject.optString("slug");
+        title = jsonObject.optString("title");
         description = jsonObject.optString("description");
         icon = jsonObject.optString("icon");
         storiesCount = jsonObject.optInt("stories_count");
+        isActive = jsonObject.optBoolean("is_active");
 
         return new Topic(
-                title,
+                id,
                 slug,
+                title,
                 description,
                 icon,
-                storiesCount
+                storiesCount,
+                isActive
         );
     }
 
@@ -118,11 +140,13 @@ public final class Topic {
 
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.putOpt("title", title);
+            jsonObject.putOpt("id", id);
             jsonObject.putOpt("slug", slug);
+            jsonObject.putOpt("title", title);
             jsonObject.putOpt("description", description);
             jsonObject.putOpt("icon", icon);
             jsonObject.putOpt("stories_count", storiesCount);
+            jsonObject.putOpt("is_active", isActive);
             return jsonObject;
         } catch (JSONException error) {
             return new JSONObject();

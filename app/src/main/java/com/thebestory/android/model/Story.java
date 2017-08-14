@@ -53,7 +53,6 @@ public final class Story {
         this.submitDate = submitDate;
         this.publishDate = publishDate;
         this.isLiked = isLiked;
-
         this.isLikedLocal = isLiked;
     }
 
@@ -108,7 +107,6 @@ public final class Story {
                         topic = null;
                         jr.skipValue();
                     }
-
                     break;
                 case "content":
                     content = jr.nextString();
@@ -137,7 +135,6 @@ public final class Story {
 
                     break;
                 case "is_liked":
-
                     isLiked = jr.nextBoolean();
                     break;
                 default:
@@ -183,9 +180,7 @@ public final class Story {
         try {
             String temp = jsonObject.optString("submitted_date");
             if (temp != null) {
-
                 submitDate = new DateTime(SimpleDateFormat.getInstance().parse(temp)).toDate();
-
             }
             temp = jsonObject.optString("published_date");
             if (temp != null) {
@@ -208,7 +203,7 @@ public final class Story {
         );
     }
 
-    public JSONObject toJSONObject () {
+    public JSONObject toJSONObject() {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.putOpt("id", id);
@@ -224,6 +219,4 @@ public final class Story {
             return new JSONObject();
         }
     }
-
-
 }

@@ -19,7 +19,7 @@ public class StoriesArray {
     private final boolean bookmarked;
 
     public StoriesArray(boolean bookmarked) {
-        storiesId = new ArrayList<String>();
+        storiesId = new ArrayList<>();
         this.bookmarked = bookmarked;
     }
 
@@ -28,7 +28,9 @@ public class StoriesArray {
     }
 
     public Story getStoryAt(int position) {
-        return this.bookmarked ? CacheStories.getInstance().getBookmarkedStory(storiesId.get(position)) : CacheStories.getInstance().getStory(storiesId.get(position));
+        return this.bookmarked ? CacheStories.getInstance()
+                .getBookmarkedStory(storiesId.get(position)) : CacheStories.getInstance()
+                .getStory(storiesId.get(position));
     }
 
     public void addStoryAtTail(Story story) {
@@ -36,13 +38,13 @@ public class StoriesArray {
     }
 
     public void addAllStoryAtTail(Iterable<Story> stories) {
-        for (Story i: stories) {
+        for (Story i : stories) {
             addStoryAtTail(i);
         }
     }
 
     public void addAllStoryAtHead(Iterable<Story> stories) {
-        for (Story i: stories) {
+        for (Story i : stories) {
             addStoryAtHead(i);
         }
     }

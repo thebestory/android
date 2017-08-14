@@ -15,9 +15,9 @@ public class StoryLike {
     public final String timestamp;
 
     public StoryLike(String userId,
-                       String id,
-                       String timestamp,
-                       boolean state) {
+                     String id,
+                     String timestamp,
+                     boolean state) {
         this.id = id;
         this.userId = userId;
         this.state = state;
@@ -33,20 +33,20 @@ public class StoryLike {
      * @throws IOException
      */
     public static StoryLike parse(JsonReader jr) throws IOException {
-        String userId = null,  id = null, timestamp = null;
+        String userId = null, id = null, timestamp = null;
         boolean state = false;
 
         jr.beginObject();
 
         while (jr.hasNext()) {
             switch (jr.nextName()) {
-                case "user_id ":
+                case "user_id":
                     userId = jr.nextString();
                     break;
                 case "story_id":
                     id = jr.nextString();
                     break;
-                case "state ":
+                case "state":
                     state = jr.nextBoolean();
                     break;
                 case "timestamp":

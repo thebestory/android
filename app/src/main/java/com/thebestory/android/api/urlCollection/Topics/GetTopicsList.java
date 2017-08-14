@@ -18,9 +18,11 @@ import java.net.URL;
 public class GetTopicsList implements ParseUrl {
     @Override
     public HttpURLConnection parse(Bundle args) throws IOException {
-        String url = Uri.parse(UrlBox.baseUrl).buildUpon().appendPath(UrlBox.topicWay).toString();
-        HttpURLConnection connection = (HttpURLConnection) (new URL(url)).openConnection();
-        return connection;
+        String url = Uri.parse(UrlBox.baseUrl)
+                .buildUpon()
+                .appendPath(UrlBox.topicWay)
+                .toString();
+        return (HttpURLConnection) (new URL(url)).openConnection();
     }
 
 }

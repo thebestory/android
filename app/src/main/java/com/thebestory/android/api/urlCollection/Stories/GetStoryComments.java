@@ -17,8 +17,11 @@ import java.net.URL;
 public class GetStoryComments implements ParseUrl {
     @Override
     public HttpURLConnection parse(Bundle args) throws IOException {
-        String url = Uri.parse(UrlBox.baseUrl).buildUpon().appendPath(UrlBox.storyWay).appendPath(args.getString("id", "")).appendPath(UrlBox.commentWay).toString();
-        HttpURLConnection connection = (HttpURLConnection) (new URL(url)).openConnection();
-        return connection;
+        String url = Uri.parse(UrlBox.baseUrl)
+                .buildUpon()
+                .appendPath(UrlBox.storyWay)
+                .appendPath(args.getString("id", ""))
+                .appendPath(UrlBox.commentWay).toString();
+        return (HttpURLConnection) (new URL(url)).openConnection();
     }
 }

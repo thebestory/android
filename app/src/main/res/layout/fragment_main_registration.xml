@@ -1,0 +1,61 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.thebestory.android.fragment.main.RegistrationDialogFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/main_registration_describe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="64dp"
+            android:gravity="top"
+            android:text="Think of login and password, also enter your actual e-mail:" />
+
+        <EditText
+            android:id="@+id/main_registration_login"
+            android:layout_width="281dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:hint="login" />
+
+        <EditText
+            android:id="@+id/main_registration_email"
+            android:layout_width="281dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:ems="10"
+            android:hint="e-mail"
+            android:inputType="textEmailAddress" />
+
+        <EditText
+            android:id="@+id/main_registration_pass"
+            android:layout_width="281dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:ems="10"
+            android:hint="password"
+            android:inputType="textPassword" />
+
+        <EditText
+            android:id="@+id/main_registration_pass_again"
+            android:layout_width="281dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:ems="10"
+            android:hint="password again"
+            android:inputType="textPassword" />
+
+    </LinearLayout>
+
+
+</FrameLayout>

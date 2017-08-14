@@ -38,7 +38,8 @@ import java.util.List;
  */
 
 public final class StoriesTabFragment extends Fragment implements LoaderManager.
-        LoaderCallbacks<LoaderResult<List<Story>>>, SwipeRefreshLayout.OnRefreshListener  {
+        LoaderCallbacks<LoaderResult<List<Story>>>, SwipeRefreshLayout.OnRefreshListener {
+
     private View view;
     private final StoriesTabFragment thisFragment = this;
 
@@ -84,8 +85,8 @@ public final class StoriesTabFragment extends Fragment implements LoaderManager.
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        String currentSlug = ((TheBestoryApplication) getActivity().getApplication()).currentTopic.slug;
-        loadedStories = BankStoriesLocation.getInstance().getStoriesArray(type, currentSlug);
+        String currentId = ((TheBestoryApplication) getActivity().getApplication()).currentTopic.id;
+        loadedStories = BankStoriesLocation.getInstance().getStoriesArray(type, currentId);
     }
 
     @Override
@@ -170,26 +171,26 @@ public final class StoriesTabFragment extends Fragment implements LoaderManager.
     @Override
     public Loader<LoaderResult<List<Story>>> onCreateLoader(int id, Bundle args) {
         Loader<LoaderResult<List<Story>>> temp = null;
-        if (args != null && args.containsKey("request")) {
+        if (args != null && args.containsKey("request") && args.getString("request") != null) {
             switch (args.getString("request")) {
                 case "before": {
-                    String currentId = loadedStories.getStoryAt(0).id;
+                    String currentStoryId = loadedStories.getStoryAt(0).id;
                     temp = ApiMethods.getInstance().getStories(type, getActivity(),
-                            ((TheBestoryApplication) getActivity().getApplication()).currentTopic.slug,
-                            TypeOfCollection.BEFORE, currentId, 25);
+                            ((TheBestoryApplication) getActivity().getApplication()).currentTopic.id,
+                            TypeOfCollection.BEFORE, currentStoryId, 25);
                     break;
                 }
                 case "none": {
                     temp = ApiMethods.getInstance().getStories(type, getActivity(),
-                            ((TheBestoryApplication) getActivity().getApplication()).currentTopic.slug,
+                            ((TheBestoryApplication) getActivity().getApplication()).currentTopic.id,
                             TypeOfCollection.NONE, null, 10);
                     break;
                 }
                 case "after": {
-                    String currentId = loadedStories.getStoryAt(loadedStories.size() - 1).id;
+                    String currentStoryId = loadedStories.getStoryAt(loadedStories.size() - 1).id;
                     temp = ApiMethods.getInstance().getStories(type, getActivity(),
-                            ((TheBestoryApplication) getActivity().getApplication()).currentTopic.slug,
-                            TypeOfCollection.AFTER, currentId, 10);
+                            ((TheBestoryApplication) getActivity().getApplication()).currentTopic.id,
+                            TypeOfCollection.AFTER, currentStoryId, 10);
                     break;
                 }
             }
