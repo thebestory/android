@@ -30,7 +30,6 @@ import com.thebestory.android.R;
 import com.thebestory.android.TheBestoryApplication;
 import com.thebestory.android.activity.MainActivity;
 import com.thebestory.android.adapter.main.OldTopicsAdapter;
-import com.thebestory.android.adapter.main.TopicsAdapter;
 import com.thebestory.android.api.ApiMethods;
 import com.thebestory.android.api.LoaderResult;
 import com.thebestory.android.api.LoaderStatus;

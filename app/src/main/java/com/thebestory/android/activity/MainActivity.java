@@ -107,11 +107,11 @@ public class MainActivity extends AppCompatActivity
 
         switch (item.getItemId()) {
             case R.id.navdrawer_main_stories:
-                ((TheBestoryApplication)getApplication()).currentTopic = BankTopics.getInstance().getAllTopic();
+                ((TheBestoryApplication) getApplication()).currentTopic = BankTopics.getInstance().getAllTopic();
                 transaction.replace(R.id.main_frame_layout, StoriesFragment.newInstance());
                 break;
             case R.id.navdrawer_main_topics:
-                transaction.replace(R.id.main_frame_layout, TopicsFragment.newInstance());
+                transaction.replace(R.id.main_frame_layout, NewTopicsFragment.Companion.newInstance());
                 break;
             case R.id.navdrawer_main_profile:
                 transaction.replace(R.id.main_frame_layout, ProfileFragment.Companion.newInstance());
