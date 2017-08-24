@@ -18,6 +18,7 @@ import com.google.gson.GsonBuilder;
 import com.thebestory.android.api.ApiMethods;
 import com.thebestory.android.api.LoaderResult;
 import com.thebestory.android.api.LoaderStatus;
+import com.thebestory.android.apollo.TopicsQuery;
 import com.thebestory.android.files.FilesSystem;
 import com.thebestory.android.model.AuthModel;
 import com.thebestory.android.model.Topic;
@@ -25,6 +26,7 @@ import com.thebestory.android.new_api.AuthModelDeserializer;
 import com.thebestory.android.new_api.NoTokenTheBestoryAPI;
 import com.thebestory.android.util.BankTopics;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.OkHttpClient;
@@ -37,7 +39,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class TheBestoryApplication extends Application implements LoaderManager.LoaderCallbacks<LoaderResult<List<Topic>>> {
 
-    public Topic currentTopic;
+    public Topic currentTopic; //Old
+    public String currentTitleTopic;
+    public ArrayList<String> currentIdTopic;
     private static NoTokenTheBestoryAPI noTokenTheBestoryAPI;
     public static SharedPreferences sharedPrefs;
     private static ApolloClient apolloClient;
@@ -77,8 +81,8 @@ public class TheBestoryApplication extends Application implements LoaderManager.
 
         //Old cache, it will disappear from here!
         FilesSystem.getInstance().onOpenApp(getApplicationContext());
-        currentTopic = BankTopics.getInstance().getAllTopic();
-
+        currentIdTopic = new ArrayList<>();
+        currentTitleTopic = "All Stories";
     }
 
     public static NoTokenTheBestoryAPI getNoTokenTheBestoryAPI() {

@@ -41,9 +41,21 @@ import io.reactivex.schedulers.Schedulers
  * Use the [TopicsFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class NewTopicsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
+class TopicsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
-    val thisFragment = this
+
+    companion object {
+
+        /**
+         * Use this factory method to create a new instance of
+         * this fragment using the provided parameters.
+
+         * @return A new instance of fragment TopicsFragment.
+         */
+        fun newInstance(): TopicsFragment {
+            return TopicsFragment()
+        }
+    }
 
     private var adapter: NewTopicsAdapter? = null
     private var mSwipeRefreshLayout: SwipeRefreshLayout? = null
@@ -83,8 +95,11 @@ class NewTopicsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     R.anim.exit_to_right
             )
 
-            //TODO
-            //(activity!!.application as TheBestoryApplication).currentTopic = topic
+            (activity.application as TheBestoryApplication).
+                    currentIdTopic.add(topic.fragments().topicFragment().id().toString())
+
+            (activity.application as TheBestoryApplication).currentTitleTopic =
+                    topic.fragments().topicFragment().title()
 
 
             // Replace whatever is in the fragment_container view with this fragment,
@@ -116,7 +131,6 @@ class NewTopicsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun getTopics() {
-
         val topicsQueryCall: ApolloCall<TopicsQuery.Data> = TheBestoryApplication.getApolloClient()
                 .query(TopicsQuery(20, null, null))
 
@@ -145,7 +159,7 @@ class NewTopicsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             }
 
             override fun onError(e: Throwable) {
-                Log.e("NewTopicsFragment", e.message, e);
+                Log.e("TopicsFragment", e.message, e)
             }
 
         }
@@ -155,86 +169,6 @@ class NewTopicsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         getTopics()
         mSwipeRefreshLayout!!.isRefreshing = false
     }
-
-    /*
-
-    override fun onCreateLoader(id: Int, args: Bundle): Loader<LoaderResult<List<Topic>>> {
-        Log.w("onCreateLoader", "Loading...")
-        val temp: Loader<LoaderResult<List<Topic>>>
-        temp = ApiMethods.getInstance().getTopicsList(activity)
-        visitOnCreateLoader = true
-        return temp
-    }
-
-    override fun onLoadFinished(loader: Loader<LoaderResult<List<Topic>>>, result: LoaderResult<List<Topic>>) {
-        when (result.status) {
-            LoaderStatus.OK -> {
-                Log.w("onFinished", "OK")
-                if (!result.data.isEmpty()) {
-                    if (visitOnCreateLoader) {
-                        BankTopics.getInstance().loadAndUpdateTopics(result.data) //TODO
-                        displayNonEmptyData()
-                    } else {
-                        displayNonEmptyData(true)
-                    }
-                }
-            }
-            LoaderStatus.ERROR -> {
-                displayError(result.status)
-            }
-            LoaderStatus.WARNING -> {
-            }//TODO: Try to write this)))
-        }
-        visitOnCreateLoader = false
-    }
-
-
-    override fun onLoaderReset(loader: Loader<LoaderResult<List<Topic>>>) {
-        displayEmptyData()
-    }
-
-    private fun displayEmptyData() {
-        progressView!!.visibility = View.GONE
-        rv!!.visibility = View.GONE
-        errorTextView!!.visibility = View.VISIBLE
-        errorTextView!!.setText(R.string.topics_not_found)
-    }
-
-    private fun displayNonEmptyData(flag: Boolean) {
-        progressView!!.visibility = View.GONE
-        errorTextView!!.visibility = View.GONE
-        rv!!.visibility = View.VISIBLE
-    }
-
-    private fun displayNonEmptyData() {
-        if (adapter != null) {
-            adapter!!.addTopics(BankTopics.getInstance().list)
-        }
-        progressView!!.visibility = View.GONE
-        errorTextView!!.visibility = View.GONE
-        rv!!.visibility = View.VISIBLE
-    }
-
-    private fun displayError(resultType: LoaderStatus) {
-        if ((if (adapter != null) adapter!!.itemCount else 0) == 0) {
-            progressView!!.visibility = View.GONE
-            rv!!.visibility = View.GONE
-            errorTextView!!.visibility = View.VISIBLE
-            val messageResId: Int
-            if (resultType == LoaderStatus.ERROR) { //TODO: Add in LoaderStatus NO_INTERNET
-                messageResId = R.string.no_internet
-            } else {
-                messageResId = R.string.error
-            }
-            errorTextView!!.setText(messageResId)
-        } else {
-            Snackbar.make(
-                    activity.findViewById(R.id.main_stories_layout),
-                    R.string.no_internet,
-                    Snackbar.LENGTH_LONG
-            ).show()
-        }
-    }*/
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         inflater!!.inflate(R.menu.main_topics, menu)
@@ -257,22 +191,4 @@ class NewTopicsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             compositeDisposable.dispose()
         }
     }
-
-    /*override fun onSaveInstanceState(outState: Bundle?) {
-        super.onSaveInstanceState(outState)
-        outState!!.putBoolean("visit", visitOnCreateLoader)
-    }*/
-
-    companion object {
-
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-
-         * @return A new instance of fragment NewTopicsFragment.
-         */
-        fun newInstance(): NewTopicsFragment {
-            return NewTopicsFragment()
-        }
-    }
-}// Required empty public constructor
+}

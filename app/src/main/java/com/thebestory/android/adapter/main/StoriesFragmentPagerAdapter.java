@@ -9,9 +9,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.thebestory.android.fragment.main.StoriesFragment;
+import com.thebestory.android.apollo.type.StoryListingSection;
 import com.thebestory.android.fragment.main.stories.*;
-import com.thebestory.android.util.StoriesType;
 
 import static com.thebestory.android.R.string.main_stories_latest_tab;
 import static com.thebestory.android.R.string.main_stories_hot_tab;
@@ -46,13 +45,13 @@ public class StoriesFragmentPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return StoriesTabFragment.newInstance(StoriesType.LATEST);
+                return StoriesTabFragment.newInstance(StoryListingSection.LATEST);
             case 1:
-                return StoriesTabFragment.newInstance(StoriesType.HOT);
+                return StoriesTabFragment.newInstance(StoryListingSection.HOT);
             case 2:
-                return StoriesTabFragment.newInstance(StoriesType.TOP);
+                return StoriesTabFragment.newInstance(StoryListingSection.TOP);
             case 3:
-                return StoriesTabFragment.newInstance(StoriesType.RANDOM);
+                return StoriesTabFragment.newInstance(StoryListingSection.RANDOM);
         }
 
         return null;

@@ -1,0 +1,13 @@
+query StoriesByTopicsQuery($ids: [Snowflake], $section: StoryListingSection, $before: Snowflake, $after: Snowflake, $limit: Int) {
+  stories(topics: $ids, section: $section, before: $before, after: $after, limit: $limit) {
+    id
+    commentsCount
+    likesCount
+    topic {
+      title
+    }
+    content
+    publishedAt
+    isPublished
+  }
+}

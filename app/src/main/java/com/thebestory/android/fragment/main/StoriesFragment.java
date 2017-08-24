@@ -65,7 +65,7 @@ public class StoriesFragment extends Fragment {
         TabLayout layout = (TabLayout) view.findViewById(R.id.main_stories_tab_layout);
         ViewPager pager = (ViewPager) view.findViewById(R.id.main_stories_pager);
 
-        toolbar.setTitle(((TheBestoryApplication) activity.getApplication()).currentTopic.title);
+        toolbar.setTitle(((TheBestoryApplication) activity.getApplication()).currentTitleTopic);
         activity.setSupportActionBar(toolbar);
 
         StoriesFragmentPagerAdapter adapter = new StoriesFragmentPagerAdapter(

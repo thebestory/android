@@ -24,7 +24,6 @@ import com.thebestory.android.TheBestoryApplication;
 import com.thebestory.android.files.FilesSystem;
 import com.thebestory.android.fragment.main.*;
 import com.thebestory.android.fragment.main.stories.BookmarkedStoriesFragment;
-import com.thebestory.android.util.BankTopics;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -107,11 +106,12 @@ public class MainActivity extends AppCompatActivity
 
         switch (item.getItemId()) {
             case R.id.navdrawer_main_stories:
-                ((TheBestoryApplication) getApplication()).currentTopic = BankTopics.getInstance().getAllTopic();
+                ((TheBestoryApplication) getApplication()).currentTitleTopic = "All Stories";
+                ((TheBestoryApplication) getApplication()).currentIdTopic.clear();
                 transaction.replace(R.id.main_frame_layout, StoriesFragment.newInstance());
                 break;
             case R.id.navdrawer_main_topics:
-                transaction.replace(R.id.main_frame_layout, NewTopicsFragment.Companion.newInstance());
+                transaction.replace(R.id.main_frame_layout, TopicsFragment.Companion.newInstance());
                 break;
             case R.id.navdrawer_main_profile:
                 transaction.replace(R.id.main_frame_layout, ProfileFragment.Companion.newInstance());

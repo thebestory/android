@@ -1,13 +1,14 @@
+/*
+ * The Bestory Project
+ */
+
 package com.thebestory.android.fragment.main.stories;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,27 +19,27 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.apollographql.apollo.ApolloCall;
+import com.apollographql.apollo.api.Response;
+import com.apollographql.apollo.rx2.Rx2Apollo;
 import com.thebestory.android.R;
 import com.thebestory.android.TheBestoryApplication;
 import com.thebestory.android.adapter.main.StoriesAdapter;
-import com.thebestory.android.api.ApiAsyncTask;
-import com.thebestory.android.api.ApiMethods;
-import com.thebestory.android.api.LoaderResult;
-import com.thebestory.android.api.LoaderStatus;
 import com.thebestory.android.api.urlCollection.TypeOfCollection;
-import com.thebestory.android.model.Story;
-import com.thebestory.android.util.BankStoriesLocation;
-import com.thebestory.android.util.StoriesArray;
-import com.thebestory.android.util.StoriesType;
+import com.thebestory.android.apollo.StoriesByTopicsQuery;
+import com.thebestory.android.apollo.type.StoryListingSection;
 
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Alex on 05.03.2017.
- */
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 
-public final class StoriesTabFragment extends Fragment implements LoaderManager.
-        LoaderCallbacks<LoaderResult<List<Story>>>, SwipeRefreshLayout.OnRefreshListener {
+
+public final class StoriesTabFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private View view;
     private final StoriesTabFragment thisFragment = this;
@@ -49,25 +50,24 @@ public final class StoriesTabFragment extends Fragment implements LoaderManager.
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
-    private boolean visitOnCreateLoader;
-    private boolean flagForLoader;
+    private boolean isLoadingNow = true;
 
-    private StoriesArray loadedStories;
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Nullable
     private StoriesAdapter adapter;
 
-    private StoriesType type;
+    private StoryListingSection section;
 
 
     public StoriesTabFragment() {
         super();
-        this.type = StoriesType.LATEST;
+        this.section = StoryListingSection.LATEST;
     }
 
 
-    public void setType(StoriesType type) {
-        this.type = type;
+    public void setSection(StoryListingSection section) {
+        this.section = section;
     }
 
     /**
@@ -76,23 +76,23 @@ public final class StoriesTabFragment extends Fragment implements LoaderManager.
      *
      * @return A new instance of fragment StoriesTabFragment.
      */
-    public static StoriesTabFragment newInstance(StoriesType type) {
+    public static StoriesTabFragment newInstance(StoryListingSection type) {
         StoriesTabFragment temp = new StoriesTabFragment();
-        temp.setType(type);
+        temp.setSection(type);
         return temp;
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        String currentId = ((TheBestoryApplication) getActivity().getApplication()).currentTopic.id;
-        loadedStories = BankStoriesLocation.getInstance().getStoriesArray(type, currentId);
+        //String currentId = ((TheBestoryApplication) getActivity().getApplication()).currentIdTopic;
+        //loadedStories = BankStoriesLocation.getInstance().getStoriesArray(section, currentId);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new StoriesAdapter(getActivity(), loadedStories);
+        adapter = new StoriesAdapter(getActivity());
     }
 
     @Override
@@ -115,39 +115,35 @@ public final class StoriesTabFragment extends Fragment implements LoaderManager.
         mSwipeRefreshLayout.setColorSchemeColors(
                 Color.RED, Color.GREEN, Color.BLUE, Color.CYAN);
 
-        if (savedInstanceState != null && savedInstanceState.containsKey("visit")) {
-            flagForLoader = true;
-            visitOnCreateLoader = savedInstanceState.getBoolean("visit");
-            displayNonEmptyData();
-        } else {
-            if (loadedStories.isEmpty()) {
-                Bundle bundle = new Bundle();
-                bundle.putString("request", "none");
-                getLoaderManager().restartLoader(2, bundle, this);
+        if (adapter != null) {
+            if (adapter.getItemCount() == 0) {
+                getStories(TypeOfCollection.NONE);
             } else {
                 displayNonEmptyData();
+                isLoadingNow = false;
             }
         }
 
         rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (flagForLoader) {
+                if (isLoadingNow) {
                     return;
                 }
+
+                Log.d("StoriesTabFragment", "FOUND");
 
                 super.onScrolled(recyclerView, dx, dy);
                 LinearLayoutManager llm = (LinearLayoutManager) recyclerView.getLayoutManager();
                 if (adapter != null
-                        && llm.findLastVisibleItemPosition() + 3 >= adapter.getItemCount()) {
-                    flagForLoader = true;
-                    Bundle bundle = new Bundle();
-                    if (loadedStories.isEmpty()) {
-                        bundle.putString("request", "none");
+                        && llm.findLastVisibleItemPosition() + 4 >= adapter.getItemCount()) {
+                    isLoadingNow = true;
+                    if (adapter.getItemCount() == 0) {
+                        getStories(TypeOfCollection.NONE);
                     } else {
-                        bundle.putString("request", "after");
+                        Log.d("StoriesTabFragment", "AFTER" + ", Count stories in adapter: " + adapter.getItemCount());
+                        getStories(TypeOfCollection.AFTER);
                     }
-                    getLoaderManager().restartLoader(2, bundle, thisFragment);
                 }
             }
         });
@@ -155,106 +151,119 @@ public final class StoriesTabFragment extends Fragment implements LoaderManager.
         return view;
     }
 
-    @Override
-    public void onRefresh() {
-        Bundle bundle = new Bundle();
-        if (!loadedStories.isEmpty()) {
-            bundle.putString("request", "before");
-            getLoaderManager().restartLoader(2, bundle, thisFragment);
-        } else {
-            bundle.putString("request", "none");
-            getLoaderManager().restartLoader(2, bundle, thisFragment);
-        }
-        mSwipeRefreshLayout.setRefreshing(false);
-    }
+    private void getStories(TypeOfCollection t) {
 
-    @Override
-    public Loader<LoaderResult<List<Story>>> onCreateLoader(int id, Bundle args) {
-        Loader<LoaderResult<List<Story>>> temp = null;
-        if (args != null && args.containsKey("request") && args.getString("request") != null) {
-            switch (args.getString("request")) {
-                case "before": {
-                    String currentStoryId = loadedStories.getStoryAt(0).id;
-                    temp = ApiMethods.getInstance().getStories(type, getActivity(),
-                            ((TheBestoryApplication) getActivity().getApplication()).currentTopic.id,
-                            TypeOfCollection.BEFORE, currentStoryId, 25);
-                    break;
-                }
-                case "none": {
-                    temp = ApiMethods.getInstance().getStories(type, getActivity(),
-                            ((TheBestoryApplication) getActivity().getApplication()).currentTopic.id,
-                            TypeOfCollection.NONE, null, 10);
-                    break;
-                }
-                case "after": {
-                    String currentStoryId = loadedStories.getStoryAt(loadedStories.size() - 1).id;
-                    temp = ApiMethods.getInstance().getStories(type, getActivity(),
-                            ((TheBestoryApplication) getActivity().getApplication()).currentTopic.id,
-                            TypeOfCollection.AFTER, currentStoryId, 10);
-                    break;
+        Object storyId = null;
+        ApolloCall<StoriesByTopicsQuery.Data> storiesQuery = null;
+
+        if (adapter != null) {
+
+            List<Object> ids = new ArrayList<>();
+
+            if (!((TheBestoryApplication) getActivity().
+                    getApplication()).currentIdTopic.isEmpty()) {
+                for (String e : ((TheBestoryApplication) getActivity().
+                        getApplication()).currentIdTopic) {
+                    ids.add((Object) e);
                 }
             }
+
+            switch (t) {
+                case BEFORE: {
+                    storyId = adapter.getStoryAt(0).id();
+                    storiesQuery = TheBestoryApplication.getApolloClient()
+                            .query(new StoriesByTopicsQuery(ids, section, storyId, null, 8));
+                    break;
+                }
+                case NONE: {
+                    storiesQuery = TheBestoryApplication.getApolloClient()
+                            .query(new StoriesByTopicsQuery(ids, section, null, null, 8));
+                    break;
+                }
+                case AFTER:
+                    storyId = adapter.getStoryAt(adapter.getItemCount() - 1).id();
+                    Log.d("StoriesTabFragment", storyId.toString());
+                    storiesQuery = TheBestoryApplication.getApolloClient()
+                            .query(new StoriesByTopicsQuery(ids, section, null, storyId, 8));
+                    break;
+            }
         }
-        visitOnCreateLoader = true;
-        return temp;
+
+        DisposableObserver<Response<StoriesByTopicsQuery.Data>> disObsForStoriesByQuery =
+                getDisObsForStoriesByQuery(t);
+
+        if (storiesQuery != null) {
+            Rx2Apollo.from(storiesQuery)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(disObsForStoriesByQuery);
+        }
+
+        compositeDisposable.add(disObsForStoriesByQuery);
     }
 
-    @Override
-    public void onLoadFinished(Loader<LoaderResult<List<Story>>> loader, LoaderResult<List<Story>> result) {
-        Log.e("TAG", result.status.toString());
-        switch (result.status) {
-            case OK: {
-                Log.w("onFinished", "OK");
-                flagForLoader = false;
-                if (!result.data.isEmpty()) {
-                    if (visitOnCreateLoader) {
-                        TypeOfCollection typeOfCollection = ((ApiAsyncTask) loader).getRequestType();
-                        switch (typeOfCollection) {
-                            case BEFORE: {
-                                if (result.data.size() < 15) {
-                                    loadedStories.addAllStoryAtHead(result.data);
-                                } else {
-                                    if (adapter != null) {
-                                        adapter.clear();
-                                    }
-                                    loadedStories.addAllStoryAtTail(result.data);
+
+    private DisposableObserver<Response<StoriesByTopicsQuery.Data>> getDisObsForStoriesByQuery(final TypeOfCollection t) {
+        return new DisposableObserver<Response<StoriesByTopicsQuery.Data>>() {
+            @Override
+            public void onNext(@NonNull Response<StoriesByTopicsQuery.Data> dataResponse) {
+                List<StoriesByTopicsQuery.Story> storyList = dataResponse.data().stories();
+
+                if (adapter != null) {
+                    if (storyList != null) {
+                        if (storyList.isEmpty()) {
+                            if (adapter.getItemCount() > 0) {
+                                displayNonEmptyData();
+                            } else {
+                                displayEmptyData();
+                            }
+                        } else {
+                            switch (t) {
+                                case BEFORE: {
+                                    adapter.addFirstStories(storyList.size(), storyList);
+                                    break;
                                 }
-                                displayNonEmptyData(result.data.size(), typeOfCollection);
-                                break;
-                            }
-                            case NONE: {
-                                loadedStories.addAllStoryAtTail(result.data);
-                                displayNonEmptyData(result.data.size(), typeOfCollection);
-                                break;
-                            }
-                            case AFTER: {
-                                loadedStories.addAllStoryAtTail(result.data);
-                                displayNonEmptyData(result.data.size(), typeOfCollection);
-                                break;
+                                case NONE: {
+                                    adapter.addLastStories(storyList.size(), storyList);
+                                    break;
+                                }
+                                case AFTER: {
+                                    adapter.addLastStories(storyList.size(), storyList);
+                                    break;
+                                }
                             }
                         }
-                    } else {
-                        displayNonEmptyData();
-                    }
-                } else {
-                    if (loadedStories.size() == 0) {
-                        displayEmptyData();
                     }
                 }
-                break;
+
+                displayNonEmptyData();
+                Log.d("StoriesTabFragment", "End: " + t.toString() + " , Count stories in adapter: " + adapter.getItemCount());
+                isLoadingNow = false;
             }
-            case WARNING:
-            case ERROR: {
-                displayError(result.status);
-                break;
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+                Log.e("StoriesTabFragment", e.getMessage(), e);
             }
-        }
-        visitOnCreateLoader = false;
+
+            @Override
+            public void onComplete() {
+                //TODO
+            }
+        };
     }
 
     @Override
-    public void onLoaderReset(Loader<LoaderResult<List<Story>>> loader) {
-        displayEmptyData();
+    public void onRefresh() {
+        if (adapter != null) {
+            if (adapter.getItemCount() > 0) {
+                getStories(TypeOfCollection.BEFORE);
+                Log.d("StoriesTabFragment", "BEFORE" + ", Count stories in adapter: " + adapter.getItemCount());
+            } else {
+                getStories(TypeOfCollection.NONE);
+            }
+        }
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     private void displayEmptyData() {
@@ -264,54 +273,38 @@ public final class StoriesTabFragment extends Fragment implements LoaderManager.
         errorTextView.setText(R.string.stories_not_found);
     }
 
-    private void displayNonEmptyData(int size, TypeOfCollection typeOfCollection) {
-        if (adapter != null) {
-            if (TypeOfCollection.BEFORE == typeOfCollection) {
-                adapter.addFirstStories(size);
-            } else {
-                adapter.addLastStories(size);
-            }
-        }
-        progressView.setVisibility(View.GONE);
-        errorTextView.setVisibility(View.GONE);
-        rv.setVisibility(View.VISIBLE);
-    }
-
     private void displayNonEmptyData() {
         progressView.setVisibility(View.GONE);
         errorTextView.setVisibility(View.GONE);
         rv.setVisibility(View.VISIBLE);
     }
 
-    private void displayError(LoaderStatus resultType) {
-        if ((adapter != null ? adapter.getItemCount() : 0) == 0) {
-            progressView.setVisibility(View.GONE);
-            rv.setVisibility(View.GONE);
-            errorTextView.setVisibility(View.VISIBLE);
-            final int messageResId;
-            if (resultType == LoaderStatus.ERROR) { //TODO: Add in LoaderStatus NO_INTERNET
-                messageResId = R.string.no_internet;
-            } else {
-                messageResId = R.string.error;
-            }
-            errorTextView.setText(messageResId);
-        } else {
-            Snackbar.make(
-                    getActivity().findViewById(R.id.main_stories_layout),
-                    R.string.no_internet,
-                    Snackbar.LENGTH_LONG
-            ).show();
-        }
-    }
+//    private void displayError(LoaderStatus resultType) {
+//        if ((adapter != null ? adapter.getItemCount() : 0) == 0) {
+//            progressView.setVisibility(View.GONE);
+//            rv.setVisibility(View.GONE);
+//            errorTextView.setVisibility(View.VISIBLE);
+//            final int messageResId;
+//            if (resultType == LoaderStatus.ERROR) {
+//                messageResId = R.string.no_internet;
+//            } else {
+//                messageResId = R.string.error;
+//            }
+//            errorTextView.setText(messageResId);
+//        } else {
+//            Snackbar.make(
+//                    getActivity().findViewById(R.id.main_stories_layout),
+//                    R.string.no_internet,
+//                    Snackbar.LENGTH_LONG
+//            ).show();
+//        }
+//    }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean("visit", visitOnCreateLoader);
+        if (!compositeDisposable.isDisposed()) {
+            compositeDisposable.dispose();
+        }
     }
 }

@@ -60,13 +60,13 @@ public class BookmarkedStoriesFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        loadedStories = BankStoriesLocation.getInstance().getBookmarkedStoriesArray();
+        //loadedStories = BankStoriesLocation.getInstance().getBookmarkedStoriesArray();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new StoriesAdapter(getActivity(), loadedStories);
+        //adapter = new StoriesAdapter(getActivity(), loadedStories);
         setHasOptionsMenu(true);
     }
 
@@ -81,20 +81,20 @@ public class BookmarkedStoriesFragment extends Fragment {
 
         errorTextView = (TextView) view.findViewById(R.id.error_text);
 
-        rv = (RecyclerView) view.findViewById(R.id.rv_stories_tab);
-        rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-        rv.setAdapter(adapter);
+        //rv = (RecyclerView) view.findViewById(R.id.rv_stories_tab);
+        //rv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        //rv.setAdapter(adapter);
 
         errorTextView.setVisibility(View.GONE);
-        rv.setVisibility(View.GONE);
+        //rv.setVisibility(View.GONE);
 
 
 
-        if (loadedStories.isEmpty()) {
+        /*if (loadedStories.isEmpty()) {
             displayEmptyData();
         } else {
             displayNonEmptyData();
-        }
+        }*/
 
         return view;
     }

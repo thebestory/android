@@ -5,7 +5,6 @@
 package com.thebestory.android.adapter.main;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,25 +15,22 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.thebestory.android.R;
-import com.thebestory.android.api.ApiMethods;
-import com.thebestory.android.loader.AsyncLoader;
-import com.thebestory.android.model.Story;
-import com.thebestory.android.util.BankStoriesLocation;
-import com.thebestory.android.util.CacheStories;
-import com.thebestory.android.util.StoriesArray;
+import com.thebestory.android.apollo.StoriesByTopicsQuery;
 
-import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import static com.thebestory.android.util.TimeConverter.relative;
 
 
 public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryViewHolder> {
     private final Context context;
-    private StoriesArray stories;
+    private ArrayList<StoriesByTopicsQuery.Story> stories;
 
-    public StoriesAdapter(Context context, StoriesArray storiesList) {
+    public StoriesAdapter(Context context) {
         this.context = context;
-        this.stories = storiesList;
+        this.stories = new ArrayList<>();
     }
 
     @Override
@@ -44,18 +40,26 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
                 R.layout.card_story, parent, false));
     }
 
-    public void addLastStories(int sizeStories) {
+    public void addLastStories(int sizeStories, List<StoriesByTopicsQuery.Story> newStories) {
+
+        for (StoriesByTopicsQuery.Story s : newStories) {
+            stories.add(s);
+        }
+        //stories.addAll(newStories);
         final int pos = this.stories.size() - sizeStories;
         notifyItemRangeInserted(pos, sizeStories);
     }
 
-    public void addFirstStories(int sizeStories) {
+    public void addFirstStories(int sizeStories, List<StoriesByTopicsQuery.Story> newStories) {
+        for (StoriesByTopicsQuery.Story e : newStories) {
+            stories.add(0, e);
+        }
         notifyDataSetChanged();
     }
 
     @Override
     public void onBindViewHolder(StoryViewHolder vh, int position) {
-        vh.onBind(stories.getStoryAt(position));
+        vh.onBind(stories.get(position));
     }
 
     @Override
@@ -68,9 +72,13 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
         stories.clear();
     }
 
+    public StoriesByTopicsQuery.Story getStoryAt(int position) {
+        return stories.get(position);
+    }
+
 
     static class StoryViewHolder extends RecyclerView.ViewHolder {
-        Story story;
+        StoriesByTopicsQuery.Story story;
 
         SimpleDraweeView topicIcon;
         TextView topicTitle;
@@ -101,7 +109,9 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
             commentsCount = (TextView) itemView.findViewById(R.id.card_story_comments_count);
             commentsIcon = (ImageView) itemView.findViewById(R.id.card_story_comments_icon);
 
-            likesView.setOnClickListener(new View.OnClickListener() {
+
+            //TODO: Listener on Click LIKE
+            /*likesView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (story.isLiked()) {
@@ -138,9 +148,9 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
                         });
                     }
                 }
-            });
+            });*/
 
-            id.setOnClickListener(new View.OnClickListener() {
+            /*id.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (CacheStories.getInstance().isBookmarked(story.id)) {
@@ -151,29 +161,32 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
                         id.setTextColor(ContextCompat.getColor(id.getContext(), R.color.colorIdBookmarked));
                     }
                 }
-            });
+            });*/
 
 
         }
 
-        void onBind(Story story) {
+        void onBind(StoriesByTopicsQuery.Story story) {
             this.story = story;
-            topicIcon.setImageURI(story.topic.icon);
-            topicTitle.setText(story.topic.title);
-            id.setText("#" + story.id);
+            //topicIcon.setImageURI(story.topic.icon);
+            topicTitle.setText(story.topic().title());
+            /*id.setText("#" + story.id);
             id.setTextColor(CacheStories.getInstance().isBookmarked(story.id) ?
                     ContextCompat.getColor(id.getContext(), R.color.colorIdBookmarked)
-                    : ContextCompat.getColor(id.getContext(), R.color.colorIdNotBookmarked));
-            content.setText(story.content);
-            timestamp.setText(relative(story.publishDate));
-            likesCount.setText(Integer.toString(story.getLikesCount()));
-            commentsCount.setText(Integer.toString(story.commentsCount));
+                    : ContextCompat.getColor(id.getContext(), R.color.colorIdNotBookmarked));*/
+            content.setText(story.content());
+            //timestamp.setText(relative((Date) story.publishedAt()));
+            timestamp.setText(story.publishedAt().toString());
+            likesCount.setText(story.likesCount().toString());
+            commentsCount.setText(story.commentsCount().toString());
 
-            if (story.isLiked()) {
+            //TODO LIKE
+
+            /*if (story.isLiked()) {
                 likesIcon.setImageResource(R.drawable.ic_liked);
             } else {
                 likesIcon.setImageResource(R.drawable.ic_not_liked);
-            }
+            }*/
 
         }
     }
